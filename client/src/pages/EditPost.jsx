@@ -12,7 +12,7 @@ const EditPost = () => {
     const fetchPost = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/posts/${id}`
+          `${import.meta.env.VITE_API_URL}/api/posts/${id}`
         );
         setPost(response.data);
         navigate`/post/${id}`;
@@ -26,7 +26,10 @@ const EditPost = () => {
 
   const handleSubmit = async (updatedData) => {
     try {
-      await axios.put(`http://localhost:5000/api/posts/${id}`, updatedData);
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/posts/${id}`,
+        updatedData
+      );
     } catch (error) {
       console.error("Error updating post:", error);
     }

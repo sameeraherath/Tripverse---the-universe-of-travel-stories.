@@ -10,7 +10,7 @@ const PostDetails = () => {
     const fetchPostDetails = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/posts/${id}`
+          `${import.meta.env.VITE_API_URL}/api/posts/${id}`
         );
         setPost(response.data);
       } catch (error) {

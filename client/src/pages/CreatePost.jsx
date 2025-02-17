@@ -7,7 +7,7 @@ const CreatePost = () => {
 
   const handleSubmit = async (postData) => {
     try {
-      await axios.post("http://localhost:5000/api/posts", postData);
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/posts`, postData);
       navigate("/");
     } catch (error) {
       console.log("Error creating post:", error);

@@ -7,7 +7,7 @@ const Home = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/posts")
+      .get(`${import.meta.env.VITE_API_URL}/api/posts`)
       .then((response) => setPosts(response.data))
       .catch((error) => console.log(error));
   }, []);
