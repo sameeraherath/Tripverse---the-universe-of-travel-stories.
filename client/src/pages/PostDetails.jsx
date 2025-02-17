@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
 const PostDetails = () => {
   const { id } = useParams();
   const [post, setPost] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPostDetails = async () => {
@@ -20,6 +21,22 @@ const PostDetails = () => {
     fetchPostDetails();
   }, [id]);
 
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this post?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/posts/${id}`);
+      alert("Post deleted successfully");
+      navigate("/");
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      alert("Error deleting post");
+    }
+  };
+
   if (!post) {
     return <div>Loading...</div>;
   }
@@ -31,6 +48,12 @@ const PostDetails = () => {
       <Link to={`/edit/${id}`} className="text-blue-500 hover:underline">
         Edit Post
       </Link>
+      <button
+        onClick={handleDelete}
+        className="text-red-500 hover:underline ml-4"
+      >
+        Delete
+      </button>
     </div>
   );
 };

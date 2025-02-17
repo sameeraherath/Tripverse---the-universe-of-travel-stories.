@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
+import Card from "../components/Card";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -13,20 +13,16 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
-      <h2 className="text-3xl font-bold mb-4">All Posts</h2>
-      <div className="grid gap-4">
+    <div className="container mx-auto p-4">
+      <h2 className="text-4xl font-bold mb-4 mt-20 text-center">
+        Latest Blog Posts
+      </h2>
+      <p className="text-gray-700 text-center pb-4">
+        Exploring the latest blog posts and post your thoughts using AI
+      </p>
+      <div className="grid gap-6 sm:grid-cols-1 md:gird-cols-2 lg:grid-cols-3">
         {posts.map((post) => (
-          <div key={post._id} className="bg-white shadow-md rounded p-4">
-            <h3 className="text-xl font-semibold">{post.title}</h3>
-            <p className="text-gray-600">{post.content.substring(0, 100)}</p>
-            <Link
-              to={`/post/${post._id}`}
-              className="text-blue-500 hover:underline"
-            >
-              Read More
-            </Link>
-          </div>
+          <Card key={post._id} post={post} />
         ))}
       </div>
     </div>
