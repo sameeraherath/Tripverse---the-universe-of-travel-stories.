@@ -45,7 +45,7 @@ const PostDetails = () => {
     <div className="max-w-3xl mx-auto mt-20">
       {post.image && (
         <img
-          src={`${import.meta.env.VITE_API_URL}${post.image}`}
+          src={`${post.image}`}
           alt={post.title}
           className="w-full h-64 object-cover mb-4 rounded-lg"
         />
