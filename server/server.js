@@ -11,7 +11,14 @@ conncetDb();
 
 const app = express();
 
-app.use(cors({ origin: "http://localhost:5173" }));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://blogger-client-5j57mdr1c-sameeraheraths-projects.vercel.app",
+    ],
+  })
+);
 app.use(express.json());
 
 app.use("/uploads", express.static("uploads"));
