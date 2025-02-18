@@ -15,7 +15,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://blogger-client-5j57mdr1c-sameeraheraths-projects.vercel.app",
+      "blogger-client-sameeraheraths-projects.vercel.app",
     ],
   })
 );
