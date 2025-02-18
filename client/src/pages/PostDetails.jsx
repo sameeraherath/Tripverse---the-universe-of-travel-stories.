@@ -37,12 +37,19 @@ const PostDetails = () => {
     }
   };
 
-  if (!post) {
+  if (!post.title) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div>
+    <div className="max-w-3xl mx-auto mt-20">
+      {post.image && (
+        <img
+          src={`${import.meta.env.VITE_API_URL}${post.image}`}
+          alt={post.title}
+          className="w-full h-64 object-cover mb-4 rounded-lg"
+        />
+      )}
       <h2 className="text-3xl font-bold mb-4">{post.title}</h2>
       <p className="mb-4">{post.content}</p>
       <Link to={`/edit/${id}`} className="text-blue-500 hover:underline">

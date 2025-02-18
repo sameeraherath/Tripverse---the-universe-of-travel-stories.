@@ -15,21 +15,24 @@ const EditPost = () => {
           `${import.meta.env.VITE_API_URL}/api/posts/${id}`
         );
         setPost(response.data);
-        navigate`/post/${id}`;
       } catch (error) {
         console.error("Error fetching post:", error);
       }
     };
 
     fetchPost();
-  }, [id, navigate]);
+  }, [id]);
 
   const handleSubmit = async (updatedData) => {
     try {
       await axios.put(
         `${import.meta.env.VITE_API_URL}/api/posts/${id}`,
-        updatedData
+        updatedData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
       );
+      navigate(`/post/${id}`);
     } catch (error) {
       console.error("Error updating post:", error);
     }

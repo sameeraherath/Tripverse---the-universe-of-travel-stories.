@@ -1,15 +1,38 @@
 const express = require("express");
 const router = express.Router();
 const Post = require("../models/post");
+const upload = require("../middleware/upload");
+const cloudinary = require("../utils/cloudinaryConfig");
 
-router.post("/", async (req, res) => {
+// Create a new post
+router.post("/", upload, async (req, res) => {
   try {
-    const newPost = new Post(req.body);
+    const { title, content } = req.body;
+
+    let imageUrl = null;
+    if (req.file) {
+      const base64Image = `data:${
+        req.file.mimetype
+      };base64,${req.file.buffer.toString("base64")}`;
+      const result = await cloudinary.uploader.upload(base64Image, {
+        folder: "posts",
+      });
+
+      imageUrl = result.secure_url;
+    }
+
+    const newPost = new Post({
+      title,
+      content,
+      image: imageUrl,
+    });
+
     await newPost.save();
     res.status(201).json(newPost);
-    console.log("Post saved successfully");
+    console.log("Post created successfully");
   } catch (err) {
-    res.status(500).json("Error saving post", err);
+    console.error("Error saving post:", err);
+    res.status(500).json({ message: "Error saving post", error: err });
   }
 });
 
@@ -20,7 +43,7 @@ router.get("/", async (req, res) => {
     res.status(200).json(posts);
     console.log("Posts fetched successfully");
   } catch (err) {
-    res.status(500).json("Error fetching posts", err);
+    res.status(500).json({ message: "Error fetching post", error });
   }
 });
 
@@ -39,18 +62,37 @@ router.get("/:id", async (req, res) => {
 
 // Update a post by ID
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", upload, async (req, res) => {
   try {
-    const updatedPost = await Post.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const { title, content } = req.body;
+    let imageUrl = req.body.image;
+
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.buffer, {
+        folder: "posts",
+      });
+      imageUrl = result.secure_url;
+    }
+
+    const updatedPost = await Post.findByIdAndUpdate(
+      req.params.id,
+      {
+        title,
+        content,
+        image: imageUrl,
+      },
+      { new: true, runValidators: true }
+    );
+
     if (!updatedPost) {
       return res.status(404).json("Post not found");
     }
+
     res.status(200).json(updatedPost);
   } catch (err) {
-    res.status(500).json("Error updating post", err);
+    res
+      .status(500)
+      .json({ message: "Error updating post", error: err.message });
   }
 });
 

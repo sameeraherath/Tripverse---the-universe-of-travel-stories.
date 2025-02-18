@@ -5,12 +5,17 @@ import { useNavigate } from "react-router-dom";
 const CreatePost = () => {
   const navigate = useNavigate();
 
-  const handleSubmit = async (postData) => {
+  const handleSubmit = async (formData) => {
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/posts`, postData);
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/posts`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       navigate("/");
     } catch (error) {
       console.log("Error creating post:", error);
+      alert("Failed to create post. Please try again.");
     }
   };
 

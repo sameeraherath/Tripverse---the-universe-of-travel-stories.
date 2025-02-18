@@ -20,9 +20,15 @@ const Home = () => {
       <p className="text-gray-700 text-center pb-4">
         Exploring the latest blog posts and post your thoughts using AI
       </p>
-      <div className="grid gap-6 sm:grid-cols-1 md:gird-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2  lg:grid-cols-3">
         {posts.map((post) => (
-          <Card key={post._id} post={post} />
+          <Card
+            key={post._id}
+            post={{
+              ...post,
+              image: post.image || null,
+            }}
+          />
         ))}
       </div>
     </div>
