@@ -50,7 +50,7 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen flex">
       {/* Left Side - Introduction */}
-      <div className="w-3/4 bg-gradient-to-r from-blue-500 to-indigo-700  flex-col items-center justify-center hidden md:flex">
+      <div className="w-2/3 bg-gradient-to-r from-gray-900 to-gray-700 flex-col items-center justify-center hidden md:flex">
         <motion.h1
           className="text-5xl font-extrabold text-center leading-tight px-4"
           initial={{ opacity: 0 }}
@@ -94,14 +94,14 @@ const LoginPage = () => {
               required
             />
             <p className="pt-6 px-2 text-gray-300 text-sm">
-              Magic link will be sent to given email address.
+              Enter your email to receive a magic link for quick access.
             </p>
           </div>
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
           <div className="mt-6 flex items-center justify-between">
             <button
               type="submit"
-              className="w-full py-2 px-4 bg-gradient-to-r from-blue-500 to-indigo-700 rounded-3xl "
+              className="w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-indigo-700 rounded-3xl "
               disabled={loading}
             >
               {loading ? "Sending Magic Link..." : "Send Magic Link"}

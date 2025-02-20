@@ -17,13 +17,13 @@ const Home = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-4xl font-bold mb-4 mt-20 text-center">
+      <h2 className="text-4xl font-bold mb-8 mt-20 text-center text-gray-50 py-2">
         Latest Blog Posts
       </h2>
-      <p className="text-gray-700 text-center pb-4">
+      <p className="text-gray-300 text-center pb-8">
         Exploring the latest blog posts and post your thoughts using AI
       </p>
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2  lg:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2  lg:grid-cols-3 ">
         {loading
           ? Array.from({ length: 6 }).map((_, index) => (
               <SkeletonCard key={index} />
