@@ -17,7 +17,7 @@ app.use(
     origin: [
       "http://localhost:5174",
       "http://localhost:5173",
-      "https://blogger-client-eight.vercel.app",
+      "https://blogger-client-murex.vercel.app",
       "https://blogger-client-sameeraheraths-projects.vercel.app",
       "https://blogger-client-git-main-sameeraheraths-projects.vercel.app",
       "https://blogger-client-6wrbdejho-sameeraheraths-projects.vercel.app",
