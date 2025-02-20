@@ -44,6 +44,7 @@ const MagicLogin = ({ onLoginSuccess }) => {
         }
       } catch (error) {
         console.error("Error verifying token:", error);
+        console.error(error);
         alert("Something went wrong, please try again.");
         navigate("/");
       }
