@@ -10,7 +10,7 @@ const App = () => {
   return (
     <Router>
       {location.pathname !== "/" && <Navbar />}
-      <div className="container mx-auto p-4">
+      <div>
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/home" element={<Home />} />
