@@ -11,6 +11,6 @@ const router = express.Router();
 router.post("/send-magic-link", sendMagicLink);
 
 // Route to verify the magic link token
-router.get("/magic-login/:token", verifyMagicLink);
+router.post("/magic-login/:token", verifyMagicLink);
 
 module.exports = router;

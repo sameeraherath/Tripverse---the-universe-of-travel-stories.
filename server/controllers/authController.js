@@ -82,7 +82,7 @@ const verifyMagicLink = async (req, res) => {
 
     // Clear the magic link token after successful login
     user.magicLinkToken = null;
-    user.magicLinkTokenExpiry = null;
+    user.magicLinkTokenExpires = null;
     await user.save();
 
     // Generate a JWT token for authentication
