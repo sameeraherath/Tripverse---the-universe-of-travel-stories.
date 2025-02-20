@@ -12,7 +12,7 @@ const CreatePost = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      navigate("/");
+      navigate("/home");
     } catch (error) {
       console.log("Error creating post:", error);
       alert("Failed to create post. Please try again.");

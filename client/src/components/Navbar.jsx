@@ -5,11 +5,11 @@ const Navbar = () => {
     <nav className="bg-black text-white p-4 fixed w-full">
       <div className="container mx-auto flex justify-between items-center">
         <h1 className="text-2xl font-bold">
-          <Link to="/">Blogger</Link>
+          <Link to="/home">Blogger</Link>
         </h1>
         <ul className="flex space-x-4">
           <li>
-            <Link to="/" className="hover:text-gray-400">
+            <Link to="/home" className="hover:text-gray-400">
               Home
             </Link>
           </li>

@@ -30,7 +30,7 @@ const PostDetails = () => {
     try {
       await axios.delete(`${import.meta.env.VITE_API_URL}/api/posts/${id}`);
       alert("Post deleted successfully");
-      navigate("/");
+      navigate("/home");
     } catch (error) {
       console.error("Error deleting post:", error);
       alert("Error deleting post");

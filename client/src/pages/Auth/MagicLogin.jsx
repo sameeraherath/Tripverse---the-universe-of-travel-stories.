@@ -1,8 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import PropTypes from "prop-types";
 
-const MagicLogin = ({ onLoginSuccess }) => {
+const MagicLogin = () => {
   const { token } = useParams();
   const navigate = useNavigate();
   const hasRun = useRef(false); // Prevents double execution in strict mode
@@ -36,7 +35,6 @@ const MagicLogin = ({ onLoginSuccess }) => {
         if (data.token) {
           localStorage.setItem("authToken", data.token);
           alert("Login successful");
-          onLoginSuccess();
           navigate("/home");
         } else {
           alert(data.message || "Invalid token");
@@ -54,13 +52,9 @@ const MagicLogin = ({ onLoginSuccess }) => {
       hasRun.current = true;
       verifyToken();
     }
-  }, [token, onLoginSuccess, navigate]);
+  }, [token, navigate]);
 
   return <div>Verifying Magic Link...</div>;
-};
-
-MagicLogin.propTypes = {
-  onLoginSuccess: PropTypes.func.isRequired,
 };
 
 export default MagicLogin;

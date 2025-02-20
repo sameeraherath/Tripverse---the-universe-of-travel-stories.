@@ -1,7 +1,6 @@
 import { useState } from "react";
-import PropTypes from "prop-types";
 
-const LoginPage = ({ onLoginSuccess }) => {
+const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -35,7 +34,6 @@ const LoginPage = ({ onLoginSuccess }) => {
 
       if (response.ok) {
         alert("Magic link sent to your email");
-        onLoginSuccess();
       } else {
         const data = await response.json();
         setError(data.message || "Something went wrong, please try again");
@@ -84,10 +82,6 @@ const LoginPage = ({ onLoginSuccess }) => {
       </div>
     </div>
   );
-};
-
-LoginPage.propTypes = {
-  onLoginSuccess: PropTypes.func,
 };
 
 export default LoginPage;
