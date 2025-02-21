@@ -1,20 +1,20 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import "react-toastify/dist/ReactToastify.css";
+import { Slide, ToastContainer, toast } from "react-toastify";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
 
     // Check if the email is valid (simple validation)
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!emailPattern.test(email)) {
-      setError("Invalid email address");
+      toast.error("Invalid email address");
       setLoading(false);
       return;
     }
@@ -34,13 +34,14 @@ const LoginPage = () => {
       );
 
       if (response.ok) {
-        alert("Magic link sent to your email");
+        toast.success("Magic link sent successfully");
       } else {
         const data = await response.json();
-        setError(data.message || "Something went wrong, please try again");
+
+        toast.error(data.message || "Something went wrong, please try again");
       }
     } catch (error) {
-      setError("Something went wrong, please try again", error);
+      toast.error("Something went wrong, please try again");
       console.error(error);
     }
 
@@ -70,7 +71,7 @@ const LoginPage = () => {
       </div>
 
       {/* Right Side - Form */}
-      <div className="w-full md:w-1/2 flex items-center justify-center  flex-col">
+      <div className="w-full md:w-1/2 flex items-center justify-center  flex-col px-8">
         <h2 className="text-3xl font-bold text-center text-white mb-10">
           Lets Get Started
         </h2>
@@ -90,18 +91,17 @@ const LoginPage = () => {
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className=" px-4 py-2 mt-2  rounded-3xl border border-gray-400  focus:outline-none text-white w-96 h-12"
+              className="w-full bg-gray-800 border border-gray-700  px-4 py-2 text-white focus:outline-none rounded-3xl"
               required
             />
             <p className="pt-6 px-2 text-gray-300 text-sm">
               Enter your email to receive a magic link for quick access.
             </p>
           </div>
-          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-          <div className="mt-6 flex items-center justify-between">
+          <div className="mt-6 flex items-center justify-center">
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-indigo-700 rounded-3xl "
+              className="bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white font-bold py-2 px-4 rounded-3xl hover:bg-gradient-to-l hover:from-gray-600 hover:to-gray-800 disabled:bg-gray-600 disabled:cursor-not-allowed "
               disabled={loading}
             >
               {loading ? "Sending Magic Link..." : "Send Magic Link"}
@@ -109,6 +109,12 @@ const LoginPage = () => {
           </div>
         </form>
       </div>
+      <ToastContainer
+        position="bottom-center"
+        hideProgressBar={true}
+        theme="dark"
+        transition={Slide}
+      />
     </div>
   );
 };
