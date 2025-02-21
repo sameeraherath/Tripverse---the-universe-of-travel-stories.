@@ -1,16 +1,18 @@
 import { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
+import { Slide, ToastContainer, toast } from "react-toastify";
 
 const MagicLogin = () => {
   const { token } = useParams();
   const navigate = useNavigate();
-  const hasRun = useRef(false); // Prevents double execution in strict mode
+  const hasRun = useRef(false);
 
   useEffect(() => {
     const verifyToken = async () => {
       if (!token) {
-        alert("Invalid login link.");
-        navigate("/");
+        toast.error("Invalid token");
+        setTimeout(() => navigate("/"), 2000);
         return;
       }
 
@@ -34,17 +36,17 @@ const MagicLogin = () => {
 
         if (data.token) {
           localStorage.setItem("authToken", data.token);
-          alert("Login successful");
-          navigate("/home");
+          toast.success("Login successful");
+          setTimeout(() => navigate("/home"), 2000);
         } else {
-          alert(data.message || "Invalid token");
-          navigate("/");
+          toast.error("Invalid token");
+          setTimeout(() => navigate("/"), 2000);
         }
       } catch (error) {
         console.error("Error verifying token:", error);
         console.error(error);
-        alert("Something went wrong, please try again.");
-        navigate("/");
+        toast.error("Error verifying token");
+        setTimeout(() => navigate("/"), 2000);
       }
     };
 
@@ -54,7 +56,17 @@ const MagicLogin = () => {
     }
   }, [token, navigate]);
 
-  return <div>Verifying Magic Link...</div>;
+  return (
+    <>
+      <div>Verifying Magic Link...</div>;
+      <ToastContainer
+        position="bottom-center"
+        hideProgressBar={true}
+        theme="dark"
+        transition={Slide}
+      />
+    </>
+  );
 };
 
 export default MagicLogin;

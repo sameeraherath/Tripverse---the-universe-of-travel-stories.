@@ -17,7 +17,7 @@ const Navbar = () => {
             Blogger
           </button>
         </h1>
-        <ul className="flex space-x-4">
+        <ul className="flex space-x-2">
           <li>
             <button
               onClick={() => navigate("/create")}
