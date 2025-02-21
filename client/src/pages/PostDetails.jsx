@@ -42,7 +42,7 @@ const PostDetails = () => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto mt-20">
+    <div className="container lg:w-1/2 lg:mx-auto px-4 py-24">
       {post.image && (
         <img
           src={`${post.image}`}

@@ -30,22 +30,25 @@ const PostForm = ({ onSubmit, initialData }) => {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         required
-        className="w-full p-2 border rounded"
+        className="w-full p-2 border rounded-3xl px-4 focus:outline-none"
       />
       <textarea
         placeholder="Content"
         value={content}
         onChange={(e) => setContent(e.target.value)}
         required
-        className="w-full p-2 border rounded"
+        className="w-full h-36 p-3 border border-gray-300 rounded-lg resize-none focus:outline-none"
       />
       <input
         type="file"
         onChange={(e) => setImage(e.target.files[0])}
-        className="w-full p-2 border rounded"
+        className="w-80 p-2 px-4 border-none  rounded-3xl focus:outline-none file:bg-stone-800 file:py-2 file:px-4 file:border-none file:mr-4 "
         accept="image/*"
       />
-      <button type="submit" className="bg-black text-white py-2 px-4 rounded">
+      <button
+        type="submit"
+        className="bg-stone-800 text-white py-2 px-10 mx-4 rounded-3xl"
+      >
         Post
       </button>
     </form>

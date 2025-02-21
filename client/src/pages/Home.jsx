@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Card from "../components/Card";
-import SkeletonCard from "../components/SkeletonCard";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -13,7 +12,7 @@ const Home = () => {
       .then((response) => setPosts(response.data))
       .then(() => setLoading(false))
       .catch((error) => console.log(error));
-  }, [setLoading]);
+  }, []);
 
   return (
     <div className="container mx-auto p-4">
@@ -23,17 +22,15 @@ const Home = () => {
       <p className="text-gray-300 text-center pb-8">
         Exploring the latest blog posts and post your thoughts using AI
       </p>
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2  lg:grid-cols-3 ">
+      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {loading
-          ? Array.from({ length: 6 }).map((_, index) => (
-              <SkeletonCard key={index} />
-            ))
+          ? Array.from({ length: 6 }).map((_, index) => <Card key={index} />)
           : posts.map((post) => (
               <Card
                 key={post._id}
                 post={{
                   ...post,
-                  image: post.image || null,
+                  image: post.image || null, // Ensure image is passed or null
                 }}
               />
             ))}

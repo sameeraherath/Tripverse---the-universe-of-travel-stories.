@@ -20,8 +20,8 @@ const CreatePost = () => {
   };
 
   return (
-    <div>
-      <h2 className="text-3xl font-bold mb-4">Create New Post</h2>
+    <div className="container mx-auto max-w-2xl py-16 px-8 ">
+      <h2 className="text-3xl font-bold mb-4 pb-6 pt-24">Create New Post</h2>
       <PostForm onSubmit={handleSubmit} />
     </div>
   );
