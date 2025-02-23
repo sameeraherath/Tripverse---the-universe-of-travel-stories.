@@ -3,9 +3,9 @@ const express = require("express");
 const cors = require("cors");
 const connectDb = require("./config/db");
 const postRoutes = require("./routes/postRoutes");
-const multer = require("multer");
-const path = require("path");
 const authRoutes = require("./routes/authRoutes");
+const cookieParser = require("cookie-parser");
+const profileRoutes = require("./routes/profileRoutes");
 
 dotenv.config();
 connectDb();
@@ -26,11 +26,13 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/uploads", express.static("uploads"));
 
 app.use("/api/posts", postRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/profile", profileRoutes);
 
 const PORT = process.env.PORT || 5000;
 

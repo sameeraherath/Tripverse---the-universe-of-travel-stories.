@@ -1,5 +1,4 @@
 const User = require("../models/user");
-const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 
@@ -13,7 +12,6 @@ const transporter = nodemailer.createTransport({
 });
 
 // Send the magic link to the user
-
 const sendMagicLink = async (req, res) => {
   const { email } = req.body;
 
@@ -26,9 +24,15 @@ const sendMagicLink = async (req, res) => {
     }
 
     // Generate a random token
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
-    const token = crypto.randomBytes(32).toString("hex");
-    const expiryTime = new Date(Date.now() + 30 * 60 * 1000); // 30 minutes
+    console.log("Generated Token for Magic Link:", token);
+
+    // Define token expiry time
+    const expiryTime = new Date();
+    expiryTime.setHours(expiryTime.getHours() + 1); // Set expiration time to 1 hour from now
 
     // Store the token and expiry in the database
     user.magicLinkToken = token;
@@ -59,7 +63,6 @@ const sendMagicLink = async (req, res) => {
 };
 
 // Verify the magic link token
-
 const verifyMagicLink = async (req, res) => {
   let { token } = req.params;
   token = token.trim();
