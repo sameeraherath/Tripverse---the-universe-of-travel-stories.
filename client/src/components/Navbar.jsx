@@ -1,4 +1,4 @@
-import { PencilLine, LogOut } from "lucide-react";
+import { PencilLine, LogOut, CircleUser } from "lucide-react";
 import { logout } from "../utils/authService";
 import { useNavigate } from "react-router-dom";
 
@@ -32,6 +32,14 @@ const Navbar = () => {
               className="hover:text-gray-100 px-4 md:px-8 py-4"
             >
               <LogOut size={24} />
+            </button>
+          </li>
+          <li>
+            <button
+              onClick={() => navigate("/profile")}
+              className="hover:text-gray-100 px-4 md:px-8 py-4"
+            >
+              <CircleUser size={24} />
             </button>
           </li>
         </ul>

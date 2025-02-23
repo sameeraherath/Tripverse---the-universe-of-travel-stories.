@@ -11,6 +11,7 @@ import PostDetails from "./pages/PostDetails";
 import LoginPage from "./pages/Auth/LoginPage";
 import MagicLogin from "./pages/Auth/MagicLogin";
 import Navbar from "./components/Navbar";
+import Profile from "./pages/Profile";
 const App = () => {
   return (
     <Router>
@@ -31,6 +32,7 @@ const AppContent = () => {
         <Route path="/edit/:id" element={<EditPost />} />
         <Route path="/post/:id" element={<PostDetails />} />
         <Route path="/magic-login/:token" element={<MagicLogin />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </div>
   );
