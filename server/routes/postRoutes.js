@@ -45,11 +45,58 @@ router.post("/", authMiddleware, upload.single("image"), async (req, res) => {
   }
 });
 
+// Delete a post by ID
+router.delete("/:id", authMiddleware, async (req, res) => {
+  try {
+    // Find the post by ID
+    const post = await Post.findById(req.params.id);
+
+    // Check if the post exists
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    // Check if the authenticated user is the author of the post
+    if (post.author.toString() !== req.userId) {
+      return res
+        .status(403)
+        .json({ message: "You are not the author of this post" });
+    }
+
+    await Post.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: "Post deleted successfully" });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Error deleting post", error: err.message });
+  }
+});
+
 // Update a post by ID
 router.put("/:id", authMiddleware, upload.single("image"), async (req, res) => {
   try {
     const { title, content } = req.body;
     let imageUrl = req.body.image;
+
+    // Find the post by ID
+
+    const post = await Post.findById(req.params.id);
+
+    // Check if the post exists
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    if (req.file) {
+      imageUrl = await uploadToCloudinary(req.file.buffer);
+    }
+
+    if (post.author.toString() !== req.userId) {
+      return res
+        .status(403)
+        .json({ message: "Unauthorized: You can only update your own posts" });
+    }
 
     if (req.file) {
       imageUrl = await uploadToCloudinary(req.file.buffer);
@@ -60,10 +107,6 @@ router.put("/:id", authMiddleware, upload.single("image"), async (req, res) => {
       { title, content, image: imageUrl },
       { new: true, runValidators: true }
     );
-
-    if (!updatedPost) {
-      return res.status(404).json({ message: "Post not found" });
-    }
 
     res.status(200).json(updatedPost);
   } catch (err) {
