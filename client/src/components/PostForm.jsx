@@ -30,14 +30,14 @@ const PostForm = ({ onSubmit, initialData }) => {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         required
-        className="w-full p-2 border rounded-3xl px-4 focus:outline-none"
+        className="w-full p-2 border border-neutral-600 rounded-3xl px-4 focus:outline-none"
       />
       <textarea
         placeholder="Content"
         value={content}
         onChange={(e) => setContent(e.target.value)}
         required
-        className="w-full h-36 p-3 border border-gray-300 rounded-lg resize-none focus:outline-none"
+        className="w-full h-36 p-3 border border-neutral-600  rounded-lg resize-none focus:outline-none"
       />
       <input
         type="file"
