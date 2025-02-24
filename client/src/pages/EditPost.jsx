@@ -25,11 +25,20 @@ const EditPost = () => {
 
   const handleSubmit = async (updatedData) => {
     try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        alert("You are not authenticated. Please log in.");
+        navigate("/");
+        return;
+      }
       await axios.put(
         `${import.meta.env.VITE_API_URL}/api/posts/${id}`,
         updatedData,
         {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       navigate(`/post/${id}`);

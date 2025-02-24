@@ -7,10 +7,19 @@ const CreatePost = () => {
 
   const handleSubmit = async (formData) => {
     try {
+      // Retrieve the token from localStorage
+      const token = localStorage.getItem("authToken");
+
+      if (!token) {
+        alert("You must be logged in to create a post.");
+        navigate("/");
+        return;
+      }
+
       await axios.post(`${import.meta.env.VITE_API_URL}/api/posts`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          withCredentials: true,
+          Authorization: `Bearer ${token}`,
         },
       });
       navigate("/home");

@@ -6,6 +6,7 @@ const PostDetails = () => {
   const { id } = useParams();
   const [post, setPost] = useState({});
   const navigate = useNavigate();
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     const fetchPostDetails = async () => {
@@ -14,6 +15,12 @@ const PostDetails = () => {
           `${import.meta.env.VITE_API_URL}/api/posts/${id}`
         );
         setPost(response.data);
+
+        const token = localStorage.getItem("authToken");
+        if (token) {
+          const decodedToken = JSON.parse(atob(token.split(".")[1]));
+          setUserId(decodedToken.userId);
+        }
       } catch (error) {
         console.error("Error fetching post details:", error);
       }
@@ -28,12 +35,25 @@ const PostDetails = () => {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/api/posts/${id}`);
-      alert("Post deleted successfully");
+      const token = localStorage.getItem("authToken");
+
+      if (!token) {
+        alert("You are not authenticated. Please log in.");
+        navigate("/login");
+        return;
+      }
+
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/posts/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      alert("Post deleted successfully.");
       navigate("/home");
     } catch (error) {
       console.error("Error deleting post:", error);
-      alert("Error deleting post");
+      alert("Failed to delete post. Please try again.");
     }
   };
 
@@ -52,15 +72,19 @@ const PostDetails = () => {
       )}
       <h2 className="text-3xl font-bold mb-4">{post.title}</h2>
       <p className="mb-4">{post.content}</p>
-      <Link to={`/edit/${id}`} className="text-blue-500 hover:underline">
-        Edit Post
-      </Link>
-      <button
-        onClick={handleDelete}
-        className="text-red-500 hover:underline ml-4"
-      >
-        Delete
-      </button>
+      {userId && post.author && userId === post.author && (
+        <>
+          <Link to={`/edit/${id}`} className="text-blue-500 hover:underline">
+            Edit Post
+          </Link>
+          <button
+            onClick={handleDelete}
+            className="text-red-500 hover:underline ml-4"
+          >
+            Delete
+          </button>
+        </>
+      )}
     </div>
   );
 };
