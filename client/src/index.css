@@ -7,3 +7,8 @@
   font-family: "Poppins", sans-serif;
   color-scheme: dark;
 }
+
+/* Change the checkmark color for success toasts */
+.Toastify__toast--success svg {
+  fill: white !important; /* Change to your desired color */
+}
