@@ -14,9 +14,10 @@ const Profile = () => {
     const fetchProfile = async () => {
       try {
         const response = await axios.get("/api/profile");
-        setName(response.data.name);
-        setBio(response.data.bio);
-        setPreview(response.data.avatar); // Load existing avatar
+        console.log("Profile Data:", response.data);
+        setName(response.data.name || "");
+        setBio(response.data.bio || "");
+        setPreview(response.data.avatar || "https://placehold.co/600x400"); // Load existing avatar
       } catch (error) {
         console.error("Error fetching profile:", error);
       }
@@ -63,7 +64,7 @@ const Profile = () => {
         <div className="flex justify-center mb-4">
           <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-neutral-600">
             <img
-              src={preview || "https://via.placeholder.com/150"}
+              src={preview || "https://placehold.co/600x400"}
               alt="Avatar Preview"
               className="w-full h-full object-cover border border-neutral-600"
             />
