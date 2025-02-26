@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { Slide, ToastContainer, toast } from "react-toastify";
+import { Camera } from "lucide-react";
 
 const Profile = () => {
   const [name, setName] = useState("");
@@ -77,11 +78,23 @@ const Profile = () => {
       <div className="  bg-neutral-900 shadow-xl rounded-3xl p-8 px-4 ">
         {/* Avatar Preview */}
         <div className="flex justify-center mb-4">
-          <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-neutral-600">
+          <div className="w-32 h-32 rounded-full overflow-hidden border-neutral-600 relative">
             <img
-              src={preview || "/public/profile-picture.png"}
-              alt="Avatar Preview"
-              className="w-full h-full object-cover border border-neutral-600"
+              src={preview || "/profile-picture.png"}
+              alt="Avatar"
+              className="w-full h-full object-cover border-neutral-600"
+            />
+            <label
+              htmlFor="avatarInput"
+              className="absolute bottom-2 right-2 bg-gray-800 p-2 rounded-full cursor-pointer"
+            >
+              <Camera className="w-4 h-4 text-white" />
+            </label>
+            <input
+              type="file"
+              id="avatarInput"
+              className="hidden"
+              onChange={handleAvatarChange}
             />
           </div>
         </div>
@@ -102,7 +115,7 @@ const Profile = () => {
           {/* Bio Textarea */}
           <div className="flex justify-center">
             <textarea
-              placeholder="Bio"
+              placeholder="Write something about yourself."
               maxLength={80}
               value={bio}
               onChange={(e) => setBio(e.target.value)}
@@ -110,20 +123,11 @@ const Profile = () => {
             />
           </div>
 
-          {/* Avatar Upload */}
-          <div>
-            <input
-              type="file"
-              onChange={handleAvatarChange}
-              className="w-80 p-2 px-4 border-none  rounded-3xl focus:outline-none file:bg-stone-800 file:py-2 file:px-4 file:border-none file:mr-4 "
-            />
-          </div>
-
           {/* Submit Button */}
-          <div>
+          <div className="flex justify-center">
             <button
               type="submit"
-              className="w-full p-3 bg-stone-800 text-white   focus:outline-none rounded-3xl"
+              className="w-80 p-3 bg-stone-800 text-white   focus:outline-none rounded-3xl "
               disabled={loading}
             >
               {loading ? "Saving..." : "Save"}

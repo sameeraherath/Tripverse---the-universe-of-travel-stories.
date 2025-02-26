@@ -12,6 +12,7 @@ import LoginPage from "./pages/Auth/LoginPage";
 import MagicLogin from "./pages/Auth/MagicLogin";
 import Navbar from "./components/Navbar";
 import Profile from "./pages/Profile";
+import LandingPage from "./pages/LandingPage";
 const App = () => {
   return (
     <Router>
@@ -24,9 +25,12 @@ const AppContent = () => {
   const location = useLocation();
   return (
     <div>
-      {location.pathname !== "/" && <Navbar />}
+      {location.pathname !== "/LoginPage" && location.pathname !== "/" && (
+        <Navbar />
+      )}
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/LoginPage" element={<LoginPage />} />
         <Route path="/home" element={<Home />} />
         <Route path="/create" element={<CreatePost />} />
         <Route path="/edit/:id" element={<EditPost />} />

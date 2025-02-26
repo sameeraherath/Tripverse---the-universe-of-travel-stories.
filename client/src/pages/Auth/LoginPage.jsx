@@ -49,9 +49,9 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex bg-gradient-to-r from-neutral-900 to-neutral-800">
       {/* Left Side - Introduction */}
-      <div className="w-2/3 bg-gradient-to-r from-gray-900 to-gray-700 flex-col items-center justify-center hidden md:flex">
+      <div className="w-2/3 flex-col items-center justify-center hidden md:flex">
         <motion.h1
           className="text-5xl font-extrabold text-center leading-tight px-4"
           initial={{ opacity: 0 }}
@@ -71,7 +71,7 @@ const LoginPage = () => {
       </div>
 
       {/* Right Side - Form */}
-      <div className="w-full md:w-1/2 flex items-center justify-center  flex-col px-8">
+      <div className="w-full md:w-1/2 flex items-center justify-center  flex-col px-8 ">
         <h2 className="text-3xl font-bold text-center text-white mb-10">
           Lets Get Started
         </h2>
@@ -80,7 +80,7 @@ const LoginPage = () => {
           <div className="mb-4">
             <label
               htmlFor="email"
-              className="block font-medium text-white pb-2 px-2"
+              className="block font-medium text-white pb-4 px-2"
             >
               Email Address
             </label>
@@ -91,7 +91,7 @@ const LoginPage = () => {
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-gray-800 border border-gray-700  px-4 py-2 text-white focus:outline-none rounded-3xl"
+              className="w-full  bg-neutral-800 border border-neutral-600  px-4 py-4 text-white focus:outline-none rounded-3xl"
               required
             />
             <p className="pt-6 px-2 text-gray-300 text-sm">
@@ -101,7 +101,7 @@ const LoginPage = () => {
           <div className="mt-6 flex items-center justify-center">
             <button
               type="submit"
-              className="bg-gradient-to-r from-gray-700 via-gray-800 to-gray-900 text-white font-bold py-2 px-4 rounded-3xl hover:bg-gradient-to-l hover:from-gray-600 hover:to-gray-800 disabled:bg-gray-600 disabled:cursor-not-allowed "
+              className="bg-stone-800 border border-stone-600 text-white py-4 px-8 font-semibold  rounded-3xl   disabled:cursor-not-allowed "
               disabled={loading}
             >
               {loading ? "Sending Magic Link..." : "Send Magic Link"}

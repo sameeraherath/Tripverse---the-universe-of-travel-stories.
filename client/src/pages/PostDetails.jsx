@@ -70,17 +70,22 @@ const PostDetails = () => {
           className="w-full h-64 object-cover mb-4 rounded-lg"
         />
       )}
+      <div className="pt-4 pb-4">
+        <p className="text-gray-300 ">
+          By{" "}
+          <span className="text-gray-300">
+            {post.author.profile?.name || "Unknown User"}
+          </span>
+        </p>
+      </div>
       <h2 className="text-3xl font-bold mb-4">{post.title}</h2>
       <p className="mb-4">{post.content}</p>
       {userId && post.author && userId === post.author && (
         <>
-          <Link to={`/edit/${id}`} className="text-blue-500 hover:underline">
+          <Link to={`/edit/${id}`} className="text-blue-500 ">
             Edit Post
           </Link>
-          <button
-            onClick={handleDelete}
-            className="text-red-500 hover:underline ml-4"
-          >
+          <button onClick={handleDelete} className="text-red-500  ml-4">
             Delete
           </button>
         </>
