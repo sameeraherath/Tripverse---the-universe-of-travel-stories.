@@ -131,7 +131,14 @@ router.get("/", async (req, res) => {
 // Get a post by ID
 router.get("/:id", async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(req.params.id).populate({
+      path: "author",
+      select: "email",
+      populate: {
+        path: "profile",
+        select: "name avatar",
+      },
+    });
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
