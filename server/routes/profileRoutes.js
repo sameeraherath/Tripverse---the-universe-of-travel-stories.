@@ -64,4 +64,20 @@ router.put("/", authMiddleware, upload.single("avatar"), async (req, res) => {
   }
 });
 
+// Get profile details by user ID
+router.get("/user/:userId", async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.params.userId }).populate(
+      "user",
+      "email"
+    );
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+    res.status(200).json(profile);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching profile", error });
+  }
+});
+
 module.exports = router;

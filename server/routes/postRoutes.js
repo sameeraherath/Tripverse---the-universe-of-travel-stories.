@@ -133,7 +133,7 @@ router.get("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id).populate({
       path: "author",
-      select: "email",
+      select: "email profile",
       populate: {
         path: "profile",
         select: "name avatar",

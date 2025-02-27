@@ -41,8 +41,37 @@ const sendMagicLink = async (req, res) => {
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
-      subject: "Your Magic Link for Login",
-      text: `Click here to log in: ${magicLink}`,
+      subject: "Your Secure Magic Login Link - Blogger",
+      html: `
+        <div style="font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f4; padding: 30px;">
+          <div style="max-width: 500px; background-color: white; padding: 20px; border-radius: 8px; 
+                      box-shadow: 0 0 10px rgba(0,0,0,0.1); margin: auto;">
+            <h2 style="color: #333;">Welcome to <span style="color: #007bff;">Blogger</span>! 📝</h2>
+            <p style="font-size: 16px; color: #555;">We're excited to have you back. Click the button below to securely log in:</p>
+            
+            <a href="${magicLink}" 
+               style="display: inline-block; background-color: #222; color: white; padding: 12px 24px; 
+                      text-decoration: none; font-size: 16px; font-weight: bold; border-radius: 5px; margin-top: 10px;">
+              🔑 Secure Login to Blogger
+            </a>
+            
+            <p style="font-size: 14px; color: #777; margin-top: 20px;">
+              This login link is valid for <strong>1 hour</strong>. If you did not request this, you can safely ignore it.
+            </p>
+    
+            <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+            
+            <p style="font-size: 14px; color: #888;">
+              Need help? Contact our support team at 
+              <a href="mailto:support@blogger.com" style="color: #007bff; text-decoration: none;">support@blogger.com</a>.
+            </p>
+    
+            <p style="font-size: 14px; color: #888;">
+              Thank you for using <strong>Blogger</strong> – Your space to write and share ideas! 🚀
+            </p>
+          </div>
+        </div>
+      `,
     };
 
     await transporter.sendMail(mailOptions);
