@@ -156,7 +156,7 @@ const LandingPage = () => {
             Join thousands of content creators who are saving time and producing
             better content with our AI-powered platform.
           </Typography>
-          <Box className="flex flex-col  sm:flex-row justify-center items-center gap-4 pt-8 ">
+          <Box className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-8">
             <Button
               component={Link}
               to="/LoginPage"
@@ -172,6 +172,16 @@ const LandingPage = () => {
               Get Started
             </Button>
           </Box>
+        </Container>
+      </Box>
+
+      {/* Footer Section */}
+      <Box className="bg-neutral-900 text-gray-300 py-6 text-center">
+        <Container maxWidth="lg">
+          <Typography variant="body2">
+            © {new Date().getFullYear()} AI Blogging Platform. All rights
+            reserved.
+          </Typography>
         </Container>
       </Box>
     </Box>

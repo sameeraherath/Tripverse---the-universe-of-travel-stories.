@@ -5,9 +5,12 @@ const PostForm = ({ onSubmit, initialData }) => {
   const [title, setTitle] = useState(initialData?.title || "");
   const [content, setContent] = useState(initialData?.content || "");
   const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false); // Add loading state
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true when the form is submitted
+
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", content);
@@ -18,8 +21,14 @@ const PostForm = ({ onSubmit, initialData }) => {
       formData.append("image", initialData.image);
     }
 
-    // Only call the onSubmit function passed as a prop
-    onSubmit(formData);
+    try {
+      // Only call the onSubmit function passed as a prop
+      await onSubmit(formData); // Assuming onSubmit is an async function
+    } catch (error) {
+      console.error("Error submitting form", error);
+    } finally {
+      setLoading(false); // Set loading to false after form submission
+    }
   };
 
   return (
@@ -45,12 +54,16 @@ const PostForm = ({ onSubmit, initialData }) => {
         className="w-80 p-2 px-4 border-none  rounded-3xl focus:outline-none file:bg-stone-800 file:py-2 file:px-4 file:border-none file:mr-4 "
         accept="image/*"
       />
-      <button
-        type="submit"
-        className="bg-stone-800 text-white py-2 px-10 mx-4 rounded-3xl"
-      >
-        Post
-      </button>
+      <div className="flex justify-center">
+        <button
+          type="submit"
+          className="w-80 p-3 bg-stone-800 text-white focus:outline-none rounded-3xl"
+          disabled={loading} // Disable the button while loading
+        >
+          {loading ? "Posting..." : "Post"}{" "}
+          {/* Change the button text based on loading */}
+        </button>
+      </div>
     </form>
   );
 };

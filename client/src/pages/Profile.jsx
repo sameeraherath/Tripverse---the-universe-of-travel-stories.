@@ -23,13 +23,15 @@ const Profile = () => {
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/profile`,
           {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
         const { name, bio, avatar } = response.data;
         setName(name || "");
         setBio(bio || "");
-        setPreview(avatar || "https://placehold.co/600x400"); // Load existing avatar
+        setPreview(avatar || "/profile-picture.png"); // Load existing avatar
       } catch (error) {
         console.error("Error fetching profile:", error);
       }

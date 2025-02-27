@@ -48,7 +48,7 @@ const EditPost = () => {
   };
 
   return (
-    <div>
+    <div className="container mx-auto max-w-2xl  px-8 pt-28">
       <h2 className="text-3xl font-bold mb-4">Edit Post</h2>
       <PostForm onSubmit={handleSubmit} initialData={post} />
     </div>
