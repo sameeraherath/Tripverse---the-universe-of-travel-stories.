@@ -1,15 +1,51 @@
-# Documentation
+# Blogger - AI-Powered Blogging Platform
 
-This is the documentation for the blog app. It contains information on how to use the app, how to contribute to the app, and how to report issues.
+Welcome to **Blogger**, a modern, AI-powered blogging platform designed to help writers create, edit, and publish content effortlessly. This project is built with a **React-based frontend** and a **Node.js/Express backend**, providing a seamless and intuitive user experience.
 
-## Using the App
+## Features
 
-To use the app, simply navigate to the root URL. You will be presented with a list of all posts. You can click on a post to view its details. You can also click on the "Create Post" button to create a new post.
+- **AI-Powered Writing**: Generate high-quality blog posts with AI assistance.
+- **Magic Link Authentication**: Secure and passwordless login using email magic links.
+- **User Profiles**: Customizable profiles with avatars, names, and bios.
+- **CRUD Operations**: Create, read, update, and delete blog posts.
+- **Image Uploads**: Upload and manage images for blog posts using Cloudinary.
+- **Responsive Design**: Optimized for both desktop and mobile devices.
+- **Dark Mode**: Built-in dark mode for a modern look and feel.
 
-## Contributing to the App
+## Technologies Used
 
-If you would like to contribute to the app, please fork the repository and submit a pull request. Make sure to follow the guidelines in the [CONTRIBUTING.md](CONTRIBUTING.md) file.
+### Frontend
 
-## Reporting Issues
+- **React**: A JavaScript library for building user interfaces.
+- **Vite**: A fast build tool for modern web applications.
+- **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
+- **React Router**: For client-side routing.
+- **Axios**: For making HTTP requests to the backend.
+- **Framer Motion**: For animations and transitions.
+- **React Toastify**: For displaying notifications.
 
-If you encounter any issues while using the app, please report them in the [issues](https://github.com/username/blog/issues) section of the repository. Make sure to follow the guidelines in the [ISSUE_TEMPLATE.md](ISSUE_TEMPLATE.md) file.
+### Backend
+
+- **Node.js**: A JavaScript runtime for building scalable server-side applications.
+- **Express**: A web framework for Node.js.
+- **MongoDB**: A NoSQL database for storing application data.
+- **Mongoose**: An ODM (Object Data Modeling) library for MongoDB.
+- **Cloudinary**: For image uploads and management.
+- **Nodemailer**: For sending magic link emails.
+- **JSON Web Tokens (JWT)**: For secure authentication.
+
+## Getting Started
+
+### Prerequisites
+
+- **Node.js**: Ensure you have Node.js installed (v16 or higher).
+- **MongoDB**: Set up a MongoDB database (local or cloud-based).
+- **Cloudinary Account**: Create an account on [Cloudinary](https://cloudinary.com/) for image uploads.
+
+### Installation
+
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/sameeraherath/blogger.git
+   cd blogger
+   ```

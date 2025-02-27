@@ -1,199 +1,216 @@
 # API Documentation
 
-The API is built using Node.js and Express.js. The API is documented using Swagger and OpenAPI.
+The API is built using Node.js and Express.js. It supports a blogging platform with features like user authentication via magic links, post management, and user profile management. The API uses MongoDB as its database and integrates with Cloudinary for image uploads.
+
+## Authentication
+
+Authentication is handled using JSON Web Tokens (JWT). Most endpoints require an `Authorization` header with a Bearer token, which is obtained after verifying a magic link.
 
 ## Endpoints
 
-### GET /posts
+### Authentication
+
+#### POST /api/auth/send-magic-link
+
+Sends a magic link to the user's email for passwordless login.
+
+- **Parameters**:
+  - `email` (body, required): The user's email address.
+- **Response**:
+  - `200 OK`: `{ message: "Magic link sent!" }`
+  - `500 Internal Server Error`: `{ message: "Error sending magic link" }`
+- **Example**:
+  ```bash
+  curl -X POST http://localhost:5000/api/auth/send-magic-link \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@example.com"}'
+  ```
+
+#### POST /api/auth/magic-login/:token
+
+Verifies the magic link token and logs the user in by issuing a JWT.
+
+- **Parameters**:
+  - `token` (path, required): The magic link token received via email.
+- **Response**:
+  - `200 OK`: `{ message: "Login successful", token: "<JWT>" }`
+  - `400 Bad Request`: `{ message: "Invalid or expired token" }`
+  - `500 Internal Server Error`: `{ message: "Internal server error" }`
+- **Example**:
+  ```bash
+  curl -X POST http://localhost:5000/api/auth/magic-login/<token>
+  ```
+
+---
+
+### Posts
+
+#### GET /api/posts
 
 Returns a list of all posts.
 
-#### Parameters
-
-- `limit`: The maximum number of posts to return. Defaults to 10.
-- `skip`: The number of posts to skip before returning the list. Defaults to 0.
-
-#### Response
-
-- `posts`: An array of post objects.
-
-### GET /posts/:id
-
-Returns a single post by ID.
-
-#### Parameters
-
-- `id`: The ID of the post to return.
-
-#### Response
-
-- `post`: The post object.
-
-### POST /posts
-
-Creates a new post.
-
-#### Parameters
-
-- `title`: The title of the post.
-- `content`: The content of the post.
-
-#### Response
-
-- `post`: The newly created post object.
-
-### PUT /posts/:id
-
-Updates a post by ID.
-
-#### Parameters
-
-- `id`: The ID of the post to update.
-- `title`: The new title of the post.
-- `content`: The new content of the post.
-
-#### Response
-
-- `post`: The updated post object.
-
-### DELETE /posts/:id
-
-Deletes a post by ID.
-
-#### Parameters
-
-- `id`: The ID of the post to delete.
-
-#### Response
-
-- `message`: A success message.
-
-### GET /users
-
-Returns a list of all users.
-
-#### Parameters
-
-- `limit`: The maximum number of users to return. Defaults to 10.
-- `skip`: The number of users to skip before returning the list. Defaults to 0.
-
-#### Response
-
-- `users`: An array of user objects.
-
-### GET /users/:id
-
-Returns a single user by ID.
-
-#### Parameters
-
-- `id`: The ID of the user to return.
-
-#### Response
-
-- `user`: The user object.
-
-### POST /users
-
-Creates a new user.
-
-#### Parameters
-
-- `email`: The email address of the user.
-- `password`: The password of the user.
-
-#### Response
-
-- `user`: The newly created user object.
-
-### PUT /users/:id
-
-Updates a user by ID.
-
-#### Parameters
-
-- `id`: The ID of the user to update.
-- `email`: The new email address of the user.
-- `password`: The new password of the user.
-
-#### Response
-
-- `user`: The updated user object.
-
-### DELETE /users/:id
-
-Deletes a user by ID.
-
-#### Parameters
-
-- `id`: The ID of the user to delete.
-
-#### Response
-
-- `message`: A success message.
-
-### GET /profiles
-
-Returns a list of all profiles.
-
-#### Parameters
-
-- `limit`: The maximum number of profiles to return. Defaults to 10.
-- `skip`: The number of profiles to skip before returning the list. Defaults to 0.
-
-#### Response
-
-- `profiles`: An array of profile objects.
-
-### GET /profiles/:id
-
-Returns a single profile by ID.
-
-#### Parameters
-
-- `id`: The ID of the profile to return.
-
-#### Response
-
-- `profile`: The profile object.
-
-### POST /profiles
-
-Creates a new profile.
-
-#### Parameters
-
-- `user`: The ID of the user the profile belongs to.
-- `name`: The name of the profile.
-- `bio`: The bio of the profile.
-
-#### Response
-
-- `profile`: The newly created profile object.
-
-### PUT /profiles/:id
-
-Updates a profile by ID.
-
-#### Parameters
-
-- `id`: The ID of the profile to update.
-- `user`: The new ID of the user the profile belongs to.
-- `name`: The new name of the profile.
-- `bio`: The new bio of the profile.
-
-#### Response
-
-- `profile`: The updated profile object.
-
-### DELETE /profiles/:id
-
-Deletes a profile by ID.
-
-#### Parameters
-
-- `id`: The ID of the profile to delete.
-
-#### Response
-
-- `message`: A success message.
+- **Parameters**: None
+- **Response**:
+  - `200 OK`: Array of post objects, each containing `title`, `content`, `image`, `author`, and `timestamps`.
+  - `500 Internal Server Error`: `{ message: "Error fetching posts", error: "<error message>" }`
+- **Example**:
+  ```bash
+  curl http://localhost:5000/api/posts
+  ```
+
+#### GET /api/posts/:id
+
+Returns a single post by its ID, including author details.
+
+- **Parameters**:
+  - `id` (path, required): The ID of the post.
+- **Response**:
+  - `200 OK`: Post object with `title`, `content`, `image`, `author` (populated with email and profile), and `timestamps`.
+  - `404 Not Found`: `{ message: "Post not found" }`
+  - `500 Internal Server Error`: `{ message: "Error fetching post", error: "<error message>" }`
+- **Example**:
+  ```bash
+  curl http://localhost:5000/api/posts/12345
+  ```
+
+#### POST /api/posts
+
+Creates a new post. Requires authentication.
+
+- **Headers**:
+  - `Authorization: Bearer <JWT>`
+  - `Content-Type: multipart/form-data`
+- **Parameters**:
+  - `title` (body, required): The title of the post.
+  - `content` (body, required): The content of the post.
+  - `image` (file, optional): An image file to upload.
+- **Response**:
+  - `201 Created`: The newly created post object.
+  - `401 Unauthorized`: `{ message: "Unauthorized" }`
+  - `500 Internal Server Error`: `{ message: "Error creating post", error: "<error message>" }`
+- **Example**:
+  ```bash
+  curl -X POST http://localhost:5000/api/posts \
+  -H "Authorization: Bearer <JWT>" \
+  -F "title=New Post" \
+  -F "content=This is a new post." \
+  -F "image=@/path/to/image.jpg"
+  ```
+
+#### PUT /api/posts/:id
+
+Updates an existing post by its ID. Requires authentication and ownership.
+
+- **Headers**:
+  - `Authorization: Bearer <JWT>`
+  - `Content-Type: multipart/form-data`
+- **Parameters**:
+  - `id` (path, required): The ID of the post to update.
+  - `title` (body, optional): The new title of the post.
+  - `content` (body, optional): The new content of the post.
+  - `image` (file or string, optional): A new image file or existing image URL.
+- **Response**:
+  - `200 OK`: The updated post object.
+  - `401 Unauthorized`: `{ message: "Unauthorized" }`
+  - `403 Forbidden`: `{ message: "Unauthorized: You can only update your own posts" }`
+  - `404 Not Found`: `{ message: "Post not found" }`
+  - `500 Internal Server Error`: `{ message: "Error updating post", error: "<error message>" }`
+- **Example**:
+  ```bash
+  curl -X PUT http://localhost:5000/api/posts/12345 \
+  -H "Authorization: Bearer <JWT>" \
+  -F "title=Updated Post" \
+  -F "content=Updated content."
+  ```
+
+#### DELETE /api/posts/:id
+
+Deletes a post by its ID. Requires authentication and ownership.
+
+- **Headers**:
+  - `Authorization: Bearer <JWT>`
+- **Parameters**:
+  - `id` (path, required): The ID of the post to delete.
+- **Response**:
+  - `200 OK`: `{ message: "Post deleted successfully" }`
+  - `401 Unauthorized`: `{ message: "Unauthorized" }`
+  - `403 Forbidden`: `{ message: "You are not the author of this post" }`
+  - `404 Not Found`: `{ message: "Post not found" }`
+  - `500 Internal Server Error`: `{ message: "Error deleting post", error: "<error message>" }`
+- **Example**:
+  ```bash
+  curl -X DELETE http://localhost:5000/api/posts/12345 \
+  -H "Authorization: Bearer <JWT>"
+  ```
+
+---
+
+### Profiles
+
+#### GET /api/profile
+
+Returns the authenticated user's profile.
+
+- **Headers**:
+  - `Authorization: Bearer <JWT>`
+- **Parameters**: None
+- **Response**:
+  - `200 OK`: Profile object with `user`, `name`, `bio`, `avatar`, and `timestamps`.
+  - `401 Unauthorized`: `{ message: "Unauthorized" }`
+  - `404 Not Found`: `{ message: "Profile not found" }`
+  - `500 Internal Server Error`: `{ message: "Error fetching profile", error: "<error message>" }`
+- **Example**:
+  ```bash
+  curl http://localhost:5000/api/profile \
+  -H "Authorization: Bearer <JWT>"
+  ```
+
+#### PUT /api/profile
+
+Updates the authenticated user's profile.
+
+- **Headers**:
+  - `Authorization: Bearer <JWT>`
+  - `Content-Type: multipart/form-data`
+- **Parameters**:
+  - `name` (body, optional): The new name for the profile.
+  - `bio` (body, optional): The new bio for the profile.
+  - `avatar` (file, optional): A new avatar image file.
+- **Response**:
+  - `200 OK`: The updated profile object.
+  - `401 Unauthorized`: `{ message: "Unauthorized" }`
+  - `404 Not Found`: `{ message: "Profile not found" }`
+  - `500 Internal Server Error`: `{ message: "Error updating profile", error: "<error message>" }`
+- **Example**:
+  ```bash
+  curl -X PUT http://localhost:5000/api/profile \
+  -H "Authorization: Bearer <JWT>" \
+  -F "name=John Doe" \
+  -F "bio=Web Developer" \
+  -F "avatar=@/path/to/avatar.jpg"
+  ```
+
+#### GET /api/profile/user/:userId
+
+Returns a user's profile by their user ID.
+
+- **Parameters**:
+  - `userId` (path, required): The ID of the user whose profile to fetch.
+- **Response**:
+  - `200 OK`: Profile object with `user`, `name`, `bio`, `avatar`, and `timestamps`.
+  - `404 Not Found`: `{ message: "Profile not found" }`
+  - `500 Internal Server Error`: `{ message: "Error fetching profile", error: "<error message>" }`
+- **Example**:
+  ```bash
+  curl http://localhost:5000/api/profile/user/67890
+  ```
+
+---
+
+## Notes
+
+- **Image Uploads**: Images for posts and profiles are uploaded to Cloudinary. Ensure the `Content-Type` is set to `multipart/form-data` when uploading files.
+- **CORS**: The API allows requests from specified origins (e.g., `http://localhost:5173`, Vercel deployments). Credentials are included for authenticated requests.
+- **Error Handling**: Most endpoints return a JSON object with a `message` field on error, accompanied by an appropriate HTTP status code.
+
+This documentation is based on the current implementation as of February 27, 2025. For further details, refer to the source code in the `server` directory.
