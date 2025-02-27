@@ -1,0 +1,199 @@
+# API Documentation
+
+The API is built using Node.js and Express.js. The API is documented using Swagger and OpenAPI.
+
+## Endpoints
+
+### GET /posts
+
+Returns a list of all posts.
+
+#### Parameters
+
+- `limit`: The maximum number of posts to return. Defaults to 10.
+- `skip`: The number of posts to skip before returning the list. Defaults to 0.
+
+#### Response
+
+- `posts`: An array of post objects.
+
+### GET /posts/:id
+
+Returns a single post by ID.
+
+#### Parameters
+
+- `id`: The ID of the post to return.
+
+#### Response
+
+- `post`: The post object.
+
+### POST /posts
+
+Creates a new post.
+
+#### Parameters
+
+- `title`: The title of the post.
+- `content`: The content of the post.
+
+#### Response
+
+- `post`: The newly created post object.
+
+### PUT /posts/:id
+
+Updates a post by ID.
+
+#### Parameters
+
+- `id`: The ID of the post to update.
+- `title`: The new title of the post.
+- `content`: The new content of the post.
+
+#### Response
+
+- `post`: The updated post object.
+
+### DELETE /posts/:id
+
+Deletes a post by ID.
+
+#### Parameters
+
+- `id`: The ID of the post to delete.
+
+#### Response
+
+- `message`: A success message.
+
+### GET /users
+
+Returns a list of all users.
+
+#### Parameters
+
+- `limit`: The maximum number of users to return. Defaults to 10.
+- `skip`: The number of users to skip before returning the list. Defaults to 0.
+
+#### Response
+
+- `users`: An array of user objects.
+
+### GET /users/:id
+
+Returns a single user by ID.
+
+#### Parameters
+
+- `id`: The ID of the user to return.
+
+#### Response
+
+- `user`: The user object.
+
+### POST /users
+
+Creates a new user.
+
+#### Parameters
+
+- `email`: The email address of the user.
+- `password`: The password of the user.
+
+#### Response
+
+- `user`: The newly created user object.
+
+### PUT /users/:id
+
+Updates a user by ID.
+
+#### Parameters
+
+- `id`: The ID of the user to update.
+- `email`: The new email address of the user.
+- `password`: The new password of the user.
+
+#### Response
+
+- `user`: The updated user object.
+
+### DELETE /users/:id
+
+Deletes a user by ID.
+
+#### Parameters
+
+- `id`: The ID of the user to delete.
+
+#### Response
+
+- `message`: A success message.
+
+### GET /profiles
+
+Returns a list of all profiles.
+
+#### Parameters
+
+- `limit`: The maximum number of profiles to return. Defaults to 10.
+- `skip`: The number of profiles to skip before returning the list. Defaults to 0.
+
+#### Response
+
+- `profiles`: An array of profile objects.
+
+### GET /profiles/:id
+
+Returns a single profile by ID.
+
+#### Parameters
+
+- `id`: The ID of the profile to return.
+
+#### Response
+
+- `profile`: The profile object.
+
+### POST /profiles
+
+Creates a new profile.
+
+#### Parameters
+
+- `user`: The ID of the user the profile belongs to.
+- `name`: The name of the profile.
+- `bio`: The bio of the profile.
+
+#### Response
+
+- `profile`: The newly created profile object.
+
+### PUT /profiles/:id
+
+Updates a profile by ID.
+
+#### Parameters
+
+- `id`: The ID of the profile to update.
+- `user`: The new ID of the user the profile belongs to.
+- `name`: The new name of the profile.
+- `bio`: The new bio of the profile.
+
+#### Response
+
+- `profile`: The updated profile object.
+
+### DELETE /profiles/:id
+
+Deletes a profile by ID.
+
+#### Parameters
+
+- `id`: The ID of the profile to delete.
+
+#### Response
+
+- `message`: A success message.
