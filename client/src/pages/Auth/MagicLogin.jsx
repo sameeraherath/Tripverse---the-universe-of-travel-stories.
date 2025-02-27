@@ -17,8 +17,6 @@ const MagicLogin = () => {
       }
 
       try {
-        console.log("Verifying token:", token);
-
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/api/auth/magic-login/${token}`,
           {
@@ -32,7 +30,6 @@ const MagicLogin = () => {
         }
 
         const data = await response.json();
-        console.log("Server Response:", data);
 
         if (data.token) {
           localStorage.setItem("authToken", data.token);
@@ -44,7 +41,6 @@ const MagicLogin = () => {
         }
       } catch (error) {
         console.error("Error verifying token:", error);
-        console.error(error);
         toast.error("Error verifying token");
         setTimeout(() => navigate("/"), 2000);
       }
