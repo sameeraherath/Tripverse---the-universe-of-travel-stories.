@@ -1,11 +1,37 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
+import axios from "axios";
 
 const PostForm = ({ onSubmit, initialData }) => {
   const [title, setTitle] = useState(initialData?.title || "");
   const [content, setContent] = useState(initialData?.content || "");
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false); // Add loading state
+  const [generating, setGenerating] = useState(false);
+
+  // AI Assistance Functions
+
+  const handleGenerateContent = async () => {
+    setGenerating(true);
+
+    try {
+      const token = localStorage.getItem("authToken");
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/ai/generate`,
+        { prompt: title || "Write a blog post" },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setContent(response.data.content);
+    } catch (error) {
+      console.error("Error generating content:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,12 +82,21 @@ const PostForm = ({ onSubmit, initialData }) => {
       />
       <div className="flex justify-center">
         <button
-          type="submit"
+          type="button"
           className="w-80 p-3 bg-stone-800 text-white focus:outline-none rounded-3xl"
+          onClick={handleGenerateContent}
           disabled={loading} // Disable the button while loading
         >
-          {loading ? "Posting..." : "Post"}{" "}
-          {/* Change the button text based on loading */}
+          {generating ? "Generating..." : "Generate with AI"}
+        </button>
+      </div>
+      <div className="flex justify-center">
+        <button
+          type="submit"
+          className="w-80 p-3 bg-stone-800 text-white rounded-3xl"
+          disabled={loading}
+        >
+          {loading ? "Posting..." : "Post"}
         </button>
       </div>
     </form>
