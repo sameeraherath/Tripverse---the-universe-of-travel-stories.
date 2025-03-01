@@ -1,18 +1,15 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPosts } from "../features/posts/postsSlice";
 import Card from "../components/Card";
 
 const Home = () => {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const { posts, loading } = useSelector((state) => state.posts);
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/api/posts`)
-      .then((response) => setPosts(response.data))
-      .then(() => setLoading(false))
-      .catch((error) => console.log(error));
-  }, []);
+    dispatch(fetchPosts());
+  }, [dispatch]);
 
   return (
     <div className="container mx-auto p-4">
