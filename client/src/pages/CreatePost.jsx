@@ -6,11 +6,11 @@ import PostForm from "../components/PostForm";
 const CreatePost = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error } = useSelector((state) => state.posts);
+  const { loading, error } = useSelector((state) => state.post);
 
   const handleSubmit = async (formData) => {
     const resultAction = await dispatch(createPost(formData));
-    if (createPost.fulfilled.match(resultAction)) {
+    if (createPost.isFulfilled.match(resultAction)) {
       navigate("/home");
     } else {
       alert("Failed to create post. Please try again.");

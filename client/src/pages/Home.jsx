@@ -5,7 +5,7 @@ import Card from "../components/Card";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { posts, loading } = useSelector((state) => state.posts);
+  const { posts, loading } = useSelector((state) => state.post);
 
   useEffect(() => {
     dispatch(fetchPosts());
