@@ -1,6 +1,7 @@
-import { PencilLine, LogOut, CircleUser } from "lucide-react";
-import { logout } from "../utils/authService";
+import { AppBar, Toolbar, Typography, IconButton } from "@mui/material";
+import { Create, Logout, AccountCircle } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { logout } from "../utils/authService";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -9,42 +10,40 @@ const Navbar = () => {
     logout();
     navigate("/");
   };
+
   return (
-    <nav className="bg-gradient-to-r from-neutral-900 to-neutral-800 text-white fixed w-full z-50 shadow-md">
-      <div className="w-full px-4 md:px-8 flex justify-between items-center">
-        <h1 className="text-2xl font-bold">
-          <button onClick={() => navigate("/home")} className="px-4 md:px-8">
-            Blogger
-          </button>
-        </h1>
-        <ul className="flex space-x-2">
-          <li>
-            <button
-              onClick={() => navigate("/create")}
-              className="hover:text-gray-100 px-4 md:px-8 py-4"
-            >
-              <PencilLine size={24} />
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={handleLogout}
-              className="hover:text-gray-100 px-4 md:px-8 py-4"
-            >
-              <LogOut size={24} />
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => navigate("/profile")}
-              className="hover:text-gray-100 px-4 md:px-8 py-4"
-            >
-              <CircleUser size={24} />
-            </button>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <AppBar
+      position="fixed"
+      sx={{ background: "linear-gradient(to right, #171717, #1f1f1f)" }}
+    >
+      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Typography
+          variant="h6"
+          component="button"
+          onClick={() => navigate("/home")}
+          sx={{
+            color: "white",
+            fontWeight: "bold",
+            border: "none",
+            background: "none",
+            cursor: "pointer",
+          }}
+        >
+          Blogger
+        </Typography>
+        <div>
+          <IconButton color="inherit" onClick={() => navigate("/create")}>
+            <Create />
+          </IconButton>
+          <IconButton color="inherit" onClick={handleLogout}>
+            <Logout />
+          </IconButton>
+          <IconButton color="inherit" onClick={() => navigate("/profile")}>
+            <AccountCircle />
+          </IconButton>
+        </div>
+      </Toolbar>
+    </AppBar>
   );
 };
 
