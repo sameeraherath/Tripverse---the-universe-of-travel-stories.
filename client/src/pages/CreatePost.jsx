@@ -9,21 +9,11 @@ const CreatePost = () => {
   const { loading, error } = useSelector((state) => state.post);
 
   const handleSubmit = async (formData) => {
-    try {
-      const resultAction = await dispatch(createPost(formData));
-      if (createPost.fulfilled.match(resultAction)) {
-        navigate("/home");
-      } else if (resultAction.payload) {
-        alert(
-          resultAction.payload.message ||
-            "Failed to create post. Please try again."
-        );
-      }
-    } catch (error) {
-      console.error("Error creating post:", error);
-      alert(
-        "Failed to create post. Please make sure you are logged in and try again."
-      );
+    const resultAction = await dispatch(createPost(formData));
+    if (createPost.isFulfilled.match(resultAction)) {
+      navigate("/home");
+    } else {
+      alert("Failed to create post. Please try again.");
     }
   };
 

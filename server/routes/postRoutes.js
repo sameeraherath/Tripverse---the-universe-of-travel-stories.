@@ -22,45 +22,26 @@ const uploadToCloudinary = async (buffer) => {
 // Create a new post
 router.post("/", authMiddleware, upload.single("image"), async (req, res) => {
   try {
-    if (!req.userId) {
-      return res
-        .status(401)
-        .json({ message: "Authentication required. Please login." });
-    }
-
     const { title, content } = req.body;
-    if (!title || !content) {
-      return res
-        .status(400)
-        .json({ message: "Title and content are required" });
-    }
-
     let imageUrl = null;
 
     if (req.file) {
-      try {
-        imageUrl = await uploadToCloudinary(req.file.buffer);
-      } catch (uploadError) {
-        console.error("Cloudinary upload error:", uploadError);
-        return res.status(500).json({ message: "Failed to upload image" });
-      }
+      imageUrl = await uploadToCloudinary(req.file.buffer);
     }
 
     const newPost = new Post({
       title,
       content,
       image: imageUrl,
-      author: req.userId,
+      author: req.userId, // Link post to authenticated user
     });
 
     await newPost.save();
     res.status(201).json(newPost);
   } catch (err) {
-    console.error("Error creating post:", err);
-    res.status(500).json({
-      message: "Error creating post",
-      error: err.message,
-    });
+    res
+      .status(500)
+      .json({ message: "Error creating post", error: err.message });
   }
 });
 

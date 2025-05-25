@@ -12,12 +12,6 @@ export const createPost = createAsyncThunk(
   "posts/createPost",
   async (formData, { getState, rejectWithValue }) => {
     const { auth } = getState();
-    const token = auth.token || localStorage.getItem("authToken");
-
-    if (!token) {
-      return rejectWithValue({ message: "No authentication token found" });
-    }
-
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/posts`,
@@ -25,15 +19,13 @@ export const createPost = createAsyncThunk(
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${auth.token}`,
           },
         }
       );
       return response.data;
     } catch (error) {
-      return rejectWithValue(
-        error.response?.data || { message: "Failed to create post" }
-      );
+      return rejectWithValue(error.response.data);
     }
   }
 );

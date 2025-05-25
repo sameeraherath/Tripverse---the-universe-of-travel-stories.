@@ -54,7 +54,7 @@ const Navbar = () => {
               },
             }}
           >
-            <Create />
+            <Create sx={{ fontSize: "32px" }} />
           </IconButton>
           <IconButton
             onClick={handleLogout}
@@ -65,7 +65,7 @@ const Navbar = () => {
               },
             }}
           >
-            <Logout />
+            <Logout sx={{ fontSize: "32px" }} />
           </IconButton>
           <IconButton
             onClick={() => navigate("/profile")}
@@ -76,7 +76,7 @@ const Navbar = () => {
               },
             }}
           >
-            <AccountCircle />
+            <AccountCircle sx={{ fontSize: "32px" }} />
           </IconButton>
         </div>
       </Toolbar>
