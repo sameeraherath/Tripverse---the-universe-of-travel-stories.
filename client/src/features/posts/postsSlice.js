@@ -30,6 +30,25 @@ export const createPost = createAsyncThunk(
   }
 );
 
+// Like a post
+export const likePost = createAsyncThunk(
+  "posts/likePost",
+  async (postId, { getState }) => {
+    const { auth } = getState();
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_URL}/api/posts/${postId}/like`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${auth.token}`,
+        },
+      }
+    );
+
+    return { postId, ...response.data };
+  }
+);
+
 // Posts slice definition
 const postsSlice = createSlice({
   name: "posts",
@@ -66,6 +85,17 @@ const postsSlice = createSlice({
       .addCase(createPost.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.message;
+      })
+      // Handle like post states
+      .addCase(likePost.fulfilled, (state, action) => {
+        const post = state.posts.find((p) => p._id === action.payload.postId);
+        if (post) {
+          post.likeCount = action.payload.likeCount;
+          post.liked = action.payload.liked;
+        }
+      })
+      .addCase(likePost.rejected, (state, action) => {
+        state.error = action.error.message;
       });
   },
 });

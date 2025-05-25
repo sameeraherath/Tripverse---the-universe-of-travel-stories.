@@ -150,4 +150,35 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// Like a post
+router.post("/:id/like", authMiddleware, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    // Check if user has already liked the post
+    const alreadyLiked = post.likes.includes(req.userId);
+
+    if (alreadyLiked) {
+      // Unlike the post
+      post.likes = post.likes.filter((id) => id.toString() !== req.userId);
+      post.likeCount = post.likeCount - 1;
+    } else {
+      // Like the post
+      post.likes.push(req.userId);
+      post.likeCount = post.likeCount + 1;
+    }
+
+    await post.save();
+    res.status(200).json({
+      liked: !alreadyLiked,
+      likeCount: post.likeCount,
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Error liking post", error: err.message });
+  }
+});
+
 module.exports = router;
