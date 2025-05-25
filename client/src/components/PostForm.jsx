@@ -58,42 +58,50 @@ const PostForm = ({ onSubmit, initialData }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <input
-        type="text"
-        placeholder="Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        required
-        className="w-full p-2 border border-neutral-600 rounded-3xl px-4 focus:outline-none"
-      />
-      <textarea
-        placeholder="Content"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        required
-        className="w-full h-36 p-3 border border-neutral-600  rounded-lg resize-none focus:outline-none"
-      />
-      <input
-        type="file"
-        onChange={(e) => setImage(e.target.files[0])}
-        className="w-80 p-2 px-4 border-none  rounded-3xl focus:outline-none file:bg-stone-800 file:py-2 file:px-4 file:border-none file:mr-4 "
-        accept="image/*"
-      />
-      <div className="flex justify-center">
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="space-y-2">
+        <input
+          type="text"
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+          className="w-full p-2 border border-gray-light bg-gray-lightest rounded-3xl px-4 focus:outline-none focus:ring-2 focus:ring-primary/20 text-gray-dark placeholder-gray-medium transition-all"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <textarea
+          placeholder="Content"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          required
+          className="w-full h-36 p-3 border border-gray-light bg-gray-lightest rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary/20 text-gray-dark placeholder-gray-medium transition-all"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <input
+          type="file"
+          onChange={(e) => setImage(e.target.files[0])}
+          className="w-full p-2 px-4 border-none rounded-3xl focus:outline-none file:bg-gradient-primary file:py-2 file:px-4 file:border-none file:mr-4 file:text-white file:font-semibold file:hover:opacity-90 file:transition"
+          accept="image/*"
+        />
+      </div>
+
+      <div className="flex flex-col gap-4">
         <button
           type="button"
-          className="w-80 p-3 bg-stone-800 text-white focus:outline-none rounded-3xl"
+          className="w-full p-3 bg-gradient-primary text-white font-semibold focus:outline-none rounded-3xl hover:opacity-90 transition disabled:opacity-60 shadow-sm"
           onClick={handleGenerateContent}
-          disabled={loading} // Disable the button while loading
+          disabled={loading}
         >
           {generating ? "Generating..." : "Generate with AI"}
         </button>
-      </div>
-      <div className="flex justify-center">
+
         <button
           type="submit"
-          className="w-80 p-3 bg-stone-800 text-white rounded-3xl"
+          className="w-full p-3 bg-gradient-primary text-white font-semibold rounded-3xl hover:opacity-90 transition disabled:opacity-60 shadow-sm"
           disabled={loading}
         >
           {loading ? "Posting..." : "Post"}

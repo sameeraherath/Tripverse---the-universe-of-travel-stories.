@@ -77,20 +77,20 @@ const Profile = () => {
 
   return (
     <div className="container mx-auto max-w-2xl py-16 px-8 pt-28">
-      <div className="  bg-neutral-900 shadow-xl rounded-3xl p-8 px-4 ">
+      <div className="bg-white shadow-xl rounded-3xl p-8 px-4">
         {/* Avatar Preview */}
         <div className="flex justify-center mb-4">
-          <div className="w-32 h-32 rounded-full overflow-hidden border-neutral-600 relative">
+          <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-lightest relative bg-gray-lightest">
             <img
               src={preview || "/profile-picture.png"}
               alt="Avatar"
-              className="w-full h-full object-cover border-neutral-600"
+              className="w-full h-full object-cover"
             />
             <label
               htmlFor="avatarInput"
-              className="absolute bottom-2 right-2 bg-gray-800 p-2 rounded-full cursor-pointer"
+              className="absolute bottom-2 right-2 bg-white border border-gray-light p-2 rounded-full cursor-pointer shadow-sm hover:bg-gray-lightest transition"
             >
-              <Camera className="w-4 h-4 text-white" />
+              <Camera className="w-4 h-4 text-primary" />
             </label>
             <input
               type="file"
@@ -110,7 +110,7 @@ const Profile = () => {
               placeholder="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="p-2 border-none border-neutral-600 rounded-3xl px-4 focus:outline-none text-center "
+              className="p-2 border border-gray-light bg-gray-lightest rounded-3xl px-4 focus:outline-none text-center text-gray-dark placeholder-gray-medium w-80"
             />
           </div>
 
@@ -121,7 +121,7 @@ const Profile = () => {
               maxLength={80}
               value={bio}
               onChange={(e) => setBio(e.target.value)}
-              className="w-80 h-16 p-3 border-none border-neutral-600 rounded-3xl resize-none focus:outline-none text-center "
+              className="w-80 h-16 p-3 border border-gray-light bg-gray-lightest rounded-3xl resize-none focus:outline-none text-center text-gray-dark placeholder-gray-medium"
             />
           </div>
 
@@ -129,7 +129,7 @@ const Profile = () => {
           <div className="flex justify-center">
             <button
               type="submit"
-              className="w-80 p-3 bg-stone-800 text-white   focus:outline-none rounded-3xl "
+              className="w-80 p-3 bg-gradient-to-r from-primary to-primary-light text-white font-semibold focus:outline-none rounded-3xl shadow hover:opacity-90 transition disabled:opacity-60"
               disabled={loading}
             >
               {loading ? "Saving..." : "Save"}
@@ -140,7 +140,7 @@ const Profile = () => {
       <ToastContainer
         position="bottom-center"
         hideProgressBar={true}
-        theme="dark"
+        theme="light"
         transition={Slide}
       />
     </div>

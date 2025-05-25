@@ -14,31 +14,68 @@ const Navbar = () => {
   return (
     <AppBar
       position="fixed"
-      sx={{ background: "linear-gradient(to right, #171717, #1f1f1f)" }}
+      sx={{
+        background: "#ffffff",
+        boxShadow:
+          "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+      }}
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+        {" "}
         <Typography
-          variant="h6"
+          variant="h4"
           component="button"
           onClick={() => navigate("/home")}
           sx={{
-            color: "white",
+            background: "linear-gradient(to right, #FF7A1A, #FFB347)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
             fontWeight: "bold",
             border: "none",
-            background: "none",
             cursor: "pointer",
+            fontSize: "2rem",
+            letterSpacing: "0.5px",
+            "&:hover": {
+              opacity: 0.9,
+            },
           }}
         >
           Blogger
         </Typography>
         <div>
-          <IconButton color="inherit" onClick={() => navigate("/create")}>
+          {" "}
+          <IconButton
+            onClick={() => navigate("/create")}
+            sx={{
+              color: "#444444",
+              "&:hover": {
+                color: "#111111",
+              },
+            }}
+          >
             <Create />
           </IconButton>
-          <IconButton color="inherit" onClick={handleLogout}>
+          <IconButton
+            onClick={handleLogout}
+            sx={{
+              color: "#444444",
+              "&:hover": {
+                color: "#111111",
+              },
+            }}
+          >
             <Logout />
           </IconButton>
-          <IconButton color="inherit" onClick={() => navigate("/profile")}>
+          <IconButton
+            onClick={() => navigate("/profile")}
+            sx={{
+              color: "#444444",
+              "&:hover": {
+                color: "#111111",
+              },
+            }}
+          >
             <AccountCircle />
           </IconButton>
         </div>

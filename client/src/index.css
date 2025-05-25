@@ -5,7 +5,24 @@
 
 :root {
   font-family: "Poppins", sans-serif;
-  color-scheme: dark;
+  color-scheme: light;
+  background-color: #f3f4f6;
+  color: #111111;
+}
+
+/* Base styles */
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-gray-dark font-bold;
+  }
+  p {
+    @apply text-gray-medium;
+  }
 }
 
 /* Change the checkmark color for success toasts */
