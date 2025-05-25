@@ -13,7 +13,7 @@ const Home = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-6xl font-bold mb-6 mt-12 text-center text-gray-dark py-2 pt-8">
+      <h2 className="text-4xl font-bold mb-6 mt-12 text-center text-gray-dark py-2 pt-8">
         Latest Blog Posts
       </h2>
       <p className="text-gray-medium text-center pb-4">
