@@ -147,7 +147,14 @@ router.get("/", async (req, res) => {
 
     // Fetch posts with pagination
     const posts = await Post.find(query)
-      .populate("author", "email")
+      .populate({
+        path: "author",
+        select: "email",
+        populate: {
+          path: "profile",
+          select: "name avatar bio"
+        }
+      })
       .sort(sortObj)
       .limit(parseInt(limit))
       .skip((parseInt(page) - 1) * parseInt(limit))

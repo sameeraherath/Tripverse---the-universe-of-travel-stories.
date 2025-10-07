@@ -7,6 +7,7 @@ import {
 } from "../features/comments/commentsSlice";
 import Comment from "../components/Comment";
 import CommentForm from "../components/CommentForm";
+import FollowButton from "../components/FollowButton";
 import api from "../utils/api";
 import {
   Share2,
@@ -189,10 +190,21 @@ const PostDetails = () => {
           <div className="p-8 md:p-12">
             {/* Author Info */}
             <div className="flex items-center justify-between mb-6 pb-6 border-b border-gray-100">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-primary flex items-center justify-center text-white text-xl font-bold">
-                  {authorProfile?.name?.charAt(0).toUpperCase() || "U"}
-                </div>
+              <Link
+                to={`/profile/${post.author?._id}`}
+                className="flex items-center gap-4 hover:opacity-80 transition-opacity"
+              >
+                {authorProfile?.avatar ? (
+                  <img
+                    src={authorProfile.avatar}
+                    alt={authorProfile.name || "Author"}
+                    className="w-12 h-12 rounded-full object-cover border-2 border-orange-200"
+                  />
+                ) : (
+                  <div className="w-12 h-12 rounded-full bg-gradient-primary flex items-center justify-center text-white text-xl font-bold">
+                    {authorProfile?.name?.charAt(0).toUpperCase() || "U"}
+                  </div>
+                )}
                 <div>
                   <p className="font-semibold text-gray-800">
                     {authorProfile ? authorProfile.name : "Unknown User"}
@@ -202,11 +214,11 @@ const PostDetails = () => {
                     <span>{formatDate(post.createdAt)}</span>
                   </div>
                 </div>
-              </div>
+              </Link>
 
               {/* Action Buttons */}
               <div className="flex items-center gap-2">
-                {userId && post.author && userId === post.author._id && (
+                {userId && post.author && userId === post.author._id ? (
                   <>
                     <Link
                       to={`/edit/${id}`}
@@ -223,6 +235,8 @@ const PostDetails = () => {
                       <span className="hidden sm:inline">Delete</span>
                     </button>
                   </>
+                ) : (
+                  post.author?._id && <FollowButton userId={post.author._id} variant="compact" />
                 )}
                 <button
                   onClick={handleShare}

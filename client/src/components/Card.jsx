@@ -87,6 +87,30 @@ const Card = ({ post }) => {
         </div>
 
         <div className="flex-1 flex flex-col gap-3">
+          {/* Author Info */}
+          {post.author && (
+            <Link
+              to={`/profile/${post.author._id}`}
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+            >
+              {post.author.profile?.avatar ? (
+                <img
+                  src={post.author.profile.avatar}
+                  alt={post.author.profile.name || "Author"}
+                  className="w-8 h-8 rounded-full object-cover border-2 border-orange-200"
+                />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-gradient-primary flex items-center justify-center text-white text-xs font-bold">
+                  {(post.author.profile?.name || post.author.email || "U")[0].toUpperCase()}
+                </div>
+              )}
+              <span className="text-sm font-medium text-gray-700">
+                {post.author.profile?.name || post.author.email}
+              </span>
+            </Link>
+          )}
+
           <h3 className="text-xl font-bold text-gray-dark line-clamp-2 group-hover:text-primary transition-colors">
             {post.title}
           </h3>

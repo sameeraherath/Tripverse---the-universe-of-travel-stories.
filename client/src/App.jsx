@@ -12,6 +12,7 @@ import LoginPage from "./pages/Auth/LoginPage";
 import MagicLogin from "./pages/Auth/MagicLogin";
 import Navbar from "./components/Navbar";
 import Profile from "./pages/Profile";
+import UserProfile from "./pages/UserProfile";
 import LandingPage from "./pages/LandingPage";
 const App = () => {
   return (
@@ -37,6 +38,7 @@ const AppContent = () => {
         <Route path="/post/:id" element={<PostDetails />} />
         <Route path="/magic-login/:token" element={<MagicLogin />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/:userId" element={<UserProfile />} />
       </Routes>
     </div>
   );
