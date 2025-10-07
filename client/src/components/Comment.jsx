@@ -37,7 +37,8 @@ const Comment = ({ comment }) => {
   };
 
   // Get author name from profile or email
-  const authorName = comment.author?.profile?.name || comment.author?.email || "Anonymous";
+  const authorName =
+    comment.author?.profile?.name || comment.author?.email || "Anonymous";
   const authorAvatar = comment.author?.profile?.avatar;
 
   return (
