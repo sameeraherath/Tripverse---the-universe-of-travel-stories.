@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { likePost } from "../features/posts/postsSlice";
+import BookmarkButton from "./BookmarkButton";
 import { MessageCircle } from "lucide-react";
 
 const Card = ({ post }) => {
@@ -153,6 +154,8 @@ const Card = ({ post }) => {
               <MessageCircle className="h-4 w-4" />
               <span className="font-medium">{post.commentCount || 0}</span>
             </div>
+
+            <BookmarkButton postId={post._id} variant="compact" />
           </div>
 
           <div className="text-primary font-medium text-sm flex items-center gap-1 group-hover:gap-2 transition-all">

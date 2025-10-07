@@ -6,7 +6,7 @@ import {
   Tooltip,
   Box,
 } from "@mui/material";
-import { Create, Logout, AccountCircle, Home } from "@mui/icons-material";
+import { Create, Logout, AccountCircle, Home, Bookmark } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../utils/authService";
 
@@ -100,6 +100,25 @@ const Navbar = () => {
               }}
             >
               <Create sx={{ fontSize: { xs: "24px", md: "28px" } }} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Bookmarks" arrow placement="bottom">
+            <IconButton
+              onClick={() => navigate("/bookmarks")}
+              sx={{
+                color: isActive("/bookmarks") ? "#FF7A1A" : "#444444",
+                backgroundColor: isActive("/bookmarks")
+                  ? "rgba(255, 122, 26, 0.1)"
+                  : "transparent",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  color: "#FF7A1A",
+                  backgroundColor: "rgba(255, 122, 26, 0.1)",
+                  transform: "translateY(-2px)",
+                },
+              }}
+            >
+              <Bookmark sx={{ fontSize: { xs: "24px", md: "28px" } }} />
             </IconButton>
           </Tooltip>
           <Tooltip title="Profile" arrow placement="bottom">

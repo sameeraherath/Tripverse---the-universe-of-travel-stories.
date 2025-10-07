@@ -8,6 +8,7 @@ import {
 import Comment from "../components/Comment";
 import CommentForm from "../components/CommentForm";
 import FollowButton from "../components/FollowButton";
+import BookmarkButton from "../components/BookmarkButton";
 import api from "../utils/api";
 import {
   Share2,
@@ -238,6 +239,7 @@ const PostDetails = () => {
                 ) : (
                   post.author?._id && <FollowButton userId={post.author._id} variant="compact" />
                 )}
+                <BookmarkButton postId={id} variant="icon-only" />
                 <button
                   onClick={handleShare}
                   className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium"

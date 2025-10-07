@@ -252,4 +252,54 @@ router.get("/follow/status/:userId", authMiddleware, async (req, res) => {
   }
 });
 
+// Get bookmarked posts
+router.get("/bookmarks", authMiddleware, async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.userId }).populate({
+      path: "bookmarkedPosts",
+      populate: {
+        path: "author",
+        select: "email",
+        populate: {
+          path: "profile",
+          select: "name avatar bio",
+        },
+      },
+    });
+
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    res.status(200).json({
+      bookmarks: profile.bookmarkedPosts,
+      count: profile.bookmarkedPosts.length,
+    });
+  } catch (error) {
+    console.error("Error fetching bookmarks:", error);
+    res.status(500).json({ message: "Error fetching bookmarks", error });
+  }
+});
+
+// Check if a post is bookmarked
+router.get("/bookmark/status/:postId", authMiddleware, async (req, res) => {
+  try {
+    const postId = req.params.postId;
+    const profile = await Profile.findOne({ user: req.userId });
+
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    const isBookmarked = profile.bookmarkedPosts.some(
+      (id) => id.toString() === postId
+    );
+
+    res.status(200).json({ isBookmarked });
+  } catch (error) {
+    console.error("Error checking bookmark status:", error);
+    res.status(500).json({ message: "Error checking bookmark status", error });
+  }
+});
+
 module.exports = router;

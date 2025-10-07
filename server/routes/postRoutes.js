@@ -230,4 +230,82 @@ router.post("/:id/like", authMiddleware, async (req, res) => {
   }
 });
 
+// Bookmark a post
+router.post("/:id/bookmark", authMiddleware, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const Profile = require("../models/profile");
+    const profile = await Profile.findOne({ user: req.userId });
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    // Check if already bookmarked
+    const alreadyBookmarked = post.bookmarks.includes(req.userId);
+
+    if (alreadyBookmarked) {
+      return res.status(400).json({ message: "Post already bookmarked" });
+    }
+
+    // Add bookmark
+    post.bookmarks.push(req.userId);
+    post.bookmarkCount = post.bookmarkCount + 1;
+    profile.bookmarkedPosts.push(post._id);
+
+    await Promise.all([post.save(), profile.save()]);
+
+    res.status(200).json({
+      bookmarked: true,
+      bookmarkCount: post.bookmarkCount,
+      message: "Post bookmarked successfully",
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Error bookmarking post", error: err.message });
+  }
+});
+
+// Remove bookmark from a post
+router.delete("/:id/bookmark", authMiddleware, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const Profile = require("../models/profile");
+    const profile = await Profile.findOne({ user: req.userId });
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    // Check if bookmarked
+    const isBookmarked = post.bookmarks.includes(req.userId);
+
+    if (!isBookmarked) {
+      return res.status(400).json({ message: "Post not bookmarked" });
+    }
+
+    // Remove bookmark
+    post.bookmarks = post.bookmarks.filter((id) => id.toString() !== req.userId);
+    post.bookmarkCount = Math.max(0, post.bookmarkCount - 1);
+    profile.bookmarkedPosts = profile.bookmarkedPosts.filter(
+      (id) => id.toString() !== post._id.toString()
+    );
+
+    await Promise.all([post.save(), profile.save()]);
+
+    res.status(200).json({
+      bookmarked: false,
+      bookmarkCount: post.bookmarkCount,
+      message: "Bookmark removed successfully",
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Error removing bookmark", error: err.message });
+  }
+});
+
 module.exports = router;

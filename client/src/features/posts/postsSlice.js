@@ -40,6 +40,51 @@ export const likePost = createAsyncThunk("posts/likePost", async (postId) => {
   return { postId, ...response.data };
 });
 
+// Bookmark a post
+export const bookmarkPost = createAsyncThunk(
+  "posts/bookmarkPost",
+  async (postId, { rejectWithValue }) => {
+    try {
+      const response = await api.post(`/api/posts/${postId}/bookmark`);
+      return { postId, ...response.data };
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to bookmark post"
+      );
+    }
+  }
+);
+
+// Remove bookmark from a post
+export const removeBookmark = createAsyncThunk(
+  "posts/removeBookmark",
+  async (postId, { rejectWithValue }) => {
+    try {
+      const response = await api.delete(`/api/posts/${postId}/bookmark`);
+      return { postId, ...response.data };
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to remove bookmark"
+      );
+    }
+  }
+);
+
+// Get bookmarked posts
+export const getBookmarkedPosts = createAsyncThunk(
+  "posts/getBookmarkedPosts",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get("/api/profile/bookmarks");
+      return response.data.bookmarks;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch bookmarks"
+      );
+    }
+  }
+);
+
 // Posts slice definition
 const postsSlice = createSlice({
   name: "posts",
@@ -114,6 +159,41 @@ const postsSlice = createSlice({
       })
       .addCase(likePost.rejected, (state, action) => {
         state.error = action.error.message;
+      })
+      // Handle bookmark post states
+      .addCase(bookmarkPost.fulfilled, (state, action) => {
+        const post = state.posts.find((p) => p._id === action.payload.postId);
+        if (post) {
+          post.bookmarkCount = action.payload.bookmarkCount;
+          post.bookmarked = action.payload.bookmarked;
+        }
+      })
+      .addCase(bookmarkPost.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+      // Handle remove bookmark states
+      .addCase(removeBookmark.fulfilled, (state, action) => {
+        const post = state.posts.find((p) => p._id === action.payload.postId);
+        if (post) {
+          post.bookmarkCount = action.payload.bookmarkCount;
+          post.bookmarked = action.payload.bookmarked;
+        }
+      })
+      .addCase(removeBookmark.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+      // Handle get bookmarked posts states
+      .addCase(getBookmarkedPosts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getBookmarkedPosts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.posts = action.payload;
+      })
+      .addCase(getBookmarkedPosts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });

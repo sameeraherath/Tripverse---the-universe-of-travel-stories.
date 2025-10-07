@@ -13,6 +13,7 @@ import MagicLogin from "./pages/Auth/MagicLogin";
 import Navbar from "./components/Navbar";
 import Profile from "./pages/Profile";
 import UserProfile from "./pages/UserProfile";
+import Bookmarks from "./pages/Bookmarks";
 import LandingPage from "./pages/LandingPage";
 const App = () => {
   return (
@@ -39,6 +40,7 @@ const AppContent = () => {
         <Route path="/magic-login/:token" element={<MagicLogin />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/:userId" element={<UserProfile />} />
+        <Route path="/bookmarks" element={<Bookmarks />} />
       </Routes>
     </div>
   );
