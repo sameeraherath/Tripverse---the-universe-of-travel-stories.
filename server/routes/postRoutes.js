@@ -22,11 +22,17 @@ const uploadToCloudinary = async (buffer) => {
 // Create a new post
 router.post("/", authMiddleware, upload.single("image"), async (req, res) => {
   try {
-    const { title, content } = req.body;
+    const { title, content, category, tags } = req.body;
     let imageUrl = null;
 
     if (req.file) {
       imageUrl = await uploadToCloudinary(req.file.buffer);
+    }
+
+    // Parse tags if sent as JSON string
+    let parsedTags = [];
+    if (tags) {
+      parsedTags = typeof tags === "string" ? JSON.parse(tags) : tags;
     }
 
     const newPost = new Post({
@@ -34,6 +40,8 @@ router.post("/", authMiddleware, upload.single("image"), async (req, res) => {
       content,
       image: imageUrl,
       author: req.userId, // Link post to authenticated user
+      category: category || "General",
+      tags: parsedTags,
     });
 
     await newPost.save();
@@ -75,8 +83,14 @@ router.delete("/:id", authMiddleware, async (req, res) => {
 // Update a post by ID
 router.put("/:id", authMiddleware, upload.single("image"), async (req, res) => {
   try {
-    const { title, content } = req.body;
+    const { title, content, category, tags } = req.body;
     let imageUrl = req.body.image;
+
+    // Parse tags if sent as JSON string
+    let parsedTags = [];
+    if (tags) {
+      parsedTags = typeof tags === "string" ? JSON.parse(tags) : tags;
+    }
 
     // Find the post by ID
 
@@ -104,7 +118,13 @@ router.put("/:id", authMiddleware, upload.single("image"), async (req, res) => {
 
     const updatedPost = await Post.findByIdAndUpdate(
       req.params.id,
-      { title, content, image: imageUrl },
+      { 
+        title, 
+        content, 
+        image: imageUrl,
+        category: category || post.category,
+        tags: parsedTags.length > 0 ? parsedTags : post.tags
+      },
       { new: true, runValidators: true }
     );
 
@@ -121,6 +141,8 @@ router.get("/", async (req, res) => {
   try {
     const { 
       search, 
+      category,
+      tags,
       page = 1, 
       limit = 10, 
       sortBy = "createdAt", 
@@ -136,6 +158,17 @@ router.get("/", async (req, res) => {
         { title: { $regex: search, $options: "i" } },
         { content: { $regex: search, $options: "i" } }
       ];
+    }
+
+    // Filter by category
+    if (category && category !== "All") {
+      query.category = category;
+    }
+
+    // Filter by tags
+    if (tags) {
+      const tagArray = Array.isArray(tags) ? tags : [tags];
+      query.tags = { $in: tagArray };
     }
 
     // Count total documents
@@ -305,6 +338,49 @@ router.delete("/:id/bookmark", authMiddleware, async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ message: "Error removing bookmark", error: err.message });
+  }
+});
+
+// Get all unique categories
+router.get("/categories/all", async (req, res) => {
+  try {
+    const categories = await Post.distinct("category");
+    res.status(200).json({ categories });
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching categories", error: err.message });
+  }
+});
+
+// Get all unique tags
+router.get("/tags/all", async (req, res) => {
+  try {
+    const tags = await Post.distinct("tags");
+    // Filter out empty strings and sort alphabetically
+    const filteredTags = tags.filter(tag => tag && tag.trim()).sort();
+    res.status(200).json({ tags: filteredTags });
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching tags", error: err.message });
+  }
+});
+
+// Get popular tags (tags with most posts)
+router.get("/tags/popular", async (req, res) => {
+  try {
+    const result = await Post.aggregate([
+      { $unwind: "$tags" },
+      { $group: { _id: "$tags", count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+      { $limit: 20 }
+    ]);
+    
+    const popularTags = result.map(item => ({
+      tag: item._id,
+      count: item.count
+    }));
+    
+    res.status(200).json({ tags: popularTags });
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching popular tags", error: err.message });
   }
 });
 

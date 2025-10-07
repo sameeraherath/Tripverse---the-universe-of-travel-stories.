@@ -50,9 +50,24 @@ const postSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    category: {
+      type: String,
+      default: "General",
+      index: true,
+    },
+    tags: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
   },
   { timestamps: true }
 );
+
+// Index for better search performance
+postSchema.index({ tags: 1 });
+postSchema.index({ category: 1 });
 
 const post = mongoose.model("Post", postSchema);
 

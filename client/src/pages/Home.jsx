@@ -1,17 +1,27 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts, setSearchTerm, setSortBy } from "../features/posts/postsSlice";
 import Card from "../components/Card";
 import SearchBar from "../components/SearchBar";
+import CategoryFilter from "../components/CategoryFilter";
+import TagCloud from "../components/TagCloud";
 import { Sparkles, Loader2 } from "lucide-react";
 
 const Home = () => {
   const dispatch = useDispatch();
   const { posts, loading, pagination, searchTerm, sortBy } = useSelector((state) => state.post);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedTags, setSelectedTags] = useState([]);
 
   useEffect(() => {
-    dispatch(fetchPosts({ search: searchTerm, sortBy, page: 1 }));
-  }, [dispatch, searchTerm, sortBy]);
+    dispatch(fetchPosts({ 
+      search: searchTerm, 
+      sortBy, 
+      category: selectedCategory,
+      tags: selectedTags,
+      page: 1 
+    }));
+  }, [dispatch, searchTerm, sortBy, selectedCategory, selectedTags]);
 
   const handleSearch = (search) => {
     dispatch(setSearchTerm(search));
@@ -21,11 +31,23 @@ const Home = () => {
     dispatch(setSortBy(sort));
   };
 
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+  };
+
+  const handleTagClick = (tag) => {
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
+  };
+
   const handleLoadMore = () => {
     if (pagination.hasMore && !loading) {
       dispatch(fetchPosts({ 
         search: searchTerm, 
-        sortBy, 
+        sortBy,
+        category: selectedCategory,
+        tags: selectedTags,
         page: pagination.currentPage + 1 
       }));
     }
@@ -49,10 +71,54 @@ const Home = () => {
           </p>
         </div>
 
-        {/* Search Bar */}
-        <div className="mb-8">
-          <SearchBar onSearch={handleSearch} onSort={handleSort} />
+        {/* Search Bar & Filters */}
+        <div className="mb-8 flex flex-col lg:flex-row gap-4">
+          <div className="flex-1">
+            <SearchBar onSearch={handleSearch} onSort={handleSort} />
+          </div>
+          <CategoryFilter
+            selectedCategory={selectedCategory}
+            onCategoryChange={handleCategoryChange}
+          />
         </div>
+
+        {/* Main Content Area */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Posts Grid - Takes 3 columns */}
+          <div className="lg:col-span-3">
+            {/* Selected Filters Display */}
+            {(selectedCategory !== "All" || selectedTags.length > 0) && (
+              <div className="mb-6 flex flex-wrap items-center gap-2">
+                <span className="text-sm font-medium text-gray-600">
+                  Filters:
+                </span>
+                {selectedCategory !== "All" && (
+                  <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
+                    {selectedCategory}
+                    <button
+                      onClick={() => setSelectedCategory("All")}
+                      className="hover:bg-blue-200 rounded-full p-0.5"
+                    >
+                      ✕
+                    </button>
+                  </span>
+                )}
+                {selectedTags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-flex items-center gap-1 px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm font-medium"
+                  >
+                    {tag}
+                    <button
+                      onClick={() => handleTagClick(tag)}
+                      className="hover:bg-orange-200 rounded-full p-0.5"
+                    >
+                      ✕
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
 
         {/* Posts Grid */}
         {loading ? (
@@ -112,6 +178,18 @@ const Home = () => {
             </a>
           </div>
         )}
+          </div>
+
+          {/* Sidebar - Takes 1 column */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-24">
+              <TagCloud
+                onTagClick={handleTagClick}
+                selectedTags={selectedTags}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

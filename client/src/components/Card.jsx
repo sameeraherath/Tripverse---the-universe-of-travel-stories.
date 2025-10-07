@@ -115,10 +115,37 @@ const Card = ({ post }) => {
           <h3 className="text-xl font-bold text-gray-dark line-clamp-2 group-hover:text-primary transition-colors">
             {post.title}
           </h3>
+
+          {/* Category Badge */}
+          {post.category && (
+            <span className="inline-block px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full w-fit">
+              {post.category}
+            </span>
+          )}
+
           <p className="text-gray-medium line-clamp-3 text-sm leading-relaxed">
             {post.content.substring(0, 150)}
             {post.content.length > 150 ? "..." : ""}
           </p>
+
+          {/* Tags */}
+          {post.tags && post.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1">
+              {post.tags.slice(0, 3).map((tag) => (
+                <span
+                  key={tag}
+                  className="inline-block px-2 py-0.5 bg-orange-50 text-orange-600 text-xs rounded-full"
+                >
+                  #{tag}
+                </span>
+              ))}
+              {post.tags.length > 3 && (
+                <span className="text-xs text-gray-400">
+                  +{post.tags.length - 3} more
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="flex justify-between items-center pt-3 border-t border-gray-100">
