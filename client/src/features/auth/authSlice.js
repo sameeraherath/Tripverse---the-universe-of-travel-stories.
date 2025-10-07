@@ -1,15 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import api from "../../utils/api";
 
 // Async thunk to request magic link email
 export const sendMagicLink = createAsyncThunk(
   "auth/sendMagicLink",
   async (email, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/send-magic-link`,
-        { email }
-      );
+      const response = await api.post("/api/auth/send-magic-link", { email });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -22,9 +19,7 @@ export const verifyMagicLink = createAsyncThunk(
   "auth/verifyMagicLink",
   async (token, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/magic-login/${token}`
-      );
+      const response = await api.post(`/api/auth/magic-login/${token}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

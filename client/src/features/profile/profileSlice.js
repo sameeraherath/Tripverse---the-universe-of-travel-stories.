@@ -1,20 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import api from "../../utils/api";
 
 // Fetch user profile from API
 export const fetchProfile = createAsyncThunk(
   "profile/fetchProfile",
-  async (_, { getState, rejectWithValue }) => {
-    const { auth } = getState();
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/profile`,
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
+      const response = await api.get("/api/profile");
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -25,19 +17,13 @@ export const fetchProfile = createAsyncThunk(
 // Update user profile with form data
 export const updateProfile = createAsyncThunk(
   "profile/updateProfile",
-  async (formData, { getState, rejectWithValue }) => {
-    const { auth } = getState();
+  async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/profile`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
+      const response = await api.put("/api/profile", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

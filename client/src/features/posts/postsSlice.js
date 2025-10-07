@@ -1,28 +1,22 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import api from "../../utils/api";
 
 // Fetch all posts from the API
 export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
-  const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/posts`);
+  const response = await api.get("/api/posts");
   return response.data;
 });
 
 // Create a new post with image support
 export const createPost = createAsyncThunk(
   "posts/createPost",
-  async (formData, { getState, rejectWithValue }) => {
-    const { auth } = getState();
+  async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/posts`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
+      const response = await api.post("/api/posts", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -31,23 +25,10 @@ export const createPost = createAsyncThunk(
 );
 
 // Like a post
-export const likePost = createAsyncThunk(
-  "posts/likePost",
-  async (postId, { getState }) => {
-    const { auth } = getState();
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/posts/${postId}/like`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${auth.token}`,
-        },
-      }
-    );
-
-    return { postId, ...response.data };
-  }
-);
+export const likePost = createAsyncThunk("posts/likePost", async (postId) => {
+  const response = await api.post(`/api/posts/${postId}/like`);
+  return { postId, ...response.data };
+});
 
 // Posts slice definition
 const postsSlice = createSlice({
