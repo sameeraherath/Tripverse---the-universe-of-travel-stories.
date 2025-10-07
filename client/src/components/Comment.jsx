@@ -27,9 +27,13 @@ const Comment = ({ comment }) => {
 
     if (diffMins < 1) return "Just now";
     if (diffMins < 60) return `${diffMins} min${diffMins > 1 ? "s" : ""} ago`;
-    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
+    if (diffHours < 24)
+      return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
     if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
-    return commentDate.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    return commentDate.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
   };
 
   return (
@@ -40,7 +44,7 @@ const Comment = ({ comment }) => {
             {comment.author.name?.charAt(0).toUpperCase() || "U"}
           </div>
         </div>
-        
+
         <div className="flex-1">
           <div className="flex items-start justify-between mb-2">
             <div>
@@ -61,7 +65,7 @@ const Comment = ({ comment }) => {
               </button>
             )}
           </div>
-          
+
           <p className="text-gray-700 leading-relaxed">{comment.content}</p>
         </div>
       </div>
@@ -81,4 +85,3 @@ Comment.propTypes = {
 };
 
 export default Comment;
-

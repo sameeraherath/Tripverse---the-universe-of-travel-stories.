@@ -28,10 +28,19 @@ const Card = ({ post }) => {
           highlightColor="#e5e7eb"
         />
         <div className="space-y-3">
-          <Skeleton width="80%" height={24} baseColor="#F3F4F6" highlightColor="#e5e7eb" />
+          <Skeleton
+            width="80%"
+            height={24}
+            baseColor="#F3F4F6"
+            highlightColor="#e5e7eb"
+          />
           <Skeleton count={3} baseColor="#F3F4F6" highlightColor="#e5e7eb" />
           <div className="flex justify-between pt-2">
-            <Skeleton width={100} baseColor="#F3F4F6" highlightColor="#e5e7eb" />
+            <Skeleton
+              width={100}
+              baseColor="#F3F4F6"
+              highlightColor="#e5e7eb"
+            />
             <Skeleton width={60} baseColor="#F3F4F6" highlightColor="#e5e7eb" />
           </div>
         </div>
@@ -44,11 +53,14 @@ const Card = ({ post }) => {
     const postDate = new Date(date);
     const diffTime = Math.abs(now - postDate);
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays === 0) return "Today";
     if (diffDays === 1) return "Yesterday";
     if (diffDays < 7) return `${diffDays} days ago`;
-    return postDate.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    return postDate.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
   };
 
   return (
@@ -73,13 +85,14 @@ const Card = ({ post }) => {
             </div>
           )}
         </div>
-        
+
         <div className="flex-1 flex flex-col gap-3">
           <h3 className="text-xl font-bold text-gray-dark line-clamp-2 group-hover:text-primary transition-colors">
             {post.title}
           </h3>
           <p className="text-gray-medium line-clamp-3 text-sm leading-relaxed">
-            {post.content.substring(0, 150)}{post.content.length > 150 ? "..." : ""}
+            {post.content.substring(0, 150)}
+            {post.content.length > 150 ? "..." : ""}
           </p>
         </div>
 
@@ -88,8 +101,8 @@ const Card = ({ post }) => {
             <button
               onClick={handleLike}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all duration-300 ${
-                post.liked 
-                  ? "text-red-500 bg-red-50" 
+                post.liked
+                  ? "text-red-500 bg-red-50"
                   : "text-gray-500 hover:text-red-500 hover:bg-red-50"
               } ${!token ? "cursor-not-allowed opacity-50" : ""}`}
               disabled={!token}
@@ -111,17 +124,27 @@ const Card = ({ post }) => {
               </svg>
               <span className="font-medium">{post.likeCount || 0}</span>
             </button>
-            
+
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-gray-500">
               <MessageCircle className="h-4 w-4" />
               <span className="font-medium">{post.commentCount || 0}</span>
             </div>
           </div>
-          
+
           <div className="text-primary font-medium text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
-            Read More 
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            Read More
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
             </svg>
           </div>
         </div>

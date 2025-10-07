@@ -1,4 +1,11 @@
-import { AppBar, Toolbar, Typography, IconButton, Tooltip, Box } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Tooltip,
+  Box,
+} from "@mui/material";
 import { Create, Logout, AccountCircle, Home } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../utils/authService";
@@ -50,13 +57,21 @@ const Navbar = () => {
         >
           ✍️ Blogger
         </Typography>
-        <Box sx={{ display: "flex", gap: { xs: 0.5, md: 1 }, alignItems: "center" }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: { xs: 0.5, md: 1 },
+            alignItems: "center",
+          }}
+        >
           <Tooltip title="Home" arrow placement="bottom">
             <IconButton
               onClick={() => navigate("/home")}
               sx={{
                 color: isActive("/home") ? "#FF7A1A" : "#444444",
-                backgroundColor: isActive("/home") ? "rgba(255, 122, 26, 0.1)" : "transparent",
+                backgroundColor: isActive("/home")
+                  ? "rgba(255, 122, 26, 0.1)"
+                  : "transparent",
                 transition: "all 0.3s ease",
                 "&:hover": {
                   color: "#FF7A1A",
@@ -73,7 +88,9 @@ const Navbar = () => {
               onClick={() => navigate("/create")}
               sx={{
                 color: isActive("/create") ? "#FF7A1A" : "#444444",
-                backgroundColor: isActive("/create") ? "rgba(255, 122, 26, 0.1)" : "transparent",
+                backgroundColor: isActive("/create")
+                  ? "rgba(255, 122, 26, 0.1)"
+                  : "transparent",
                 transition: "all 0.3s ease",
                 "&:hover": {
                   color: "#FF7A1A",
@@ -90,7 +107,9 @@ const Navbar = () => {
               onClick={() => navigate("/profile")}
               sx={{
                 color: isActive("/profile") ? "#FF7A1A" : "#444444",
-                backgroundColor: isActive("/profile") ? "rgba(255, 122, 26, 0.1)" : "transparent",
+                backgroundColor: isActive("/profile")
+                  ? "rgba(255, 122, 26, 0.1)"
+                  : "transparent",
                 transition: "all 0.3s ease",
                 "&:hover": {
                   color: "#FF7A1A",

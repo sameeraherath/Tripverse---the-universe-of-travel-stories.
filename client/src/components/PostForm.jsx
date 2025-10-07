@@ -1,12 +1,14 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
+import RichTextEditor from "./RichTextEditor";
+import { Sparkles } from "lucide-react";
 
 const PostForm = ({ onSubmit, initialData }) => {
   const [title, setTitle] = useState(initialData?.title || "");
   const [content, setContent] = useState(initialData?.content || "");
   const [image, setImage] = useState(null);
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [loading, setLoading] = useState(false);
   const [generating, setGenerating] = useState(false);
 
   // AI Assistance Functions
@@ -70,17 +72,22 @@ const PostForm = ({ onSubmit, initialData }) => {
         />
       </div>
 
+      {/* Rich Text Editor */}
       <div className="space-y-2">
-        <textarea
-          placeholder="Content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          required
-          className="w-full h-36 p-3 border border-gray-light bg-gray-lightest rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary/20 text-gray-dark placeholder-gray-medium transition-all"
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          Content
+        </label>
+        <RichTextEditor
+          content={content}
+          onChange={setContent}
+          placeholder="Start writing your amazing blog post..."
         />
       </div>
 
       <div className="space-y-2">
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          Featured Image
+        </label>
         <input
           type="file"
           onChange={(e) => setImage(e.target.files[0])}
@@ -92,19 +99,20 @@ const PostForm = ({ onSubmit, initialData }) => {
       <div className="flex flex-col gap-4">
         <button
           type="button"
-          className="w-full p-3 bg-gradient-primary text-white font-semibold focus:outline-none rounded-3xl hover:opacity-90 transition disabled:opacity-60 shadow-sm"
+          className="w-full p-3 bg-white border-2 border-primary text-primary font-semibold focus:outline-none rounded-3xl hover:bg-primary hover:text-white transition disabled:opacity-60 shadow-sm flex items-center justify-center gap-2"
           onClick={handleGenerateContent}
-          disabled={loading}
+          disabled={loading || generating}
         >
-          {generating ? "Generating..." : "Generate with AI"}
+          <Sparkles className="w-5 h-5" />
+          {generating ? "Generating with AI..." : "Generate Content with AI"}
         </button>
 
         <button
           type="submit"
-          className="w-full p-3 bg-gradient-primary text-white font-semibold rounded-3xl hover:opacity-90 transition disabled:opacity-60 shadow-sm"
+          className="w-full p-3 bg-gradient-primary text-white font-semibold rounded-3xl hover:shadow-lg transition disabled:opacity-60 shadow-sm"
           disabled={loading}
         >
-          {loading ? "Posting..." : "Post"}
+          {loading ? "Publishing..." : "Publish Post"}
         </button>
       </div>
     </form>

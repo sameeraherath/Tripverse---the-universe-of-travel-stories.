@@ -8,7 +8,15 @@ import {
 import Comment from "../components/Comment";
 import CommentForm from "../components/CommentForm";
 import api from "../utils/api";
-import { Share2, Edit2, Trash2, Calendar, Heart, MessageCircle, ArrowLeft } from "lucide-react";
+import {
+  Share2,
+  Edit2,
+  Trash2,
+  Calendar,
+  Heart,
+  MessageCircle,
+  ArrowLeft,
+} from "lucide-react";
 
 const PostDetails = () => {
   const { id } = useParams();
@@ -101,13 +109,15 @@ const PostDetails = () => {
       </div>
     );
   }
-  
+
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Error Loading Post</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+            Error Loading Post
+          </h2>
           <p className="text-gray-600 mb-6">{error}</p>
           <button
             onClick={() => navigate("/home")}
@@ -119,14 +129,18 @@ const PostDetails = () => {
       </div>
     );
   }
-  
+
   if (!post) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="text-6xl mb-4">📖</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Post Not Found</h2>
-          <p className="text-gray-600 mb-6">The post you&apos;re looking for doesn&apos;t exist.</p>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+            Post Not Found
+          </h2>
+          <p className="text-gray-600 mb-6">
+            The post you&apos;re looking for doesn&apos;t exist.
+          </p>
           <button
             onClick={() => navigate("/home")}
             className="px-6 py-2 bg-gradient-primary text-white rounded-full hover:shadow-lg transition-all"
@@ -238,11 +252,10 @@ const PostDetails = () => {
             </div>
 
             {/* Content */}
-            <div className="prose prose-lg max-w-none mb-12">
-              <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-                {post.content}
-              </p>
-            </div>
+            <div 
+              className="prose prose-lg max-w-none mb-12 rich-text-content"
+              dangerouslySetInnerHTML={{ __html: post.content }}
+            />
           </div>
         </article>
 
@@ -252,7 +265,7 @@ const PostDetails = () => {
             <MessageCircle className="w-8 h-8 text-primary" />
             Comments ({comments.length})
           </h2>
-          
+
           <div className="mb-8">
             <CommentForm postId={id} />
           </div>
@@ -271,7 +284,9 @@ const PostDetails = () => {
           ) : (
             <div className="text-center py-12">
               <MessageCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500 text-lg">No comments yet. Be the first to comment!</p>
+              <p className="text-gray-500 text-lg">
+                No comments yet. Be the first to comment!
+              </p>
             </div>
           )}
         </div>

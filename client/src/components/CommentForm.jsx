@@ -23,7 +23,9 @@ const CommentForm = ({ postId }) => {
   if (!isAuthenticated) {
     return (
       <div className="bg-gradient-to-r from-orange-50 to-yellow-50 border border-primary/20 rounded-xl p-6 text-center">
-        <p className="text-gray-700 font-medium mb-3">💬 Want to join the conversation?</p>
+        <p className="text-gray-700 font-medium mb-3">
+          💬 Want to join the conversation?
+        </p>
         <a
           href="/LoginPage"
           className="inline-block px-6 py-2 bg-gradient-primary text-white font-semibold rounded-full hover:shadow-lg transition-all"
@@ -76,4 +78,3 @@ CommentForm.propTypes = {
 };
 
 export default CommentForm;
-

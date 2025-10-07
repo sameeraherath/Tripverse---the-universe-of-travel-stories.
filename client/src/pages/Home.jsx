@@ -25,7 +25,8 @@ const Home = () => {
             Latest Blog Posts
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
-            Explore inspiring stories, insightful articles, and creative content from our community
+            Explore inspiring stories, insightful articles, and creative content
+            from our community
           </p>
         </div>
 

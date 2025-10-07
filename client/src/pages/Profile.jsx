@@ -66,8 +66,10 @@ const Profile = () => {
     <div className="min-h-screen bg-gradient-to-b from-orange-50/30 to-white py-24">
       <div className="container mx-auto max-w-2xl px-4">
         <div className="bg-white shadow-2xl rounded-2xl p-8 md:p-12 border border-gray-100">
-          <h2 className="text-3xl font-bold text-center mb-8 text-gray-900">Edit Profile</h2>
-          
+          <h2 className="text-3xl font-bold text-center mb-8 text-gray-900">
+            Edit Profile
+          </h2>
+
           {/* Avatar Preview */}
           <div className="flex justify-center mb-8">
             <div className="relative group">
@@ -149,7 +151,7 @@ const Profile = () => {
             </div>
           </form>
         </div>
-        
+
         <ToastContainer
           position="bottom-center"
           hideProgressBar={true}
