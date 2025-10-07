@@ -22,7 +22,7 @@ const uploadToCloudinary = async (buffer) => {
 // Create a new post
 router.post("/", authMiddleware, upload.single("image"), async (req, res) => {
   try {
-    const { title, content, category, tags } = req.body;
+    const { title, content, tags } = req.body;
     let imageUrl = null;
 
     if (req.file) {
@@ -40,7 +40,6 @@ router.post("/", authMiddleware, upload.single("image"), async (req, res) => {
       content,
       image: imageUrl,
       author: req.userId, // Link post to authenticated user
-      category: category || "General",
       tags: parsedTags,
     });
 
@@ -83,7 +82,7 @@ router.delete("/:id", authMiddleware, async (req, res) => {
 // Update a post by ID
 router.put("/:id", authMiddleware, upload.single("image"), async (req, res) => {
   try {
-    const { title, content, category, tags } = req.body;
+    const { title, content, tags } = req.body;
     let imageUrl = req.body.image;
 
     // Parse tags if sent as JSON string
@@ -118,12 +117,11 @@ router.put("/:id", authMiddleware, upload.single("image"), async (req, res) => {
 
     const updatedPost = await Post.findByIdAndUpdate(
       req.params.id,
-      { 
-        title, 
-        content, 
+      {
+        title,
+        content,
         image: imageUrl,
-        category: category || post.category,
-        tags: parsedTags.length > 0 ? parsedTags : post.tags
+        tags: parsedTags.length > 0 ? parsedTags : post.tags,
       },
       { new: true, runValidators: true }
     );
@@ -139,30 +137,24 @@ router.put("/:id", authMiddleware, upload.single("image"), async (req, res) => {
 // Get all posts with search and filters
 router.get("/", async (req, res) => {
   try {
-    const { 
-      search, 
-      category,
+    const {
+      search,
       tags,
-      page = 1, 
-      limit = 10, 
-      sortBy = "createdAt", 
-      order = "desc" 
+      page = 1,
+      limit = 10,
+      sortBy = "createdAt",
+      order = "desc",
     } = req.query;
 
     // Build query
     const query = {};
-    
+
     // Search functionality (text search in title and content)
     if (search) {
       query.$or = [
         { title: { $regex: search, $options: "i" } },
-        { content: { $regex: search, $options: "i" } }
+        { content: { $regex: search, $options: "i" } },
       ];
-    }
-
-    // Filter by category
-    if (category && category !== "All") {
-      query.category = category;
     }
 
     // Filter by tags
@@ -185,8 +177,8 @@ router.get("/", async (req, res) => {
         select: "email",
         populate: {
           path: "profile",
-          select: "name avatar bio"
-        }
+          select: "name avatar bio",
+        },
       })
       .sort(sortObj)
       .limit(parseInt(limit))
@@ -200,8 +192,8 @@ router.get("/", async (req, res) => {
         totalPages: Math.ceil(total / parseInt(limit)),
         totalPosts: total,
         postsPerPage: parseInt(limit),
-        hasMore: parseInt(page) * parseInt(limit) < total
-      }
+        hasMore: parseInt(page) * parseInt(limit) < total,
+      },
     });
   } catch (err) {
     res
@@ -297,7 +289,9 @@ router.post("/:id/bookmark", authMiddleware, async (req, res) => {
       message: "Post bookmarked successfully",
     });
   } catch (err) {
-    res.status(500).json({ message: "Error bookmarking post", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error bookmarking post", error: err.message });
   }
 });
 
@@ -323,7 +317,9 @@ router.delete("/:id/bookmark", authMiddleware, async (req, res) => {
     }
 
     // Remove bookmark
-    post.bookmarks = post.bookmarks.filter((id) => id.toString() !== req.userId);
+    post.bookmarks = post.bookmarks.filter(
+      (id) => id.toString() !== req.userId
+    );
     post.bookmarkCount = Math.max(0, post.bookmarkCount - 1);
     profile.bookmarkedPosts = profile.bookmarkedPosts.filter(
       (id) => id.toString() !== post._id.toString()
@@ -337,17 +333,9 @@ router.delete("/:id/bookmark", authMiddleware, async (req, res) => {
       message: "Bookmark removed successfully",
     });
   } catch (err) {
-    res.status(500).json({ message: "Error removing bookmark", error: err.message });
-  }
-});
-
-// Get all unique categories
-router.get("/categories/all", async (req, res) => {
-  try {
-    const categories = await Post.distinct("category");
-    res.status(200).json({ categories });
-  } catch (err) {
-    res.status(500).json({ message: "Error fetching categories", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error removing bookmark", error: err.message });
   }
 });
 
@@ -356,10 +344,12 @@ router.get("/tags/all", async (req, res) => {
   try {
     const tags = await Post.distinct("tags");
     // Filter out empty strings and sort alphabetically
-    const filteredTags = tags.filter(tag => tag && tag.trim()).sort();
+    const filteredTags = tags.filter((tag) => tag && tag.trim()).sort();
     res.status(200).json({ tags: filteredTags });
   } catch (err) {
-    res.status(500).json({ message: "Error fetching tags", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching tags", error: err.message });
   }
 });
 
@@ -370,17 +360,19 @@ router.get("/tags/popular", async (req, res) => {
       { $unwind: "$tags" },
       { $group: { _id: "$tags", count: { $sum: 1 } } },
       { $sort: { count: -1 } },
-      { $limit: 20 }
+      { $limit: 20 },
     ]);
-    
-    const popularTags = result.map(item => ({
+
+    const popularTags = result.map((item) => ({
       tag: item._id,
-      count: item.count
+      count: item.count,
     }));
-    
+
     res.status(200).json({ tags: popularTags });
   } catch (err) {
-    res.status(500).json({ message: "Error fetching popular tags", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching popular tags", error: err.message });
   }
 });
 

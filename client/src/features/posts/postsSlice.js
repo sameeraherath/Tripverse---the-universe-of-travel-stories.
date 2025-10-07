@@ -3,15 +3,21 @@ import api from "../../utils/api";
 
 // Fetch all posts with search, pagination, and sorting
 export const fetchPosts = createAsyncThunk(
-  "posts/fetchPosts", 
-  async ({ search = "", page = 1, limit = 10, sortBy = "createdAt", order = "desc" } = {}) => {
+  "posts/fetchPosts",
+  async ({
+    search = "",
+    page = 1,
+    limit = 10,
+    sortBy = "createdAt",
+    order = "desc",
+  } = {}) => {
     const params = new URLSearchParams();
     if (search) params.append("search", search);
     params.append("page", page);
     params.append("limit", limit);
     params.append("sortBy", sortBy);
     params.append("order", order);
-    
+
     const response = await api.get(`/api/posts?${params.toString()}`);
     return response.data;
   }
@@ -94,7 +100,7 @@ const postsSlice = createSlice({
       currentPage: 1,
       totalPages: 1,
       totalPosts: 0,
-      hasMore: false
+      hasMore: false,
     },
     loading: false, // Loading state for API calls
     error: null, // Store any error messages
@@ -120,7 +126,7 @@ const postsSlice = createSlice({
         state.loading = false;
         const newPosts = action.payload.posts || action.payload;
         const newPagination = action.payload.pagination;
-        
+
         // If it's page 1 or a new search, replace posts; otherwise append
         if (newPagination && newPagination.currentPage === 1) {
           state.posts = newPosts;
@@ -129,7 +135,7 @@ const postsSlice = createSlice({
         } else {
           state.posts = newPosts;
         }
-        
+
         state.pagination = newPagination || state.pagination;
       })
       .addCase(fetchPosts.rejected, (state, action) => {

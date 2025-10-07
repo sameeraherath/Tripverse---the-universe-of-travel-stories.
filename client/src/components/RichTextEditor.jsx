@@ -53,7 +53,9 @@ const MenuBar = ({ editor }) => {
         onClick={() => editor.chain().focus().toggleBold().run()}
         disabled={!editor.can().chain().focus().toggleBold().run()}
         className={`p-2 rounded-lg transition-all hover:bg-gray-200 ${
-          editor.isActive("bold") ? "bg-primary/20 text-primary" : "text-gray-700"
+          editor.isActive("bold")
+            ? "bg-primary/20 text-primary"
+            : "text-gray-700"
         }`}
         title="Bold (Ctrl+B)"
       >
@@ -65,7 +67,9 @@ const MenuBar = ({ editor }) => {
         onClick={() => editor.chain().focus().toggleItalic().run()}
         disabled={!editor.can().chain().focus().toggleItalic().run()}
         className={`p-2 rounded-lg transition-all hover:bg-gray-200 ${
-          editor.isActive("italic") ? "bg-primary/20 text-primary" : "text-gray-700"
+          editor.isActive("italic")
+            ? "bg-primary/20 text-primary"
+            : "text-gray-700"
         }`}
         title="Italic (Ctrl+I)"
       >
@@ -77,7 +81,9 @@ const MenuBar = ({ editor }) => {
         onClick={() => editor.chain().focus().toggleUnderline().run()}
         disabled={!editor.can().chain().focus().toggleUnderline().run()}
         className={`p-2 rounded-lg transition-all hover:bg-gray-200 ${
-          editor.isActive("underline") ? "bg-primary/20 text-primary" : "text-gray-700"
+          editor.isActive("underline")
+            ? "bg-primary/20 text-primary"
+            : "text-gray-700"
         }`}
         title="Underline (Ctrl+U)"
       >
@@ -89,7 +95,9 @@ const MenuBar = ({ editor }) => {
         onClick={() => editor.chain().focus().toggleStrike().run()}
         disabled={!editor.can().chain().focus().toggleStrike().run()}
         className={`p-2 rounded-lg transition-all hover:bg-gray-200 ${
-          editor.isActive("strike") ? "bg-primary/20 text-primary" : "text-gray-700"
+          editor.isActive("strike")
+            ? "bg-primary/20 text-primary"
+            : "text-gray-700"
         }`}
         title="Strikethrough"
       >
@@ -101,7 +109,9 @@ const MenuBar = ({ editor }) => {
         onClick={() => editor.chain().focus().toggleCode().run()}
         disabled={!editor.can().chain().focus().toggleCode().run()}
         className={`p-2 rounded-lg transition-all hover:bg-gray-200 ${
-          editor.isActive("code") ? "bg-primary/20 text-primary" : "text-gray-700"
+          editor.isActive("code")
+            ? "bg-primary/20 text-primary"
+            : "text-gray-700"
         }`}
         title="Inline Code"
       >
@@ -115,7 +125,9 @@ const MenuBar = ({ editor }) => {
         type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
         className={`p-2 rounded-lg transition-all hover:bg-gray-200 ${
-          editor.isActive("heading", { level: 1 }) ? "bg-primary/20 text-primary" : "text-gray-700"
+          editor.isActive("heading", { level: 1 })
+            ? "bg-primary/20 text-primary"
+            : "text-gray-700"
         }`}
         title="Heading 1"
       >
@@ -126,7 +138,9 @@ const MenuBar = ({ editor }) => {
         type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
         className={`p-2 rounded-lg transition-all hover:bg-gray-200 ${
-          editor.isActive("heading", { level: 2 }) ? "bg-primary/20 text-primary" : "text-gray-700"
+          editor.isActive("heading", { level: 2 })
+            ? "bg-primary/20 text-primary"
+            : "text-gray-700"
         }`}
         title="Heading 2"
       >
@@ -140,7 +154,9 @@ const MenuBar = ({ editor }) => {
         type="button"
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         className={`p-2 rounded-lg transition-all hover:bg-gray-200 ${
-          editor.isActive("bulletList") ? "bg-primary/20 text-primary" : "text-gray-700"
+          editor.isActive("bulletList")
+            ? "bg-primary/20 text-primary"
+            : "text-gray-700"
         }`}
         title="Bullet List"
       >
@@ -151,7 +167,9 @@ const MenuBar = ({ editor }) => {
         type="button"
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         className={`p-2 rounded-lg transition-all hover:bg-gray-200 ${
-          editor.isActive("orderedList") ? "bg-primary/20 text-primary" : "text-gray-700"
+          editor.isActive("orderedList")
+            ? "bg-primary/20 text-primary"
+            : "text-gray-700"
         }`}
         title="Numbered List"
       >
@@ -162,7 +180,9 @@ const MenuBar = ({ editor }) => {
         type="button"
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
         className={`p-2 rounded-lg transition-all hover:bg-gray-200 ${
-          editor.isActive("blockquote") ? "bg-primary/20 text-primary" : "text-gray-700"
+          editor.isActive("blockquote")
+            ? "bg-primary/20 text-primary"
+            : "text-gray-700"
         }`}
         title="Blockquote"
       >
@@ -176,7 +196,9 @@ const MenuBar = ({ editor }) => {
         type="button"
         onClick={() => editor.chain().focus().setTextAlign("left").run()}
         className={`p-2 rounded-lg transition-all hover:bg-gray-200 ${
-          editor.isActive({ textAlign: "left" }) ? "bg-primary/20 text-primary" : "text-gray-700"
+          editor.isActive({ textAlign: "left" })
+            ? "bg-primary/20 text-primary"
+            : "text-gray-700"
         }`}
         title="Align Left"
       >
@@ -187,7 +209,9 @@ const MenuBar = ({ editor }) => {
         type="button"
         onClick={() => editor.chain().focus().setTextAlign("center").run()}
         className={`p-2 rounded-lg transition-all hover:bg-gray-200 ${
-          editor.isActive({ textAlign: "center" }) ? "bg-primary/20 text-primary" : "text-gray-700"
+          editor.isActive({ textAlign: "center" })
+            ? "bg-primary/20 text-primary"
+            : "text-gray-700"
         }`}
         title="Align Center"
       >
@@ -198,7 +222,9 @@ const MenuBar = ({ editor }) => {
         type="button"
         onClick={() => editor.chain().focus().setTextAlign("right").run()}
         className={`p-2 rounded-lg transition-all hover:bg-gray-200 ${
-          editor.isActive({ textAlign: "right" }) ? "bg-primary/20 text-primary" : "text-gray-700"
+          editor.isActive({ textAlign: "right" })
+            ? "bg-primary/20 text-primary"
+            : "text-gray-700"
         }`}
         title="Align Right"
       >
@@ -212,7 +238,9 @@ const MenuBar = ({ editor }) => {
         type="button"
         onClick={addLink}
         className={`p-2 rounded-lg transition-all hover:bg-gray-200 ${
-          editor.isActive("link") ? "bg-primary/20 text-primary" : "text-gray-700"
+          editor.isActive("link")
+            ? "bg-primary/20 text-primary"
+            : "text-gray-700"
         }`}
         title="Add Link"
       >
@@ -269,7 +297,8 @@ const RichTextEditor = ({ content, onChange, placeholder }) => {
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: "text-primary underline cursor-pointer hover:text-primary-light",
+          class:
+            "text-primary underline cursor-pointer hover:text-primary-light",
         },
       }),
       Image.configure({
@@ -296,10 +325,7 @@ const RichTextEditor = ({ content, onChange, placeholder }) => {
   return (
     <div className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
       <MenuBar editor={editor} />
-      <EditorContent 
-        editor={editor} 
-        className="rich-text-editor"
-      />
+      <EditorContent editor={editor} className="rich-text-editor" />
     </div>
   );
 };

@@ -10,7 +10,7 @@ const SearchBar = ({ onSearch, onSort }) => {
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
-    
+
     // Debounce search
     setIsSearching(true);
     const timeoutId = setTimeout(() => {
@@ -63,7 +63,7 @@ const SearchBar = ({ onSearch, onSort }) => {
         <span className="text-sm font-semibold text-gray-700 flex items-center mr-2">
           Sort by:
         </span>
-        
+
         <button
           onClick={() => handleSortChange("createdAt")}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all font-medium text-sm ${
@@ -105,7 +105,10 @@ const SearchBar = ({ onSearch, onSort }) => {
       {searchTerm && (
         <div className="mt-4 pt-4 border-t border-gray-200">
           <p className="text-sm text-gray-600">
-            Searching for: <span className="font-semibold text-gray-900">&quot;{searchTerm}&quot;</span>
+            Searching for:{" "}
+            <span className="font-semibold text-gray-900">
+              &quot;{searchTerm}&quot;
+            </span>
           </p>
         </div>
       )}

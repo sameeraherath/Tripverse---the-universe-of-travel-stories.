@@ -237,7 +237,9 @@ const PostDetails = () => {
                     </button>
                   </>
                 ) : (
-                  post.author?._id && <FollowButton userId={post.author._id} variant="compact" />
+                  post.author?._id && (
+                    <FollowButton userId={post.author._id} variant="compact" />
+                  )
                 )}
                 <BookmarkButton postId={id} variant="icon-only" />
                 <button
@@ -267,38 +269,25 @@ const PostDetails = () => {
               </div>
             </div>
 
-            {/* Category and Tags */}
-            <div className="flex flex-wrap items-center gap-3 mb-6 pb-6 border-b border-gray-100">
-              {post.category && (
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-gray-500">
-                    Category:
+            {/* Tags */}
+            {post.tags && post.tags.length > 0 && (
+              <div className="flex flex-wrap items-center gap-3 mb-6 pb-6 border-b border-gray-100">
+                <span className="text-sm font-medium text-gray-500">
+                  Tags:
+                </span>
+                {post.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-3 py-1 bg-orange-50 text-orange-600 text-sm font-medium rounded-full hover:bg-orange-100 transition-colors cursor-pointer"
+                  >
+                    #{tag}
                   </span>
-                  <span className="px-3 py-1 bg-blue-100 text-blue-700 text-sm font-medium rounded-full">
-                    {post.category}
-                  </span>
-                </div>
-              )}
-
-              {post.tags && post.tags.length > 0 && (
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-sm font-medium text-gray-500">
-                    Tags:
-                  </span>
-                  {post.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-3 py-1 bg-orange-50 text-orange-600 text-sm font-medium rounded-full hover:bg-orange-100 transition-colors cursor-pointer"
-                    >
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
+                ))}
+              </div>
+            )}
 
             {/* Content */}
-            <div 
+            <div
               className="prose prose-lg max-w-none mb-12 rich-text-content"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />

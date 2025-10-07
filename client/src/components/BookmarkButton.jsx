@@ -17,7 +17,9 @@ const BookmarkButton = ({ postId, variant = "default" }) => {
       if (!token || !postId) return;
 
       try {
-        const response = await api.get(`/api/profile/bookmark/status/${postId}`);
+        const response = await api.get(
+          `/api/profile/bookmark/status/${postId}`
+        );
         setIsBookmarked(response.data.isBookmarked);
       } catch (error) {
         console.error("Error checking bookmark status:", error);

@@ -5,33 +5,9 @@ import RichTextEditor from "./RichTextEditor";
 import TagInput from "./TagInput";
 import { Sparkles } from "lucide-react";
 
-const CATEGORIES = [
-  "General",
-  "Technology",
-  "Travel",
-  "Food",
-  "Lifestyle",
-  "Fashion",
-  "Health",
-  "Business",
-  "Entertainment",
-  "Sports",
-  "Education",
-  "Science",
-  "Art",
-  "Music",
-  "Gaming",
-  "Photography",
-  "DIY",
-  "Finance",
-  "Parenting",
-  "Pets",
-];
-
 const PostForm = ({ onSubmit, initialData }) => {
   const [title, setTitle] = useState(initialData?.title || "");
   const [content, setContent] = useState(initialData?.content || "");
-  const [category, setCategory] = useState(initialData?.category || "General");
   const [tags, setTags] = useState(initialData?.tags || []);
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -68,7 +44,6 @@ const PostForm = ({ onSubmit, initialData }) => {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", content);
-    formData.append("category", category);
     formData.append("tags", JSON.stringify(tags));
 
     if (image) {
@@ -98,24 +73,6 @@ const PostForm = ({ onSubmit, initialData }) => {
           required
           className="w-full p-2 border border-gray-light bg-gray-lightest rounded-3xl px-4 focus:outline-none focus:ring-2 focus:ring-primary/20 text-gray-dark placeholder-gray-medium transition-all"
         />
-      </div>
-
-      {/* Category Selection */}
-      <div className="space-y-2">
-        <label className="block text-sm font-semibold text-gray-700 mb-2">
-          Category
-        </label>
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="w-full p-3 border-2 border-gray-200 bg-gray-50 rounded-xl px-4 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 text-gray-900 transition-all"
-        >
-          {CATEGORIES.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
       </div>
 
       {/* Tags Input */}

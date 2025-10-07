@@ -105,7 +105,9 @@ const UserProfile = () => {
                   />
                 ) : (
                   <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-primary flex items-center justify-center text-white font-bold text-5xl border-4 border-white shadow-xl">
-                    {(profile.name || profile.user?.email || "U")[0].toUpperCase()}
+                    {(profile.name ||
+                      profile.user?.email ||
+                      "U")[0].toUpperCase()}
                   </div>
                 )}
               </div>
@@ -174,9 +176,7 @@ const UserProfile = () => {
 
               <div className="flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-gray-400" />
-                <span className="text-gray-medium">
-                  Joined {formattedDate}
-                </span>
+                <span className="text-gray-medium">Joined {formattedDate}</span>
               </div>
             </div>
           </div>

@@ -72,10 +72,7 @@ const FollowListModal = ({ userId, type, isOpen, onClose }) => {
                     className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
                   >
                     {/* Avatar */}
-                    <a
-                      href={`/profile/${user._id}`}
-                      className="flex-shrink-0"
-                    >
+                    <a href={`/profile/${user._id}`} className="flex-shrink-0">
                       {profile.avatar ? (
                         <img
                           src={profile.avatar}

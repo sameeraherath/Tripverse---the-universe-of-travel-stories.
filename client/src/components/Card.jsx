@@ -103,7 +103,9 @@ const Card = ({ post }) => {
                 />
               ) : (
                 <div className="w-8 h-8 rounded-full bg-gradient-primary flex items-center justify-center text-white text-xs font-bold">
-                  {(post.author.profile?.name || post.author.email || "U")[0].toUpperCase()}
+                  {(post.author.profile?.name ||
+                    post.author.email ||
+                    "U")[0].toUpperCase()}
                 </div>
               )}
               <span className="text-sm font-medium text-gray-700">
@@ -115,13 +117,6 @@ const Card = ({ post }) => {
           <h3 className="text-xl font-bold text-gray-dark line-clamp-2 group-hover:text-primary transition-colors">
             {post.title}
           </h3>
-
-          {/* Category Badge */}
-          {post.category && (
-            <span className="inline-block px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full w-fit">
-              {post.category}
-            </span>
-          )}
 
           <p className="text-gray-medium line-clamp-3 text-sm leading-relaxed">
             {post.content.substring(0, 150)}

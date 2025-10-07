@@ -180,15 +180,16 @@ router.delete("/follow/:userId", authMiddleware, async (req, res) => {
 // Get followers list
 router.get("/followers/:userId", async (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.params.userId })
-      .populate({
+    const profile = await Profile.findOne({ user: req.params.userId }).populate(
+      {
         path: "followers",
         populate: {
           path: "profile",
           select: "name avatar bio",
         },
         select: "email",
-      });
+      }
+    );
 
     if (!profile) {
       return res.status(404).json({ message: "Profile not found" });
@@ -207,15 +208,16 @@ router.get("/followers/:userId", async (req, res) => {
 // Get following list
 router.get("/following/:userId", async (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.params.userId })
-      .populate({
+    const profile = await Profile.findOne({ user: req.params.userId }).populate(
+      {
         path: "following",
         populate: {
           path: "profile",
           select: "name avatar bio",
         },
         select: "email",
-      });
+      }
+    );
 
     if (!profile) {
       return res.status(404).json({ message: "Profile not found" });
