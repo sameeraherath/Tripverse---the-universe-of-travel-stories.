@@ -116,11 +116,53 @@ router.put("/:id", authMiddleware, upload.single("image"), async (req, res) => {
   }
 });
 
-// Get all posts
+// Get all posts with search and filters
 router.get("/", async (req, res) => {
   try {
-    const posts = await Post.find().populate("author", "name avatar");
-    res.status(200).json(posts);
+    const { 
+      search, 
+      page = 1, 
+      limit = 10, 
+      sortBy = "createdAt", 
+      order = "desc" 
+    } = req.query;
+
+    // Build query
+    const query = {};
+    
+    // Search functionality (text search in title and content)
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { content: { $regex: search, $options: "i" } }
+      ];
+    }
+
+    // Count total documents
+    const total = await Post.countDocuments(query);
+
+    // Build sort object
+    const sortOrder = order === "asc" ? 1 : -1;
+    const sortObj = { [sortBy]: sortOrder };
+
+    // Fetch posts with pagination
+    const posts = await Post.find(query)
+      .populate("author", "email")
+      .sort(sortObj)
+      .limit(parseInt(limit))
+      .skip((parseInt(page) - 1) * parseInt(limit))
+      .lean();
+
+    res.status(200).json({
+      posts,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(total / parseInt(limit)),
+        totalPosts: total,
+        postsPerPage: parseInt(limit),
+        hasMore: parseInt(page) * parseInt(limit) < total
+      }
+    });
   } catch (err) {
     res
       .status(500)

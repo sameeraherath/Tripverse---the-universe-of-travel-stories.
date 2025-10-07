@@ -1,16 +1,35 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPosts } from "../features/posts/postsSlice";
+import { fetchPosts, setSearchTerm, setSortBy } from "../features/posts/postsSlice";
 import Card from "../components/Card";
-import { Sparkles } from "lucide-react";
+import SearchBar from "../components/SearchBar";
+import { Sparkles, Loader2 } from "lucide-react";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { posts, loading } = useSelector((state) => state.post);
+  const { posts, loading, pagination, searchTerm, sortBy } = useSelector((state) => state.post);
 
   useEffect(() => {
-    dispatch(fetchPosts());
-  }, [dispatch]);
+    dispatch(fetchPosts({ search: searchTerm, sortBy, page: 1 }));
+  }, [dispatch, searchTerm, sortBy]);
+
+  const handleSearch = (search) => {
+    dispatch(setSearchTerm(search));
+  };
+
+  const handleSort = (sort) => {
+    dispatch(setSortBy(sort));
+  };
+
+  const handleLoadMore = () => {
+    if (pagination.hasMore && !loading) {
+      dispatch(fetchPosts({ 
+        search: searchTerm, 
+        sortBy, 
+        page: pagination.currentPage + 1 
+      }));
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50/30 to-white">
@@ -30,6 +49,11 @@ const Home = () => {
           </p>
         </div>
 
+        {/* Search Bar */}
+        <div className="mb-8">
+          <SearchBar onSearch={handleSearch} onSort={handleSort} />
+        </div>
+
         {/* Posts Grid */}
         {loading ? (
           <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
@@ -38,17 +62,39 @@ const Home = () => {
             ))}
           </div>
         ) : posts.length > 0 ? (
-          <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            {posts.map((post) => (
-              <Card
-                key={post._id}
-                post={{
-                  ...post,
-                  image: post.image || null,
-                }}
-              />
-            ))}
-          </div>
+          <>
+            <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+              {posts.map((post) => (
+                <Card
+                  key={post._id}
+                  post={{
+                    ...post,
+                    image: post.image || null,
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Load More Button */}
+            {pagination.hasMore && (
+              <div className="flex justify-center mt-12">
+                <button
+                  onClick={handleLoadMore}
+                  disabled={loading}
+                  className="group relative px-8 py-4 bg-white border-2 border-orange-500 text-orange-500 font-semibold rounded-full hover:bg-orange-500 hover:text-white transform hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-orange-500"
+                >
+                  {loading ? (
+                    <span className="flex items-center gap-2">
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Loading...
+                    </span>
+                  ) : (
+                    <span>Load More Posts</span>
+                  )}
+                </button>
+              </div>
+            )}
+          </>
         ) : (
           <div className="text-center py-20">
             <div className="text-8xl mb-6">📖</div>
