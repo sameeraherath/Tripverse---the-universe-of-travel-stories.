@@ -8,7 +8,7 @@ const CommentForm = ({ postId }) => {
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +20,7 @@ const CommentForm = ({ postId }) => {
     setIsSubmitting(false);
   };
 
-  if (!isAuthenticated) {
+  if (!token) {
     return (
       <div className="bg-gradient-to-r from-orange-50 to-yellow-50 border border-primary/20 rounded-xl p-6 text-center">
         <p className="text-gray-700 font-medium mb-3">

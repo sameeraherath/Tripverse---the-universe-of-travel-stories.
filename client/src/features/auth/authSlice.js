@@ -27,12 +27,30 @@ export const verifyMagicLink = createAsyncThunk(
   }
 );
 
+// Helper function to decode token and get userId
+const getInitialAuthState = () => {
+  const token = localStorage.getItem("authToken");
+  let userId = null;
+
+  if (token) {
+    try {
+      const decoded = JSON.parse(atob(token.split(".")[1]));
+      userId = decoded.userId;
+    } catch {
+      // If token is invalid, remove it
+      localStorage.removeItem("authToken");
+      return { token: null, userId: null };
+    }
+  }
+
+  return { token, userId };
+};
+
 // Auth slice with initial state and reducers
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    token: localStorage.getItem("authToken") || null,
-    userId: null,
+    ...getInitialAuthState(),
     loading: false,
     error: null,
   },
