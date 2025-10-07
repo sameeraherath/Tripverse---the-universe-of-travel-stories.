@@ -8,11 +8,18 @@ const createComment = async (req, res) => {
     const comment = await Comment.create({
       content,
       post: postId,
-      author: req.user._id,
+      author: req.userId,
     });
 
-    // Populate the author details
-    await comment.populate("author", "name email");
+    // Populate the author details with profile
+    await comment.populate({
+      path: "author",
+      select: "email",
+      populate: {
+        path: "profile",
+        select: "name avatar",
+      },
+    });
 
     // Update the post's comments array and commentCount
     await Post.findByIdAndUpdate(postId, {
@@ -31,7 +38,14 @@ const getPostComments = async (req, res) => {
   try {
     const { postId } = req.params;
     const comments = await Comment.find({ post: postId })
-      .populate("author", "name email")
+      .populate({
+        path: "author",
+        select: "email",
+        populate: {
+          path: "profile",
+          select: "name avatar",
+        },
+      })
       .sort({ createdAt: -1 });
     res.json(comments);
   } catch (error) {
@@ -50,7 +64,7 @@ const deleteComment = async (req, res) => {
     }
 
     // Check if the user is the author of the comment
-    if (comment.author.toString() !== req.user._id.toString()) {
+    if (comment.author.toString() !== req.userId.toString()) {
       return res.status(403).json({ message: "Not authorized" });
     }
 

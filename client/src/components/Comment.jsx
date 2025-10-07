@@ -6,7 +6,7 @@ import { Trash2, Clock } from "lucide-react";
 
 const Comment = ({ comment }) => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
+  const { userId } = useSelector((state) => state.auth);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
@@ -36,25 +36,37 @@ const Comment = ({ comment }) => {
     });
   };
 
+  // Get author name from profile or email
+  const authorName = comment.author?.profile?.name || comment.author?.email || "Anonymous";
+  const authorAvatar = comment.author?.profile?.avatar;
+
   return (
     <div className="bg-gray-50 p-5 rounded-xl border border-gray-100 hover:border-gray-200 transition-all duration-300">
       <div className="flex gap-4">
         <div className="flex-shrink-0">
-          <div className="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center text-white font-bold">
-            {comment.author.name?.charAt(0).toUpperCase() || "U"}
-          </div>
+          {authorAvatar ? (
+            <img
+              src={authorAvatar}
+              alt={authorName}
+              className="w-10 h-10 rounded-full object-cover border-2 border-orange-200"
+            />
+          ) : (
+            <div className="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center text-white font-bold">
+              {authorName.charAt(0).toUpperCase()}
+            </div>
+          )}
         </div>
 
         <div className="flex-1">
           <div className="flex items-start justify-between mb-2">
             <div>
-              <h4 className="font-bold text-gray-900">{comment.author.name}</h4>
+              <h4 className="font-bold text-gray-900">{authorName}</h4>
               <div className="flex items-center gap-1.5 text-sm text-gray-500">
                 <Clock className="w-3.5 h-3.5" />
                 <span>{getTimeAgo(comment.createdAt)}</span>
               </div>
             </div>
-            {user && user._id === comment.author._id && (
+            {userId && userId === comment.author._id && (
               <button
                 onClick={handleDelete}
                 disabled={isDeleting}
@@ -77,7 +89,11 @@ Comment.propTypes = {
     _id: PropTypes.string.isRequired,
     author: PropTypes.shape({
       _id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
+      email: PropTypes.string,
+      profile: PropTypes.shape({
+        name: PropTypes.string,
+        avatar: PropTypes.string,
+      }),
     }).isRequired,
     content: PropTypes.string.isRequired,
     createdAt: PropTypes.string.isRequired,

@@ -272,9 +272,7 @@ const PostDetails = () => {
             {/* Tags */}
             {post.tags && post.tags.length > 0 && (
               <div className="flex flex-wrap items-center gap-3 mb-6 pb-6 border-b border-gray-100">
-                <span className="text-sm font-medium text-gray-500">
-                  Tags:
-                </span>
+                <span className="text-sm font-medium text-gray-500">Tags:</span>
                 {post.tags.map((tag) => (
                   <span
                     key={tag}
