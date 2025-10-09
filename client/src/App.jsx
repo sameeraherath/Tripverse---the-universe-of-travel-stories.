@@ -17,6 +17,7 @@ import Bookmarks from "./pages/Bookmarks";
 import Notifications from "./pages/Notifications";
 import Messages from "./pages/Messages";
 import LandingPage from "./pages/LandingPage";
+import ForYou from "./pages/ForYou";
 import FloatingActionButton from "./components/FloatingActionButton";
 import { SocketProvider } from "./contexts/SocketContext";
 
@@ -42,6 +43,7 @@ const AppContent = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/for-you" element={<ForYou />} />
         <Route path="/create" element={<CreatePost />} />
         <Route path="/edit/:id" element={<EditPost />} />
         <Route path="/post/:id" element={<PostDetails />} />

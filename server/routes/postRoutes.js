@@ -352,6 +352,106 @@ router.delete("/:id/bookmark", authMiddleware, async (req, res) => {
   }
 });
 
+// Get personalized recommendations for authenticated user
+router.get("/recommendations", authMiddleware, async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const Profile = require("../models/profile");
+
+    // Get user's profile with following and bookmarked posts
+    const profile = await Profile.findOne({ user: req.userId })
+      .populate("bookmarkedPosts", "tags")
+      .lean();
+
+    if (!profile) {
+      // If no profile, return trending posts
+      const trendingPosts = await Post.find()
+        .populate({
+          path: "author",
+          select: "email",
+          populate: {
+            path: "profile",
+            select: "name avatar bio",
+          },
+        })
+        .sort({ likeCount: -1, commentCount: -1 })
+        .limit(parseInt(limit))
+        .skip((parseInt(page) - 1) * parseInt(limit))
+        .lean();
+
+      return res.status(200).json({
+        posts: trendingPosts,
+        pagination: {
+          currentPage: parseInt(page),
+          hasMore: trendingPosts.length === parseInt(limit),
+        },
+      });
+    }
+
+    // Extract tags from bookmarked posts
+    const bookmarkedTags = profile.bookmarkedPosts
+      ? profile.bookmarkedPosts.flatMap((post) => post.tags || [])
+      : [];
+    const uniqueTags = [...new Set(bookmarkedTags)];
+
+    // Get posts the user has already liked
+    const likedPosts = await Post.find({ likes: req.userId }).select("_id");
+    const likedPostIds = likedPosts.map((p) => p._id);
+
+    // Build recommendation query
+    const query = {
+      _id: {
+        $nin: [...likedPostIds, ...profile.bookmarkedPosts.map((p) => p._id)],
+      }, // Exclude already interacted posts
+      $or: [
+        // Posts from followed users
+        { author: { $in: profile.following || [] } },
+        // Posts with similar tags
+        { tags: { $in: uniqueTags } },
+        // Trending posts (high engagement)
+        { $and: [{ likeCount: { $gte: 5 } }, { commentCount: { $gte: 2 } }] },
+      ],
+    };
+
+    // Count total recommendations
+    const total = await Post.countDocuments(query);
+
+    // Fetch recommended posts with scoring
+    const recommendedPosts = await Post.find(query)
+      .populate({
+        path: "author",
+        select: "email",
+        populate: {
+          path: "profile",
+          select: "name avatar bio",
+        },
+      })
+      .sort({
+        likeCount: -1,
+        commentCount: -1,
+        createdAt: -1,
+      })
+      .limit(parseInt(limit))
+      .skip((parseInt(page) - 1) * parseInt(limit))
+      .lean();
+
+    res.status(200).json({
+      posts: recommendedPosts,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(total / parseInt(limit)),
+        totalPosts: total,
+        hasMore: parseInt(page) * parseInt(limit) < total,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Error fetching recommendations",
+      error: err.message,
+    });
+  }
+});
+
 // Get all unique tags
 router.get("/tags/all", async (req, res) => {
   try {

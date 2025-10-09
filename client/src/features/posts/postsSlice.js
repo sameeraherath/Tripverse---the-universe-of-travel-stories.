@@ -91,6 +91,27 @@ export const getBookmarkedPosts = createAsyncThunk(
   }
 );
 
+// Fetch personalized recommendations
+export const fetchRecommendations = createAsyncThunk(
+  "posts/fetchRecommendations",
+  async ({ page = 1, limit = 10 } = {}, { rejectWithValue }) => {
+    try {
+      const params = new URLSearchParams();
+      params.append("page", page);
+      params.append("limit", limit);
+
+      const response = await api.get(
+        `/api/posts/recommendations?${params.toString()}`
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch recommendations"
+      );
+    }
+  }
+);
+
 // Posts slice definition
 const postsSlice = createSlice({
   name: "posts",
@@ -198,6 +219,31 @@ const postsSlice = createSlice({
         state.posts = action.payload;
       })
       .addCase(getBookmarkedPosts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Handle fetch recommendations states
+      .addCase(fetchRecommendations.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchRecommendations.fulfilled, (state, action) => {
+        state.loading = false;
+        const newPosts = action.payload.posts || action.payload;
+        const newPagination = action.payload.pagination;
+
+        // If it's page 1, replace posts; otherwise append
+        if (newPagination && newPagination.currentPage === 1) {
+          state.posts = newPosts;
+        } else if (newPagination && newPagination.currentPage > 1) {
+          state.posts = [...state.posts, ...newPosts];
+        } else {
+          state.posts = newPosts;
+        }
+
+        state.pagination = newPagination || state.pagination;
+      })
+      .addCase(fetchRecommendations.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

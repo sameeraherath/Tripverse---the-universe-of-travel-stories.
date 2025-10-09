@@ -3,18 +3,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteComment } from "../features/comments/commentsSlice";
 import PropTypes from "prop-types";
 import { Trash2, Clock } from "lucide-react";
+import ConfirmDialog from "./ConfirmDialog";
 
 const Comment = ({ comment }) => {
   const dispatch = useDispatch();
   const { userId } = useSelector((state) => state.auth);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  const handleDeleteClick = () => {
+    console.log("Delete button clicked - opening dialog");
+    setShowDeleteDialog(true);
+  };
 
   const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this comment?")) {
-      setIsDeleting(true);
-      await dispatch(deleteComment(comment._id));
-      setIsDeleting(false);
-    }
+    console.log("Confirming delete");
+    setIsDeleting(true);
+    await dispatch(deleteComment(comment._id));
+    setIsDeleting(false);
+    setShowDeleteDialog(false);
   };
 
   const getTimeAgo = (date) => {
@@ -68,7 +75,7 @@ const Comment = ({ comment }) => {
             </div>
             {userId && userId === comment.author._id && (
               <button
-                onClick={handleDelete}
+                onClick={handleDeleteClick}
                 disabled={isDeleting}
                 className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
               >
@@ -81,6 +88,17 @@ const Comment = ({ comment }) => {
           <p className="text-gray-700 leading-relaxed">{comment.content}</p>
         </div>
       </div>
+
+      <ConfirmDialog
+        isOpen={showDeleteDialog}
+        onClose={() => setShowDeleteDialog(false)}
+        onConfirm={handleDelete}
+        title="Delete Comment"
+        message="Are you sure you want to delete this comment? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        isLoading={isDeleting}
+      />
     </div>
   );
 };

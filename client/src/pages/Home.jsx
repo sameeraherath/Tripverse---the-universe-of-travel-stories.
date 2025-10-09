@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchPosts,
+  fetchRecommendations,
   setSearchTerm,
   setSortBy,
 } from "../features/posts/postsSlice";
@@ -15,18 +16,25 @@ const Home = () => {
   const { posts, loading, pagination, searchTerm, sortBy } = useSelector(
     (state) => state.post
   );
+  const { token, userId } = useSelector((state) => state.auth);
+  const isLoggedIn = !!token && !!userId;
   const [selectedTags, setSelectedTags] = useState([]);
+  const [activeTab, setActiveTab] = useState("all");
 
   useEffect(() => {
-    dispatch(
-      fetchPosts({
-        search: searchTerm,
-        sortBy,
-        tags: selectedTags,
-        page: 1,
-      })
-    );
-  }, [dispatch, searchTerm, sortBy, selectedTags]);
+    if (activeTab === "all") {
+      dispatch(
+        fetchPosts({
+          search: searchTerm,
+          sortBy,
+          tags: selectedTags,
+          page: 1,
+        })
+      );
+    } else if (activeTab === "forYou" && isLoggedIn) {
+      dispatch(fetchRecommendations({ page: 1, limit: 10 }));
+    }
+  }, [dispatch, searchTerm, sortBy, selectedTags, activeTab, isLoggedIn]);
 
   const handleSearch = (search) => {
     dispatch(setSearchTerm(search));
@@ -44,15 +52,34 @@ const Home = () => {
 
   const handleLoadMore = () => {
     if (pagination.hasMore && !loading) {
-      dispatch(
-        fetchPosts({
-          search: searchTerm,
-          sortBy,
-          tags: selectedTags,
-          page: pagination.currentPage + 1,
-        })
-      );
+      if (activeTab === "all") {
+        dispatch(
+          fetchPosts({
+            search: searchTerm,
+            sortBy,
+            tags: selectedTags,
+            page: pagination.currentPage + 1,
+          })
+        );
+      } else if (activeTab === "forYou") {
+        dispatch(
+          fetchRecommendations({
+            page: pagination.currentPage + 1,
+            limit: 10,
+          })
+        );
+      }
     }
+  };
+
+  const handleTabChange = (tab) => {
+    if (tab === "forYou" && !isLoggedIn) {
+      // Show alert or do nothing if not logged in
+      alert("Please login to see personalized recommendations");
+      return;
+    }
+    setActiveTab(tab);
+    setSelectedTags([]);
   };
 
   return (
@@ -74,8 +101,37 @@ const Home = () => {
         </div>
 
         {/* Search Bar */}
-        <div className="mb-8">
+        <div className="mb-6">
           <SearchBar onSearch={handleSearch} onSort={handleSort} />
+        </div>
+
+        {/* Tabs */}
+        <div className="mb-8 flex justify-center">
+          <div className="inline-flex bg-white rounded-full p-1 shadow-sm border border-gray-200">
+            <button
+              onClick={() => handleTabChange("all")}
+              className={`px-6 py-2 rounded-full font-medium transition-all duration-200 ${
+                activeTab === "all"
+                  ? "bg-gradient-primary text-white shadow-md"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              All
+            </button>
+            <button
+              onClick={() => handleTabChange("forYou")}
+              className={`px-6 py-2 rounded-full font-medium transition-all duration-200 flex items-center gap-2 ${
+                activeTab === "forYou"
+                  ? "bg-gradient-primary text-white shadow-md"
+                  : isLoggedIn
+                  ? "text-gray-600 hover:text-gray-900"
+                  : "text-gray-400 hover:text-gray-600"
+              }`}
+            >
+              <Sparkles className="w-4 h-4" />
+              For You
+            </button>
+          </div>
         </div>
 
         {/* Main Content Area */}
@@ -83,7 +139,7 @@ const Home = () => {
           {/* Posts Grid - Takes 3 columns */}
           <div className="lg:col-span-3">
             {/* Selected Filters Display */}
-            {selectedTags.length > 0 && (
+            {activeTab === "all" && selectedTags.length > 0 && (
               <div className="mb-6 flex flex-wrap items-center gap-2">
                 <span className="text-sm font-medium text-gray-600">
                   Filters:
@@ -148,12 +204,18 @@ const Home = () => {
               </>
             ) : (
               <div className="text-center py-20">
-                <div className="text-8xl mb-6">📖</div>
+                <div className="text-8xl mb-6">
+                  {activeTab === "forYou" ? "✨" : "📖"}
+                </div>
                 <h3 className="text-2xl font-bold text-gray-dark mb-3">
-                  No Posts Yet
+                  {activeTab === "forYou"
+                    ? "No Recommendations Yet"
+                    : "No Posts Yet"}
                 </h3>
                 <p className="text-gray-medium mb-6">
-                  Be the first to share your story with the community!
+                  {activeTab === "forYou"
+                    ? "Follow authors and bookmark posts to get personalized recommendations!"
+                    : "Be the first to share your story with the community!"}
                 </p>
                 <a
                   href="/create"
