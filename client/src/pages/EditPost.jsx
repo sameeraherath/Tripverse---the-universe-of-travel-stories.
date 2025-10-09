@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import PostForm from "../components/PostForm";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const EditPost = () => {
   const { id } = useParams();
@@ -27,7 +28,7 @@ const EditPost = () => {
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
-        alert("You are not authenticated. Please log in.");
+        toast.error("You are not authenticated. Please log in.");
         navigate("/");
         return;
       }
@@ -41,9 +42,13 @@ const EditPost = () => {
           },
         }
       );
-      navigate(`/post/${id}`);
+      toast.success("Post updated successfully!");
+      setTimeout(() => {
+        navigate(`/post/${id}`);
+      }, 500);
     } catch (error) {
       console.error("Error updating post:", error);
+      toast.error("Failed to update post. Please try again.");
     }
   };
 

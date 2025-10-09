@@ -68,7 +68,21 @@ const Card = ({ post }) => {
     <Link to={`/post/${post._id}`} className="block group">
       <div className="bg-white p-5 rounded-2xl flex flex-col gap-4 transition-all duration-300 border border-gray-200 hover:border-primary/50 hover:-translate-y-1 h-full">
         <div className="relative overflow-hidden rounded-xl">
-          {post.image ? (
+          {post.images && post.images.length > 0 ? (
+            <div className="relative">
+              <img
+                src={post.images[0]}
+                alt={post.title}
+                className="rounded-xl w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                loading="lazy"
+              />
+              {post.images.length > 1 && (
+                <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium text-white">
+                  +{post.images.length - 1} more
+                </div>
+              )}
+            </div>
+          ) : post.image ? (
             <img
               src={post.image}
               alt={post.title}

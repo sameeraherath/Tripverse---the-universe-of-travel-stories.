@@ -1,0 +1,97 @@
+/* Custom Toast Styles with Primary Orange Color */
+
+/* Success Toast - Orange */
+.Toastify__toast--success {
+  background: linear-gradient(135deg, #ff7a1a 0%, #ffb347 100%) !important;
+  color: white !important;
+}
+
+.Toastify__toast--success .Toastify__toast-icon {
+  color: white !important;
+}
+
+.Toastify__toast--success .Toastify__progress-bar {
+  background: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Error Toast - Darker Orange with Red Tint */
+.Toastify__toast--error {
+  background: linear-gradient(135deg, #ff5a1a 0%, #ff7a1a 100%) !important;
+  color: white !important;
+}
+
+.Toastify__toast--error .Toastify__toast-icon {
+  color: white !important;
+}
+
+.Toastify__toast--error .Toastify__progress-bar {
+  background: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Info Toast - Light Orange */
+.Toastify__toast--info {
+  background: linear-gradient(135deg, #ffb347 0%, #ffcc80 100%) !important;
+  color: #444444 !important;
+}
+
+.Toastify__toast--info .Toastify__toast-icon {
+  color: #ff7a1a !important;
+}
+
+.Toastify__toast--info .Toastify__progress-bar {
+  background: #ff7a1a !important;
+}
+
+/* Warning Toast - Orange Yellow */
+.Toastify__toast--warning {
+  background: linear-gradient(135deg, #ffa500 0%, #ffb347 100%) !important;
+  color: white !important;
+}
+
+.Toastify__toast--warning .Toastify__toast-icon {
+  color: white !important;
+}
+
+.Toastify__toast--warning .Toastify__progress-bar {
+  background: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Close Button */
+.Toastify__toast--success .Toastify__close-button,
+.Toastify__toast--error .Toastify__close-button,
+.Toastify__toast--warning .Toastify__close-button {
+  color: white !important;
+  opacity: 0.8;
+}
+
+.Toastify__toast--success .Toastify__close-button:hover,
+.Toastify__toast--error .Toastify__close-button:hover,
+.Toastify__toast--warning .Toastify__close-button:hover {
+  opacity: 1;
+}
+
+.Toastify__toast--info .Toastify__close-button {
+  color: #444444 !important;
+  opacity: 0.7;
+}
+
+.Toastify__toast--info .Toastify__close-button:hover {
+  opacity: 1;
+}
+
+/* Toast Body */
+.Toastify__toast-body {
+  padding: 8px;
+  font-weight: 500;
+}
+
+/* Border Radius for modern look */
+.Toastify__toast {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(255, 122, 26, 0.3);
+}
+
+/* Animation enhancements */
+.Toastify__toast {
+  backdrop-filter: blur(10px);
+}

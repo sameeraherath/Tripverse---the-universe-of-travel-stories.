@@ -9,7 +9,10 @@ import Comment from "../components/Comment";
 import CommentForm from "../components/CommentForm";
 import FollowButton from "../components/FollowButton";
 import BookmarkButton from "../components/BookmarkButton";
+import ImageSlideshow from "../components/ImageSlideshow";
+import ConfirmDialog from "../components/ConfirmDialog";
 import api from "../utils/api";
+import { toast } from "react-toastify";
 import {
   Share2,
   Edit2,
@@ -28,6 +31,8 @@ const PostDetails = () => {
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
   const [authorProfile, setAuthorProfile] = useState(null);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const dispatch = useDispatch();
   const { comments, isLoading: commentsLoading } = useSelector(
     (state) => state.comments
@@ -70,18 +75,29 @@ const PostDetails = () => {
     };
   }, [id, dispatch]);
 
-  const handleDelete = async () => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this post?"
-    );
-    if (!confirmDelete) return;
+  const handleDeleteClick = () => {
+    setShowDeleteDialog(true);
+  };
 
+  const handleDeleteConfirm = async () => {
+    setIsDeleting(true);
     try {
       await api.delete(`/api/posts/${id}`);
-      navigate("/home");
+      setShowDeleteDialog(false);
+      toast.success("Post deleted successfully!");
+      setTimeout(() => {
+        navigate("/home");
+      }, 500);
     } catch (error) {
       console.error("Error deleting post:", error);
+      setIsDeleting(false);
+      setShowDeleteDialog(false);
+      toast.error("Failed to delete post. Please try again.");
     }
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteDialog(false);
   };
 
   const handleShare = async () => {
@@ -92,12 +108,13 @@ const PostDetails = () => {
           text: post.content.substring(0, 100),
           url: window.location.href,
         });
+        toast.success("Shared successfully!");
       } catch (err) {
         console.log("Error sharing:", err);
       }
     } else {
       navigator.clipboard.writeText(window.location.href);
-      alert("Link copied to clipboard!");
+      toast.info("Link copied to clipboard!");
     }
   };
 
@@ -176,16 +193,20 @@ const PostDetails = () => {
 
         {/* Main Content Card */}
         <article className="bg-white rounded-2xl overflow-hidden border border-gray-200">
-          {/* Featured Image */}
-          {post.image && (
-            <div className="relative h-96 overflow-hidden">
-              <img
-                src={post.image}
-                alt={post.title}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-            </div>
+          {/* Featured Images Slideshow */}
+          {post.images && post.images.length > 0 ? (
+            <ImageSlideshow images={post.images} />
+          ) : (
+            post.image && (
+              <div className="relative h-96 overflow-hidden">
+                <img
+                  src={post.image}
+                  alt={post.title}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+              </div>
+            )
           )}
 
           <div className="p-8 md:p-12">
@@ -229,7 +250,7 @@ const PostDetails = () => {
                       <span className="hidden sm:inline">Edit</span>
                     </Link>
                     <button
-                      onClick={handleDelete}
+                      onClick={handleDeleteClick}
                       className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -324,6 +345,18 @@ const PostDetails = () => {
           )}
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={showDeleteDialog}
+        onClose={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+        title="Delete Post"
+        message="Are you sure you want to delete this post? This action cannot be undone and all comments will be permanently removed."
+        confirmText="Delete Post"
+        cancelText="Cancel"
+        isLoading={isDeleting}
+      />
     </div>
   );
 };

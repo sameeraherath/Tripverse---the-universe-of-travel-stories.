@@ -20,6 +20,9 @@ import LandingPage from "./pages/LandingPage";
 import ForYou from "./pages/ForYou";
 import FloatingActionButton from "./components/FloatingActionButton";
 import { SocketProvider } from "./contexts/SocketContext";
+import { ToastContainer, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./toastStyles.css";
 
 const App = () => {
   return (
@@ -37,6 +40,19 @@ const AppContent = () => {
 
   return (
     <div>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Slide}
+      />
       {!hideNavbarPaths.includes(location.pathname) && <Navbar />}
       <Routes>
         <Route path="/" element={<LandingPage />} />

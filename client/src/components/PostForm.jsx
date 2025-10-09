@@ -9,7 +9,10 @@ const PostForm = ({ onSubmit, initialData }) => {
   const [title, setTitle] = useState(initialData?.title || "");
   const [content, setContent] = useState(initialData?.content || "");
   const [tags, setTags] = useState(initialData?.tags || []);
-  const [image, setImage] = useState(null);
+  const [images, setImages] = useState([]);
+  const [existingImages, setExistingImages] = useState(
+    initialData?.images || []
+  );
   const [loading, setLoading] = useState(false);
   const [generating, setGenerating] = useState(false);
 
@@ -37,6 +40,26 @@ const PostForm = ({ onSubmit, initialData }) => {
     }
   };
 
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    const totalImages = existingImages.length + images.length + files.length;
+
+    if (totalImages > 3) {
+      alert("You can only upload a maximum of 3 images");
+      return;
+    }
+
+    setImages([...images, ...files]);
+  };
+
+  const removeExistingImage = (index) => {
+    setExistingImages(existingImages.filter((_, i) => i !== index));
+  };
+
+  const removeNewImage = (index) => {
+    setImages(images.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true); // Set loading to true when the form is submitted
@@ -46,11 +69,15 @@ const PostForm = ({ onSubmit, initialData }) => {
     formData.append("content", content);
     formData.append("tags", JSON.stringify(tags));
 
-    if (image) {
-      formData.append("image", image);
-    } else if (initialData?.image) {
-      formData.append("image", initialData.image);
+    // Append existing images (for edit mode)
+    if (existingImages.length > 0) {
+      formData.append("existingImages", JSON.stringify(existingImages));
     }
+
+    // Append new images
+    images.forEach((image) => {
+      formData.append("images", image);
+    });
 
     try {
       // Only call the onSubmit function passed as a prop
@@ -92,14 +119,67 @@ const PostForm = ({ onSubmit, initialData }) => {
 
       <div className="space-y-2">
         <label className="block text-sm font-semibold text-gray-700 mb-2">
-          Featured Image
+          Images (Maximum 3)
         </label>
-        <input
-          type="file"
-          onChange={(e) => setImage(e.target.files[0])}
-          className="w-full p-2 px-4 border-none rounded-3xl focus:outline-none file:bg-gradient-primary file:py-2 file:px-4 file:border-none file:mr-4 file:text-white file:font-semibold file:hover:opacity-90 file:transition"
-          accept="image/*"
-        />
+
+        {/* Display existing images */}
+        {existingImages.length > 0 && (
+          <div className="grid grid-cols-3 gap-3 mb-3">
+            {existingImages.map((img, index) => (
+              <div key={`existing-${index}`} className="relative group">
+                <img
+                  src={img}
+                  alt={`Existing ${index + 1}`}
+                  className="w-full h-24 object-cover rounded-lg"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeExistingImage(index)}
+                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Display newly selected images */}
+        {images.length > 0 && (
+          <div className="grid grid-cols-3 gap-3 mb-3">
+            {images.map((img, index) => (
+              <div key={`new-${index}`} className="relative group">
+                <img
+                  src={URL.createObjectURL(img)}
+                  alt={`New ${index + 1}`}
+                  className="w-full h-24 object-cover rounded-lg"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeNewImage(index)}
+                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* File input - only show if less than 3 images */}
+        {existingImages.length + images.length < 3 && (
+          <input
+            type="file"
+            onChange={handleImageChange}
+            className="w-full p-2 px-4 border-none rounded-3xl focus:outline-none file:bg-gradient-primary file:py-2 file:px-4 file:border-none file:mr-4 file:text-white file:font-semibold file:hover:opacity-90 file:transition"
+            accept="image/*"
+            multiple
+          />
+        )}
+
+        <p className="text-xs text-gray-500 mt-1">
+          {existingImages.length + images.length} of 3 images selected
+        </p>
       </div>
 
       <div className="flex flex-col gap-4">

@@ -20,37 +20,46 @@ const uploadToCloudinary = async (buffer) => {
 };
 
 // Create a new post
-router.post("/", authMiddleware, upload.single("image"), async (req, res) => {
-  try {
-    const { title, content, tags } = req.body;
-    let imageUrl = null;
+router.post(
+  "/",
+  authMiddleware,
+  upload.array("images", 3),
+  async (req, res) => {
+    try {
+      const { title, content, tags } = req.body;
+      let imageUrls = [];
 
-    if (req.file) {
-      imageUrl = await uploadToCloudinary(req.file.buffer);
+      // Upload multiple images to Cloudinary
+      if (req.files && req.files.length > 0) {
+        const uploadPromises = req.files.map((file) =>
+          uploadToCloudinary(file.buffer)
+        );
+        imageUrls = await Promise.all(uploadPromises);
+      }
+
+      // Parse tags if sent as JSON string
+      let parsedTags = [];
+      if (tags) {
+        parsedTags = typeof tags === "string" ? JSON.parse(tags) : tags;
+      }
+
+      const newPost = new Post({
+        title,
+        content,
+        images: imageUrls,
+        author: req.userId, // Link post to authenticated user
+        tags: parsedTags,
+      });
+
+      await newPost.save();
+      res.status(201).json(newPost);
+    } catch (err) {
+      res
+        .status(500)
+        .json({ message: "Error creating post", error: err.message });
     }
-
-    // Parse tags if sent as JSON string
-    let parsedTags = [];
-    if (tags) {
-      parsedTags = typeof tags === "string" ? JSON.parse(tags) : tags;
-    }
-
-    const newPost = new Post({
-      title,
-      content,
-      image: imageUrl,
-      author: req.userId, // Link post to authenticated user
-      tags: parsedTags,
-    });
-
-    await newPost.save();
-    res.status(201).json(newPost);
-  } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Error creating post", error: err.message });
   }
-});
+);
 
 // Delete a post by ID
 router.delete("/:id", authMiddleware, async (req, res) => {
@@ -80,59 +89,76 @@ router.delete("/:id", authMiddleware, async (req, res) => {
 });
 
 // Update a post by ID
-router.put("/:id", authMiddleware, upload.single("image"), async (req, res) => {
-  try {
-    const { title, content, tags } = req.body;
-    let imageUrl = req.body.image;
+router.put(
+  "/:id",
+  authMiddleware,
+  upload.array("images", 3),
+  async (req, res) => {
+    try {
+      const { title, content, tags, existingImages } = req.body;
+      let imageUrls = [];
 
-    // Parse tags if sent as JSON string
-    let parsedTags = [];
-    if (tags) {
-      parsedTags = typeof tags === "string" ? JSON.parse(tags) : tags;
+      // Parse existing images if provided
+      if (existingImages) {
+        imageUrls =
+          typeof existingImages === "string"
+            ? JSON.parse(existingImages)
+            : existingImages;
+      }
+
+      // Parse tags if sent as JSON string
+      let parsedTags = [];
+      if (tags) {
+        parsedTags = typeof tags === "string" ? JSON.parse(tags) : tags;
+      }
+
+      // Find the post by ID
+      const post = await Post.findById(req.params.id);
+
+      // Check if the post exists
+      if (!post) {
+        return res.status(404).json({ message: "Post not found" });
+      }
+
+      if (post.author.toString() !== req.userId) {
+        return res
+          .status(403)
+          .json({
+            message: "Unauthorized: You can only update your own posts",
+          });
+      }
+
+      // Upload new images to Cloudinary
+      if (req.files && req.files.length > 0) {
+        const uploadPromises = req.files.map((file) =>
+          uploadToCloudinary(file.buffer)
+        );
+        const newImageUrls = await Promise.all(uploadPromises);
+        imageUrls = [...imageUrls, ...newImageUrls];
+      }
+
+      // Limit to 3 images maximum
+      imageUrls = imageUrls.slice(0, 3);
+
+      const updatedPost = await Post.findByIdAndUpdate(
+        req.params.id,
+        {
+          title,
+          content,
+          images: imageUrls,
+          tags: parsedTags.length > 0 ? parsedTags : post.tags,
+        },
+        { new: true, runValidators: true }
+      );
+
+      res.status(200).json(updatedPost);
+    } catch (err) {
+      res
+        .status(500)
+        .json({ message: "Error updating post", error: err.message });
     }
-
-    // Find the post by ID
-
-    const post = await Post.findById(req.params.id);
-
-    // Check if the post exists
-
-    if (!post) {
-      return res.status(404).json({ message: "Post not found" });
-    }
-
-    if (req.file) {
-      imageUrl = await uploadToCloudinary(req.file.buffer);
-    }
-
-    if (post.author.toString() !== req.userId) {
-      return res
-        .status(403)
-        .json({ message: "Unauthorized: You can only update your own posts" });
-    }
-
-    if (req.file) {
-      imageUrl = await uploadToCloudinary(req.file.buffer);
-    }
-
-    const updatedPost = await Post.findByIdAndUpdate(
-      req.params.id,
-      {
-        title,
-        content,
-        image: imageUrl,
-        tags: parsedTags.length > 0 ? parsedTags : post.tags,
-      },
-      { new: true, runValidators: true }
-    );
-
-    res.status(200).json(updatedPost);
-  } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Error updating post", error: err.message });
   }
-});
+);
 
 // Get all posts with search and filters
 router.get("/", async (req, res) => {

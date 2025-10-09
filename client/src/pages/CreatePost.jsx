@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createPost } from "../features/posts/postsSlice";
 import PostForm from "../components/PostForm";
+import { toast } from "react-toastify";
 
 const CreatePost = () => {
   const dispatch = useDispatch();
@@ -9,11 +10,20 @@ const CreatePost = () => {
   const { loading, error } = useSelector((state) => state.post);
 
   const handleSubmit = async (formData) => {
-    const resultAction = await dispatch(createPost(formData));
-    if (createPost.isFulfilled.match(resultAction)) {
-      navigate("/home");
-    } else {
-      alert("Failed to create post. Please try again.");
+    try {
+      const resultAction = await dispatch(createPost(formData));
+
+      if (createPost.fulfilled.match(resultAction)) {
+        toast.success("Post created successfully!");
+        setTimeout(() => {
+          navigate("/home");
+        }, 500);
+      } else if (createPost.rejected.match(resultAction)) {
+        toast.error("Failed to create post. Please try again.");
+      }
+    } catch (err) {
+      console.error("Error creating post:", err);
+      toast.error("Failed to create post. Please try again.");
     }
   };
 

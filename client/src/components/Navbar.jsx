@@ -153,7 +153,7 @@ const Navbar = () => {
               },
             }}
           >
-            ✍️ Blogger
+            Tripverse
           </Typography>
 
           {/* Desktop Menu */}

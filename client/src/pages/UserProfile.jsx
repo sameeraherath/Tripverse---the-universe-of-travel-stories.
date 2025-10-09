@@ -203,13 +203,7 @@ const UserProfile = () => {
           {posts.length > 0 ? (
             <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               {posts.map((post) => (
-                <Card
-                  key={post._id}
-                  post={{
-                    ...post,
-                    image: post.image || null,
-                  }}
-                />
+                <Card key={post._id} post={post} />
               ))}
             </div>
           ) : (
