@@ -8,7 +8,6 @@ import {
 } from "../features/posts/postsSlice";
 import Card from "../components/Card";
 import SearchBar from "../components/SearchBar";
-import TagCloud from "../components/TagCloud";
 import { Sparkles, Loader2 } from "lucide-react";
 
 const Home = () => {
@@ -135,9 +134,9 @@ const Home = () => {
         </div>
 
         {/* Main Content Area */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Posts Grid - Takes 3 columns */}
-          <div className="lg:col-span-3">
+        <div className="w-full">
+          {/* Posts Grid */}
+          <div>
             {/* Selected Filters Display */}
             {activeTab === "all" && selectedTags.length > 0 && (
               <div className="mb-6 flex flex-wrap items-center gap-2">
@@ -225,16 +224,6 @@ const Home = () => {
                 </a>
               </div>
             )}
-          </div>
-
-          {/* Sidebar - Takes 1 column */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-24">
-              <TagCloud
-                onTagClick={handleTagClick}
-                selectedTags={selectedTags}
-              />
-            </div>
           </div>
         </div>
       </div>
