@@ -1,16 +1,12 @@
 const express = require("express");
-const {
-  sendMagicLink,
-  verifyMagicLink,
-} = require("../controllers/authController");
+const { register, login } = require("../controllers/authController");
 
 const router = express.Router();
 
-// Route to send magic link to the user
+// Register route
+router.post("/register", register);
 
-router.post("/send-magic-link", sendMagicLink);
-
-// Route to verify the magic link token
-router.post("/magic-login/:token", verifyMagicLink);
+// Login route
+router.post("/login", login);
 
 module.exports = router;

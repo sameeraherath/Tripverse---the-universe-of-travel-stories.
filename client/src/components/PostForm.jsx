@@ -105,7 +105,7 @@ const PostForm = ({ onSubmit, initialData }) => {
       <div className="flex flex-col gap-4">
         <button
           type="button"
-          className="w-full p-3 bg-white border-2 border-primary text-primary font-semibold focus:outline-none rounded-3xl hover:bg-primary hover:text-white transition disabled:opacity-60 shadow-sm flex items-center justify-center gap-2"
+          className="w-full p-3 bg-white border-2 border-primary text-primary font-semibold focus:outline-none rounded-3xl hover:bg-primary hover:text-white transition disabled:opacity-60 flex items-center justify-center gap-2"
           onClick={handleGenerateContent}
           disabled={loading || generating}
         >
@@ -115,7 +115,7 @@ const PostForm = ({ onSubmit, initialData }) => {
 
         <button
           type="submit"
-          className="w-full p-3 bg-gradient-primary text-white font-semibold rounded-3xl hover:shadow-lg transition disabled:opacity-60 shadow-sm"
+          className="w-full p-3 bg-gradient-primary text-white font-semibold rounded-3xl border border-gray-200 transition disabled:opacity-60"
           disabled={loading}
         >
           {loading ? "Publishing..." : "Publish Post"}

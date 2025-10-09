@@ -28,7 +28,7 @@ const CommentForm = ({ postId }) => {
         </p>
         <a
           href="/LoginPage"
-          className="inline-block px-6 py-2 bg-gradient-primary text-white font-semibold rounded-full hover:shadow-lg transition-all"
+          className="inline-block px-6 py-2 bg-gradient-primary text-white font-semibold rounded-full border border-gray-200 transition-all"
         >
           Login to Comment
         </a>
@@ -55,7 +55,7 @@ const CommentForm = ({ postId }) => {
         <button
           type="submit"
           disabled={isSubmitting || !content.trim()}
-          className="flex items-center gap-2 bg-gradient-primary text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:scale-105"
+          className="flex items-center gap-2 bg-gradient-primary text-white px-6 py-3 rounded-xl font-semibold border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:scale-105"
         >
           {isSubmitting ? (
             <>

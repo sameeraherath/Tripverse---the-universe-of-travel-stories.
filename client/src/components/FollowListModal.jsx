@@ -32,7 +32,7 @@ const FollowListModal = ({ userId, type, isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[80vh] flex flex-col animate-scale-in">
+      <div className="bg-white rounded-2xl border-2 border-gray-200 max-w-md w-full max-h-[80vh] flex flex-col animate-scale-in">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center gap-3">
@@ -81,7 +81,8 @@ const FollowListModal = ({ userId, type, isOpen, onClose }) => {
                         />
                       ) : (
                         <div className="w-12 h-12 rounded-full bg-gradient-primary flex items-center justify-center text-white font-bold text-lg">
-                          {(profile.name || user.email || "U")[0].toUpperCase()}
+                          {(profile.name?.trim() ||
+                            "Anonymous")[0].toUpperCase()}
                         </div>
                       )}
                     </a>
@@ -93,11 +94,13 @@ const FollowListModal = ({ userId, type, isOpen, onClose }) => {
                         className="block hover:text-orange-500 transition-colors"
                       >
                         <h3 className="font-semibold text-gray-dark truncate">
-                          {profile.name || "Anonymous User"}
+                          {profile.name?.trim() || "Anonymous User"}
                         </h3>
-                        <p className="text-sm text-gray-500 truncate">
-                          {user.email}
-                        </p>
+                        {profile.bio?.trim() && (
+                          <p className="text-sm text-gray-500 truncate">
+                            {profile.bio}
+                          </p>
+                        )}
                       </a>
                       {profile.bio && (
                         <p className="text-sm text-gray-600 mt-1 line-clamp-1">

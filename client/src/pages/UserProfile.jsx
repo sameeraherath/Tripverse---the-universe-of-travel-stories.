@@ -10,14 +10,17 @@ import FollowListModal from "../components/FollowListModal";
 const UserProfile = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
-  const currentUser = useSelector((state) => state.auth.user);
+  const currentUserId = useSelector((state) => state.auth.userId);
+  const followStatus = useSelector((state) => state.following?.followStatus);
 
   const [profile, setProfile] = useState(null);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalType, setModalType] = useState(null); // 'followers' or 'following'
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  const isOwnProfile = currentUser?._id === userId;
+  const isOwnProfile =
+    currentUserId && String(currentUserId) === String(userId);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -43,7 +46,14 @@ const UserProfile = () => {
     if (userId) {
       fetchUserProfile();
     }
-  }, [userId, navigate]);
+  }, [userId, navigate, refreshKey]);
+
+  // Refresh profile when follow status changes
+  useEffect(() => {
+    if (followStatus && userId && followStatus[userId] !== undefined) {
+      setRefreshKey((prev) => prev + 1);
+    }
+  }, [followStatus, userId]);
 
   if (loading) {
     return (
@@ -66,7 +76,7 @@ const UserProfile = () => {
           </p>
           <button
             onClick={() => navigate("/")}
-            className="px-6 py-3 bg-gradient-primary text-white font-semibold rounded-full hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300"
+            className="px-6 py-3 bg-gradient-primary text-white font-semibold rounded-full border border-gray-200 transform hover:-translate-y-0.5 transition-all duration-300"
           >
             Go Home
           </button>
@@ -88,7 +98,7 @@ const UserProfile = () => {
     <div className="min-h-screen bg-gradient-to-b from-orange-50/30 to-white py-24">
       <div className="container mx-auto max-w-6xl px-4">
         {/* Profile Header Card */}
-        <div className="bg-white shadow-2xl rounded-2xl overflow-hidden border border-gray-100 mb-8">
+        <div className="bg-white rounded-2xl overflow-hidden border border-gray-200 mb-8">
           {/* Cover Image */}
           <div className="h-48 bg-gradient-primary relative"></div>
 
@@ -101,13 +111,11 @@ const UserProfile = () => {
                   <img
                     src={profile.avatar}
                     alt={profile.name || "User"}
-                    className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-white shadow-xl"
+                    className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-white"
                   />
                 ) : (
-                  <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-primary flex items-center justify-center text-white font-bold text-5xl border-4 border-white shadow-xl">
-                    {(profile.name ||
-                      profile.user?.email ||
-                      "U")[0].toUpperCase()}
+                  <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-primary flex items-center justify-center text-white font-bold text-5xl border-4 border-white">
+                    {(profile.name?.trim() || "A")[0].toUpperCase()}
                   </div>
                 )}
               </div>
@@ -116,7 +124,7 @@ const UserProfile = () => {
               <div className="flex-1 flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:mb-4">
                 <div>
                   <h1 className="text-3xl md:text-4xl font-bold text-gray-dark mb-2">
-                    {profile.name || "Anonymous User"}
+                    {profile.name?.trim() || "Anonymous User"}
                   </h1>
                   <div className="flex items-center gap-2 text-gray-medium">
                     <Mail className="w-4 h-4" />
@@ -129,7 +137,7 @@ const UserProfile = () => {
                   {isOwnProfile ? (
                     <button
                       onClick={() => navigate("/profile")}
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-primary text-white font-semibold rounded-full hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-primary text-white font-semibold rounded-full border border-gray-200 transform hover:-translate-y-0.5 transition-all duration-300"
                     >
                       <Edit className="w-5 h-5" />
                       <span>Edit Profile</span>
@@ -201,7 +209,7 @@ const UserProfile = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center py-20 bg-white rounded-2xl shadow-lg">
+            <div className="text-center py-20 bg-white rounded-2xl border border-gray-200">
               <div className="text-8xl mb-6">📝</div>
               <h3 className="text-2xl font-bold text-gray-dark mb-3">
                 No Posts Yet

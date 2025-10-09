@@ -112,7 +112,7 @@ const TagInput = ({ tags, onChange, maxTags = 10 }) => {
               className="fixed inset-0 z-10"
               onClick={() => setShowSuggestions(false)}
             ></div>
-            <div className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-gray-100 rounded-lg shadow-xl z-20 overflow-hidden animate-scale-in">
+            <div className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-gray-200 rounded-lg z-20 overflow-hidden animate-scale-in">
               {suggestions.map((suggestion) => (
                 <button
                   key={suggestion}

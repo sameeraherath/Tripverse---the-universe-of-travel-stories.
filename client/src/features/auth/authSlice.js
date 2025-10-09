@@ -1,28 +1,35 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../utils/api";
 
-// Async thunk to request magic link email
-export const sendMagicLink = createAsyncThunk(
-  "auth/sendMagicLink",
-  async (email, { rejectWithValue }) => {
+// Login user
+export const loginUser = createAsyncThunk(
+  "auth/login",
+  async ({ email, password }, { rejectWithValue }) => {
     try {
-      const response = await api.post("/api/auth/send-magic-link", { email });
+      const response = await api.post("/api/auth/login", { email, password });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(
+        error.response?.data || { message: "Login failed" }
+      );
     }
   }
 );
 
-// Async thunk to verify magic link token
-export const verifyMagicLink = createAsyncThunk(
-  "auth/verifyMagicLink",
-  async (token, { rejectWithValue }) => {
+// Register user
+export const registerUser = createAsyncThunk(
+  "auth/register",
+  async ({ email, password }, { rejectWithValue }) => {
     try {
-      const response = await api.post(`/api/auth/magic-login/${token}`);
+      const response = await api.post("/api/auth/register", {
+        email,
+        password,
+      });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(
+        error.response?.data || { message: "Registration failed" }
+      );
     }
   }
 );
@@ -37,7 +44,6 @@ const getInitialAuthState = () => {
       const decoded = JSON.parse(atob(token.split(".")[1]));
       userId = decoded.userId;
     } catch {
-      // If token is invalid, remove it
       localStorage.removeItem("authToken");
       return { token: null, userId: null };
     }
@@ -46,7 +52,7 @@ const getInitialAuthState = () => {
   return { token, userId };
 };
 
-// Auth slice with initial state and reducers
+// Auth slice
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -55,7 +61,6 @@ const authSlice = createSlice({
     error: null,
   },
   reducers: {
-    // Clear auth state on logout
     logout: (state) => {
       state.token = null;
       state.userId = null;
@@ -64,34 +69,35 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Handle magic link request states
-      .addCase(sendMagicLink.pending, (state) => {
+      // Login
+      .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(sendMagicLink.fulfilled, (state) => {
-        state.loading = false;
-      })
-      .addCase(sendMagicLink.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload.message;
-      })
-      // Handle magic link verification states
-      .addCase(verifyMagicLink.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(verifyMagicLink.fulfilled, (state, action) => {
+      .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.token = action.payload.token;
-        state.userId = JSON.parse(
-          atob(action.payload.token.split(".")[1])
-        ).userId;
+        state.userId = action.payload.userId;
         localStorage.setItem("authToken", action.payload.token);
       })
-      .addCase(verifyMagicLink.rejected, (state, action) => {
+      .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.message;
+        state.error = action.payload?.message || "Login failed";
+      })
+      // Register
+      .addCase(registerUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(registerUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.token = action.payload.token;
+        state.userId = action.payload.userId;
+        localStorage.setItem("authToken", action.payload.token);
+      })
+      .addCase(registerUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.message || "Registration failed";
       });
   },
 });

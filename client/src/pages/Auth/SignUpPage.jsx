@@ -5,20 +5,35 @@ import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Eye, EyeOff } from "lucide-react";
 
-const LoginPage = () => {
+const SignUpPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate passwords match
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    // Validate password length
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters long");
+      return;
+    }
+
     setLoading(true);
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/auth/login`,
+        `${import.meta.env.VITE_API_URL}/api/auth/register`,
         {
           method: "POST",
           headers: {
@@ -32,15 +47,15 @@ const LoginPage = () => {
 
       if (response.ok) {
         localStorage.setItem("authToken", data.token);
-        toast.success("🎉 Login successful! Redirecting...", {
+        toast.success("🎉 Account created successfully! Redirecting...", {
           autoClose: 2000,
         });
         setTimeout(() => navigate("/home"), 2000);
       } else {
-        toast.error(data.message || "Login failed");
+        toast.error(data.message || "Registration failed");
       }
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("Registration error:", error);
       toast.error("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -58,7 +73,7 @@ const LoginPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
           >
-            Write Better, Faster, Together with Blogger
+            Start Your Writing Journey Today
           </motion.h1>
           <motion.p
             className="mt-8 text-2xl text-center px-8 text-[#444]"
@@ -66,7 +81,7 @@ const LoginPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.3 }}
           >
-            🌟 Join Thousands of Writers. Start Your AI-Powered Blog Today!
+            ✍️ Create, Share, and Connect with Writers Worldwide
           </motion.p>
 
           <motion.div
@@ -76,12 +91,12 @@ const LoginPage = () => {
             transition={{ delay: 0.6 }}
           >
             <div className="text-center p-4 bg-white border border-gray-200 rounded-lg">
-              <h3 className="text-2xl font-bold text-[#111]">10K+</h3>
-              <p className="text-[#555]">Active Writers</p>
+              <h3 className="text-2xl font-bold text-[#111]">Free</h3>
+              <p className="text-[#555]">Forever</p>
             </div>
             <div className="text-center p-4 bg-white border border-gray-200 rounded-lg">
-              <h3 className="text-2xl font-bold text-[#111]">50K+</h3>
-              <p className="text-[#555]">Articles Published</p>
+              <h3 className="text-2xl font-bold text-[#111]">AI-Powered</h3>
+              <p className="text-[#555]">Writing Tools</p>
             </div>
           </motion.div>
         </div>
@@ -96,7 +111,7 @@ const LoginPage = () => {
           transition={{ duration: 0.8 }}
         >
           <h2 className="text-4xl font-bold text-center text-[#111] mb-8">
-            Welcome Back
+            Create Account
           </h2>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-4">
@@ -128,7 +143,7 @@ const LoginPage = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   id="password"
-                  placeholder="Enter your password"
+                  placeholder="Create a password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full bg-[#FFF9F3] border border-[#F3F4F6] px-4 py-4 text-[#111] focus:outline-none focus:ring-2 focus:ring-[#FF7A1A]/20 rounded-xl transition-all"
@@ -146,6 +161,40 @@ const LoginPage = () => {
                   )}
                 </button>
               </div>
+              <p className="text-sm text-gray-500">
+                Must be at least 6 characters long
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <label
+                htmlFor="confirmPassword"
+                className="block font-medium text-[#444] text-lg"
+              >
+                Confirm Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  id="confirmPassword"
+                  placeholder="Confirm your password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full bg-[#FFF9F3] border border-[#F3F4F6] px-4 py-4 text-[#111] focus:outline-none focus:ring-2 focus:ring-[#FF7A1A]/20 rounded-xl transition-all"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
             </div>
 
             <button
@@ -153,17 +202,17 @@ const LoginPage = () => {
               className="w-full bg-gradient-to-r from-[#FF7A1A] to-[#FFB347] hover:from-[#FF6600] hover:to-[#FFA533] text-white py-4 px-8 font-semibold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={loading}
             >
-              {loading ? "Logging in..." : "Login"}
+              {loading ? "Creating Account..." : "Sign Up"}
             </button>
           </form>
 
           <p className="text-center mt-6 text-[#555]">
-            Don&#39;t have an account?{" "}
+            Already have an account?{" "}
             <Link
-              to="/signup"
+              to="/login"
               className="text-[#FF7A1A] font-semibold hover:underline"
             >
-              Sign Up
+              Login
             </Link>
           </p>
         </motion.div>
@@ -178,4 +227,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignUpPage;

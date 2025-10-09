@@ -9,6 +9,7 @@ const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 const aiRoutes = require("./routes/aiRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
 
 // Connect to MongoDB
 (async () => {
@@ -67,6 +68,7 @@ app.use("/api/posts", postRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/comments", commentRoutes);
+app.use("/api/notifications", notificationRoutes);
 app.use("/api/ai", aiLimiter, aiRoutes);
 
 // 404 handler

@@ -60,12 +60,12 @@ const Home = () => {
       <div className="container mx-auto px-4 py-8 pt-24">
         {/* Hero Section */}
         <div className="text-center mb-12 space-y-4">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-primary rounded-full text-white font-medium shadow-lg mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-primary rounded-full text-white font-medium border border-gray-200 mb-4">
             <Sparkles className="w-4 h-4" />
             <span>Discover Amazing Stories</span>
           </div>
           <h1 className="text-5xl md:text-6xl font-extrabold text-gray-dark mb-4">
-            Latest Blog Posts
+            Latest Stories
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
             Explore inspiring stories, insightful articles, and creative content
@@ -132,7 +132,7 @@ const Home = () => {
                     <button
                       onClick={handleLoadMore}
                       disabled={loading}
-                      className="group relative px-8 py-4 bg-white border-2 border-orange-500 text-orange-500 font-semibold rounded-full hover:bg-orange-500 hover:text-white transform hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-orange-500"
+                      className="group relative px-8 py-4 bg-white border-2 border-orange-500 text-orange-500 font-semibold rounded-full hover:bg-orange-500 hover:text-white transform hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-orange-500"
                     >
                       {loading ? (
                         <span className="flex items-center gap-2">
@@ -157,7 +157,7 @@ const Home = () => {
                 </p>
                 <a
                   href="/create"
-                  className="inline-block px-8 py-3 bg-gradient-primary text-white font-semibold rounded-full hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300"
+                  className="inline-block px-8 py-3 bg-gradient-primary text-white font-semibold rounded-full border border-gray-200 transform hover:-translate-y-0.5 transition-all duration-300"
                 >
                   Create Your First Post
                 </a>

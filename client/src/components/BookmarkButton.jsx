@@ -111,9 +111,9 @@ const BookmarkButton = ({ postId, variant = "default" }) => {
     <button
       onClick={handleBookmarkToggle}
       disabled={isProcessing}
-      className={`group relative inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 ${
+      className={`group relative inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 ${
         isBookmarked
-          ? "bg-orange-500 text-white"
+          ? "bg-orange-500 text-white border border-gray-200"
           : "bg-white border-2 border-orange-500 text-orange-500 hover:bg-orange-50"
       }`}
     >

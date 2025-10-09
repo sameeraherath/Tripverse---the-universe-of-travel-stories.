@@ -323,7 +323,7 @@ const RichTextEditor = ({ content, onChange, placeholder }) => {
   });
 
   return (
-    <div className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+    <div className="border border-gray-200 rounded-xl overflow-hidden bg-white">
       <MenuBar editor={editor} />
       <EditorContent editor={editor} className="rich-text-editor" />
     </div>

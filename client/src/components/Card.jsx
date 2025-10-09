@@ -21,7 +21,7 @@ const Card = ({ post }) => {
 
   if (!post) {
     return (
-      <div className="bg-white shadow-lg p-5 rounded-2xl flex flex-col gap-4 hover:shadow-xl transition-all duration-300 border border-gray-100">
+      <div className="bg-white p-5 rounded-2xl flex flex-col gap-4 transition-all duration-300 border border-gray-200">
         <Skeleton
           height={192}
           className="rounded-xl"
@@ -66,7 +66,7 @@ const Card = ({ post }) => {
 
   return (
     <Link to={`/post/${post._id}`} className="block group">
-      <div className="bg-white shadow-lg p-5 rounded-2xl flex flex-col gap-4 hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-primary/30 hover:-translate-y-1 h-full">
+      <div className="bg-white p-5 rounded-2xl flex flex-col gap-4 transition-all duration-300 border border-gray-200 hover:border-primary/50 hover:-translate-y-1 h-full">
         <div className="relative overflow-hidden rounded-xl">
           {post.image ? (
             <img
@@ -103,13 +103,12 @@ const Card = ({ post }) => {
                 />
               ) : (
                 <div className="w-8 h-8 rounded-full bg-gradient-primary flex items-center justify-center text-white text-xs font-bold">
-                  {(post.author.profile?.name ||
-                    post.author.email ||
-                    "U")[0].toUpperCase()}
+                  {(post.author.profile?.name?.trim() ||
+                    "Anonymous")[0].toUpperCase()}
                 </div>
               )}
               <span className="text-sm font-medium text-gray-700">
-                {post.author.profile?.name || post.author.email}
+                {post.author.profile?.name?.trim() || "Anonymous User"}
               </span>
             </Link>
           )}

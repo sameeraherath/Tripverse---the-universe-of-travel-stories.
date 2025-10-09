@@ -123,7 +123,7 @@ const PostDetails = () => {
           <p className="text-gray-600 mb-6">{error}</p>
           <button
             onClick={() => navigate("/home")}
-            className="px-6 py-2 bg-gradient-primary text-white rounded-full hover:shadow-lg transition-all"
+            className="px-6 py-2 bg-gradient-primary text-white rounded-full border border-gray-200 transition-all"
           >
             Back to Home
           </button>
@@ -145,7 +145,7 @@ const PostDetails = () => {
           </p>
           <button
             onClick={() => navigate("/home")}
-            className="px-6 py-2 bg-gradient-primary text-white rounded-full hover:shadow-lg transition-all"
+            className="px-6 py-2 bg-gradient-primary text-white rounded-full border border-gray-200 transition-all"
           >
             Back to Home
           </button>
@@ -175,7 +175,7 @@ const PostDetails = () => {
         </button>
 
         {/* Main Content Card */}
-        <article className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+        <article className="bg-white rounded-2xl overflow-hidden border border-gray-200">
           {/* Featured Image */}
           {post.image && (
             <div className="relative h-96 overflow-hidden">
@@ -293,7 +293,7 @@ const PostDetails = () => {
         </article>
 
         {/* Comments Section */}
-        <div className="mt-8 bg-white rounded-2xl shadow-xl p-8 md:p-12 border border-gray-100">
+        <div className="mt-8 bg-white rounded-2xl p-8 md:p-12 border border-gray-200">
           <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
             <MessageCircle className="w-8 h-8 text-primary" />
             Comments ({comments.length})

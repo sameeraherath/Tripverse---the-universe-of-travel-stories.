@@ -33,7 +33,7 @@ const Bookmarks = () => {
       <div className="container mx-auto px-4 py-8 pt-24">
         {/* Header */}
         <div className="text-center mb-12 space-y-4">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-primary rounded-full text-white font-medium shadow-lg mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-primary rounded-full text-white font-medium border border-gray-200 mb-4">
             <Bookmark className="w-4 h-4" fill="currentColor" />
             <span>Your Bookmarks</span>
           </div>
@@ -69,7 +69,7 @@ const Bookmarks = () => {
             </p>
             <button
               onClick={() => navigate("/home")}
-              className="inline-block px-8 py-3 bg-gradient-primary text-white font-semibold rounded-full hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300"
+              className="inline-block px-8 py-3 bg-gradient-primary text-white font-semibold rounded-full border border-gray-200 transform hover:-translate-y-0.5 transition-all duration-300"
             >
               Explore Posts
             </button>

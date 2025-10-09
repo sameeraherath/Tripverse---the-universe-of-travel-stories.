@@ -61,7 +61,7 @@ const LandingPage = () => {
             >
               <Button
                 component={Link}
-                to="/LoginPage"
+                to="/login"
                 variant="contained"
                 size="large"
                 sx={{
@@ -71,6 +71,7 @@ const LandingPage = () => {
                   fontWeight: 600,
                   px: 4,
                   boxShadow: "none",
+                  border: "1px solid #e5e7eb",
                   width: { xs: "100%", sm: "auto" },
                   mb: { xs: 1, sm: 0 },
                   "&:hover": { backgroundColor: "#FF6600" },
@@ -121,7 +122,7 @@ const LandingPage = () => {
                   borderRadius: 2,
                   px: 2,
                   py: 0.5,
-                  boxShadow: 1,
+                  border: "1px solid #e5e7eb",
                   display: "flex",
                   alignItems: "center",
                   gap: 1,
@@ -673,7 +674,7 @@ const LandingPage = () => {
                   cursor: "pointer",
                   "&:hover": {
                     transform: "translateY(-4px)",
-                    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
+                    border: "1px solid #d1d5db",
                   },
                 }}
               >
@@ -786,7 +787,7 @@ const LandingPage = () => {
                   cursor: "pointer",
                   "&:hover": {
                     transform: "translateY(-4px)",
-                    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
+                    border: "1px solid #d1d5db",
                   },
                 }}
               >
@@ -899,7 +900,7 @@ const LandingPage = () => {
                   cursor: "pointer",
                   "&:hover": {
                     transform: "translateY(-4px)",
-                    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
+                    border: "1px solid #d1d5db",
                   },
                 }}
               >
