@@ -5,6 +5,7 @@ import { Calendar, Mail, Edit, Users, UserPlus, Loader2 } from "lucide-react";
 import api from "../utils/api";
 import Card from "../components/Card";
 import FollowButton from "../components/FollowButton";
+import ChatButton from "../components/ChatButton";
 import FollowListModal from "../components/FollowListModal";
 
 const UserProfile = () => {
@@ -143,7 +144,10 @@ const UserProfile = () => {
                       <span>Edit Profile</span>
                     </button>
                   ) : (
-                    <FollowButton userId={userId} />
+                    <>
+                      <FollowButton userId={userId} />
+                      <ChatButton userId={userId} />
+                    </>
                   )}
                 </div>
               </div>

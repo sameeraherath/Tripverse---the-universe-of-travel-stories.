@@ -3,6 +3,9 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const rateLimit = require("express-rate-limit");
+const http = require("http");
+const { Server } = require("socket.io");
+const jwt = require("jsonwebtoken");
 const connectDb = require("./config/db");
 const postRoutes = require("./routes/postRoutes");
 const authRoutes = require("./routes/authRoutes");
@@ -10,6 +13,7 @@ const profileRoutes = require("./routes/profileRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 const aiRoutes = require("./routes/aiRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
+const chatRoutes = require("./routes/chatRoutes");
 
 // Connect to MongoDB
 (async () => {
@@ -23,6 +27,21 @@ const notificationRoutes = require("./routes/notificationRoutes");
 })();
 
 const app = express();
+const server = http.createServer(app);
+
+// Socket.IO setup
+const io = new Server(server, {
+  cors: {
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "http://localhost:5000",
+      "https://blogger-client-murex.vercel.app",
+      "https://blogger-client-sameeraheraths-projects.vercel.app",
+    ],
+    credentials: true,
+  },
+});
 
 const aiLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
@@ -70,6 +89,7 @@ app.use("/api/profile", profileRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/ai", aiLimiter, aiRoutes);
+app.use("/api/chats", chatRoutes);
 
 // 404 handler
 app.use((req, res) => {
@@ -92,8 +112,88 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Socket.IO middleware for authentication
+io.use((socket, next) => {
+  const token = socket.handshake.auth.token;
+
+  if (!token) {
+    return next(new Error("Authentication error"));
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    socket.userId = decoded.userId;
+    next();
+  } catch (error) {
+    next(new Error("Authentication error"));
+  }
+});
+
+// Store online users
+const onlineUsers = new Map();
+
+// Socket.IO connection handling
+io.on("connection", (socket) => {
+  console.log(`User connected: ${socket.userId}`);
+
+  // Add user to online users
+  onlineUsers.set(socket.userId, socket.id);
+
+  // Broadcast online status
+  io.emit("user:online", { userId: socket.userId });
+
+  // Join user's personal room
+  socket.join(socket.userId);
+
+  // Handle joining chat room
+  socket.on("chat:join", (chatId) => {
+    socket.join(`chat:${chatId}`);
+    console.log(`User ${socket.userId} joined chat ${chatId}`);
+  });
+
+  // Handle leaving chat room
+  socket.on("chat:leave", (chatId) => {
+    socket.leave(`chat:${chatId}`);
+    console.log(`User ${socket.userId} left chat ${chatId}`);
+  });
+
+  // Handle sending message
+  socket.on("message:send", (data) => {
+    const { chatId, message } = data;
+
+    // Broadcast to all users in the chat room
+    io.to(`chat:${chatId}`).emit("message:receive", {
+      chatId,
+      message,
+    });
+  });
+
+  // Handle typing indicator
+  socket.on("typing:start", (data) => {
+    const { chatId, userId } = data;
+    socket.to(`chat:${chatId}`).emit("typing:start", { chatId, userId });
+  });
+
+  socket.on("typing:stop", (data) => {
+    const { chatId, userId } = data;
+    socket.to(`chat:${chatId}`).emit("typing:stop", { chatId, userId });
+  });
+
+  // Handle disconnect
+  socket.on("disconnect", () => {
+    console.log(`User disconnected: ${socket.userId}`);
+    onlineUsers.delete(socket.userId);
+
+    // Broadcast offline status
+    io.emit("user:offline", { userId: socket.userId });
+  });
+});
+
+// Make io accessible to routes
+app.set("io", io);
+
 const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
 });

@@ -15,12 +15,17 @@ import Profile from "./pages/Profile";
 import UserProfile from "./pages/UserProfile";
 import Bookmarks from "./pages/Bookmarks";
 import Notifications from "./pages/Notifications";
+import Messages from "./pages/Messages";
 import LandingPage from "./pages/LandingPage";
 import FloatingActionButton from "./components/FloatingActionButton";
+import { SocketProvider } from "./contexts/SocketContext";
+
 const App = () => {
   return (
     <Router>
-      <AppContent />
+      <SocketProvider>
+        <AppContent />
+      </SocketProvider>
     </Router>
   );
 };
@@ -44,6 +49,7 @@ const AppContent = () => {
         <Route path="/profile/:userId" element={<UserProfile />} />
         <Route path="/bookmarks" element={<Bookmarks />} />
         <Route path="/notifications" element={<Notifications />} />
+        <Route path="/messages" element={<Messages />} />
       </Routes>
       {!hideNavbarPaths.includes(location.pathname) && <FloatingActionButton />}
     </div>

@@ -28,18 +28,24 @@ import {
   Bookmark,
   Menu as MenuIcon,
   Close as CloseIcon,
+  Message,
+  Badge,
 } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../utils/authService";
+import { fetchUnreadCount } from "../features/chat/chatSlice";
 import NotificationDropdown from "./NotificationDropdown";
 import api from "../utils/api";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userAvatar, setUserAvatar] = useState(null);
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+  const { unreadCount } = useSelector((state) => state.chat);
 
   // Fetch user profile to get avatar
   useEffect(() => {
@@ -56,6 +62,18 @@ const Navbar = () => {
 
     fetchUserProfile();
   }, []);
+
+  // Fetch unread message count
+  useEffect(() => {
+    dispatch(fetchUnreadCount());
+
+    // Poll every 30 seconds
+    const interval = setInterval(() => {
+      dispatch(fetchUnreadCount());
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [dispatch]);
 
   const handleLogoutClick = () => {
     setLogoutDialogOpen(true);
@@ -87,6 +105,7 @@ const Navbar = () => {
     { text: "Home", path: "/home", icon: <Home /> },
     { text: "Create Post", path: "/create", icon: <Create /> },
     { text: "Bookmarks", path: "/bookmarks", icon: <Bookmark /> },
+    { text: "Messages", path: "/messages", icon: <Message /> },
     { text: "Notifications", path: "/notifications", icon: <AccountCircle /> },
     {
       text: "Profile",
@@ -200,6 +219,27 @@ const Navbar = () => {
                 }}
               >
                 <Bookmark sx={{ fontSize: { xs: "24px", md: "28px" } }} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Messages" arrow placement="bottom">
+              <IconButton
+                onClick={() => navigate("/messages")}
+                sx={{
+                  color: isActive("/messages") ? "#FF7A1A" : "#444444",
+                  backgroundColor: isActive("/messages")
+                    ? "rgba(255, 122, 26, 0.1)"
+                    : "transparent",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    color: "#FF7A1A",
+                    backgroundColor: "rgba(255, 122, 26, 0.1)",
+                    transform: "translateY(-2px)",
+                  },
+                }}
+              >
+                <Badge badgeContent={unreadCount} color="error">
+                  <Message sx={{ fontSize: { xs: "24px", md: "28px" } }} />
+                </Badge>
               </IconButton>
             </Tooltip>
 
@@ -328,7 +368,7 @@ const Navbar = () => {
               fontWeight: "800",
             }}
           >
-            ✍️ Blogger
+            ✍️ Tripverse
           </Typography>
         </Box>
 
