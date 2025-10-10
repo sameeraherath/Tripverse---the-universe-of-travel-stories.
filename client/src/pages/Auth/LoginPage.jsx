@@ -58,7 +58,7 @@ const LoginPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
           >
-            Write Better, Faster, Together with Blogger
+            Share Your Travel Adventures, Inspire Others
           </motion.h1>
           <motion.p
             className="mt-8 text-2xl text-center px-8 text-[#444]"
@@ -66,7 +66,7 @@ const LoginPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.3 }}
           >
-            🌟 Join Thousands of Writers. Start Your AI-Powered Blog Today!
+            🌍 Join Fellow Travelers. Document Your Journey, Discover New Places!
           </motion.p>
 
           <motion.div
@@ -77,11 +77,11 @@ const LoginPage = () => {
           >
             <div className="text-center p-4 bg-white border border-gray-200 rounded-lg">
               <h3 className="text-2xl font-bold text-[#111]">10K+</h3>
-              <p className="text-[#555]">Active Writers</p>
+              <p className="text-[#555]">Travel Bloggers</p>
             </div>
             <div className="text-center p-4 bg-white border border-gray-200 rounded-lg">
               <h3 className="text-2xl font-bold text-[#111]">50K+</h3>
-              <p className="text-[#555]">Articles Published</p>
+              <p className="text-[#555]">Travel Stories</p>
             </div>
           </motion.div>
         </div>
