@@ -64,6 +64,6 @@ const postSchema = new mongoose.Schema(
 // Index for better search performance
 postSchema.index({ tags: 1 });
 
-const post = mongoose.model("Post", postSchema);
+const Post = mongoose.model("Post", postSchema);
 
-module.exports = post;
+module.exports = Post;

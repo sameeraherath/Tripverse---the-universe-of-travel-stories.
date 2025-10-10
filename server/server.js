@@ -14,6 +14,7 @@ const commentRoutes = require("./routes/commentRoutes");
 const aiRoutes = require("./routes/aiRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const chatRoutes = require("./routes/chatRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
 // Connect to MongoDB
 (async () => {
@@ -90,6 +91,7 @@ app.use("/api/comments", commentRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/ai", aiLimiter, aiRoutes);
 app.use("/api/chats", chatRoutes);
+app.use("/api/admin", adminRoutes);
 
 // 404 handler
 app.use((req, res) => {

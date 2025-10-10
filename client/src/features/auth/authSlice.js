@@ -57,6 +57,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     ...getInitialAuthState(),
+    userRole: null,
     loading: false,
     error: null,
   },
@@ -64,7 +65,11 @@ const authSlice = createSlice({
     logout: (state) => {
       state.token = null;
       state.userId = null;
+      state.userRole = null;
       localStorage.removeItem("authToken");
+    },
+    setUserRole: (state, action) => {
+      state.userRole = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -78,6 +83,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.token = action.payload.token;
         state.userId = action.payload.userId;
+        state.userRole = action.payload.role;
         localStorage.setItem("authToken", action.payload.token);
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -102,5 +108,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, setUserRole } = authSlice.actions;
 export default authSlice.reducer;

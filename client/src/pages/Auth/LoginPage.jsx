@@ -1,49 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import { Slide, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Eye, EyeOff } from "lucide-react";
+import { loginUser } from "../../features/auth/authSlice";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading, error, userRole } = useSelector((state) => state.auth);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-
+    
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/auth/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem("authToken", data.token);
+      const result = await dispatch(loginUser({ email, password }));
+      
+      if (loginUser.fulfilled.match(result)) {
         toast.success("🎉 Login successful! Redirecting...", {
           autoClose: 2000,
         });
-        setTimeout(() => navigate("/home"), 2000);
+        
+        // Redirect based on user role
+        setTimeout(() => {
+          if (result.payload.role === 'admin' || result.payload.role === 'superadmin') {
+            navigate("/admin");
+          } else {
+            navigate("/home");
+          }
+        }, 2000);
       } else {
-        toast.error(data.message || "Login failed");
+        toast.error(result.payload?.message || "Login failed");
       }
     } catch (error) {
       console.error("Login error:", error);
       toast.error("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
     }
   };
 

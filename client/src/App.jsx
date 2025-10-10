@@ -18,7 +18,9 @@ import Notifications from "./pages/Notifications";
 import Messages from "./pages/Messages";
 import LandingPage from "./pages/LandingPage";
 import ForYou from "./pages/ForYou";
+import AdminDashboard from "./pages/AdminDashboard";
 import FloatingActionButton from "./components/FloatingActionButton";
+import ProtectedRoute from "./components/ProtectedRoute";
 import { SocketProvider } from "./contexts/SocketContext";
 import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -36,7 +38,7 @@ const App = () => {
 
 const AppContent = () => {
   const location = useLocation();
-  const hideNavbarPaths = ["/login", "/signup", "/"];
+  const hideNavbarPaths = ["/login", "/signup", "/", "/admin"];
 
   return (
     <div>
@@ -68,6 +70,11 @@ const AppContent = () => {
         <Route path="/bookmarks" element={<Bookmarks />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/messages" element={<Messages />} />
+        <Route path="/admin" element={
+          <ProtectedRoute requiredRole="admin">
+            <AdminDashboard />
+          </ProtectedRoute>
+        } />
       </Routes>
       {!hideNavbarPaths.includes(location.pathname) && <FloatingActionButton />}
     </div>

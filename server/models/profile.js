@@ -13,6 +13,11 @@ const profileSchema = new mongoose.Schema(
       default: "",
       trim: true,
     },
+    username: {
+      type: String,
+      default: "",
+      trim: true,
+    },
     bio: {
       type: String,
       default: "",
