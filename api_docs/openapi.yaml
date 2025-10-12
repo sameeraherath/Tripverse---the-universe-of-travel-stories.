@@ -1,0 +1,2277 @@
+openapi: 3.0.3
+info:
+  title: Tripverse API
+  description: |
+    🌍 **Tripverse — for travelers, by travelers.**  
+    An open-source community platform for those who love to explore, share experiences, and connect through travel.
+    
+    ## Features
+    - AI story correction and mistake fixing
+    - Real-time chat and notifications
+    - Social features (follow, like, bookmark)
+    - Rich travel story management
+    - Admin dashboard and analytics
+    
+    ## Demo Video
+    Watch the platform in action: [Tripverse Platform Demo](https://youtu.be/iT4rAaV9MhU?si=0sUBL6oLZnKGsrZH)
+    
+    ## Authentication
+    The API uses JWT (JSON Web Tokens) for authentication. Include the token in the Authorization header:
+    ```
+    Authorization: Bearer <your_jwt_token>
+    ```
+  version: 1.0.0
+  contact:
+    name: Sameera Herath
+    url: https://github.com/sameeraherath
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:5000/api
+    description: Development server
+  - url: https://tripverse-api.herokuapp.com/api
+    description: Production server
+
+tags:
+  - name: Authentication
+    description: Traveler registration and login
+  - name: Travel Stories
+    description: Travel story management
+  - name: Profiles
+    description: Traveler profile management
+  - name: Comments
+    description: Travel story comments
+  - name: Chat
+    description: Real-time messaging between travelers
+  - name: AI
+    description: AI-powered story correction
+  - name: Admin
+    description: Administrative functions
+  - name: FAQ
+    description: Frequently asked questions
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register new traveler
+      description: Create a new traveler account with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: traveler@example.com
+                password:
+                  type: string
+                  minLength: 6
+                  example: password123
+      responses:
+        '201':
+          description: Traveler registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User registered successfully
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                  userId:
+                    type: string
+                    example: 507f1f77bcf86cd799439011
+        '400':
+          description: Traveler already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Traveler login
+      description: Authenticate traveler with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: traveler@example.com
+                password:
+                  type: string
+                  example: password123
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Login successful
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                  userId:
+                    type: string
+                    example: 507f1f77bcf86cd799439011
+                  role:
+                    type: string
+                    enum: [user, admin, superadmin]
+                    example: user
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /posts:
+    get:
+      tags:
+        - Travel Stories
+      summary: Get all travel stories
+      description: Retrieve travel stories with pagination, search, and filtering options
+      parameters:
+        - name: search
+          in: query
+          description: Search term for title and content
+          schema:
+            type: string
+          example: paris adventure
+        - name: tags
+          in: query
+          description: Filter by travel tags
+          schema:
+            type: array
+            items:
+              type: string
+          example: ["europe", "adventure"]
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            type: integer
+            default: 1
+          example: 1
+        - name: limit
+          in: query
+          description: Number of stories per page
+          schema:
+            type: integer
+            default: 10
+          example: 10
+        - name: sortBy
+          in: query
+          description: Sort field
+          schema:
+            type: string
+            enum: [createdAt, likeCount, commentCount]
+            default: createdAt
+          example: createdAt
+        - name: order
+          in: query
+          description: Sort order
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+          example: desc
+      responses:
+        '200':
+          description: Travel stories retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TravelStory'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    post:
+      tags:
+        - Travel Stories
+      summary: Create new travel story
+      description: Create a new travel story (requires authentication)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - title
+                - content
+              properties:
+                title:
+                  type: string
+                  example: My Amazing Paris Adventure
+                content:
+                  type: string
+                  example: Last summer, I embarked on an incredible journey through the streets of Paris...
+                tags:
+                  type: string
+                  description: JSON string of travel tags array
+                  example: '["europe", "paris", "adventure"]'
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: Up to 3 travel photos
+      responses:
+        '201':
+          description: Travel story created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelStory'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /posts/{id}:
+    get:
+      tags:
+        - Travel Stories
+      summary: Get travel story by ID
+      description: Retrieve a specific travel story by its ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Travel story ID
+          schema:
+            type: string
+          example: 507f1f77bcf86cd799439011
+      responses:
+        '200':
+          description: Travel story retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelStory'
+        '404':
+          description: Travel story not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags:
+        - Travel Stories
+      summary: Update travel story
+      description: Update an existing travel story (requires authentication and ownership)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Travel story ID
+          schema:
+            type: string
+          example: 507f1f77bcf86cd799439011
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Updated Paris Adventure Story
+                content:
+                  type: string
+                  example: Updated travel story content...
+                tags:
+                  type: string
+                  description: JSON string of travel tags array
+                  example: '["europe", "paris"]'
+                existingImages:
+                  type: string
+                  description: JSON string of existing image URLs
+                  example: '["https://res.cloudinary.com/image1.jpg"]'
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: New travel photos to add
+      responses:
+        '200':
+          description: Travel story updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelStory'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - not the author
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Travel story not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - Travel Stories
+      summary: Delete travel story
+      description: Delete a travel story (requires authentication and ownership)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Travel story ID
+          schema:
+            type: string
+          example: 507f1f77bcf86cd799439011
+      responses:
+        '200':
+          description: Travel story deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Post deleted successfully
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - not the author
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Travel story not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /posts/{id}/like:
+    post:
+      tags:
+        - Travel Stories
+      summary: Like/unlike travel story
+      description: Toggle like status for a travel story (requires authentication)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Travel story ID
+          schema:
+            type: string
+          example: 507f1f77bcf86cd799439011
+      responses:
+        '200':
+          description: Like status updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  liked:
+                    type: boolean
+                    example: true
+                  likeCount:
+                    type: integer
+                    example: 15
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Travel story not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /posts/{id}/bookmark:
+    post:
+      tags:
+        - Travel Stories
+      summary: Bookmark travel story
+      description: Add travel story to bookmarks (requires authentication)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Travel story ID
+          schema:
+            type: string
+          example: 507f1f77bcf86cd799439011
+      responses:
+        '200':
+          description: Travel story bookmarked successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bookmarked:
+                    type: boolean
+                    example: true
+                  bookmarkCount:
+                    type: integer
+                    example: 8
+                  message:
+                    type: string
+                    example: Post bookmarked successfully
+        '400':
+          description: Travel story already bookmarked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Travel story not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - Travel Stories
+      summary: Remove bookmark
+      description: Remove travel story from bookmarks (requires authentication)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Travel story ID
+          schema:
+            type: string
+          example: 507f1f77bcf86cd799439011
+      responses:
+        '200':
+          description: Bookmark removed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bookmarked:
+                    type: boolean
+                    example: false
+                  bookmarkCount:
+                    type: integer
+                    example: 7
+                  message:
+                    type: string
+                    example: Bookmark removed successfully
+        '400':
+          description: Travel story not bookmarked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Travel story not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /posts/tags/all:
+    get:
+      tags:
+        - Travel Stories
+      summary: Get all unique travel tags
+      description: Retrieve all unique travel tags used across stories
+      responses:
+        '200':
+          description: Travel tags retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tags:
+                    type: array
+                    items:
+                      type: string
+                    example: ["europe", "asia", "adventure", "culture"]
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /posts/tags/popular:
+    get:
+      tags:
+        - Travel Stories
+      summary: Get popular travel tags
+      description: Retrieve most popular travel tags with story counts
+      responses:
+        '200':
+          description: Popular travel tags retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tags:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        tag:
+                          type: string
+                          example: europe
+                        count:
+                          type: integer
+                          example: 25
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /profile:
+    get:
+      tags:
+        - Profiles
+      summary: Get current traveler profile
+      description: Retrieve current authenticated traveler's profile
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelerProfile'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags:
+        - Profiles
+      summary: Update traveler profile
+      description: Update current traveler's profile (requires authentication)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: John Traveler
+                bio:
+                  type: string
+                  example: Passionate traveler exploring the world one adventure at a time
+                avatar:
+                  type: string
+                  format: binary
+                  description: Traveler profile picture
+      responses:
+        '200':
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelerProfile'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /profile/user/{userId}:
+    get:
+      tags:
+        - Profiles
+      summary: Get traveler profile by ID
+      description: Retrieve a specific traveler's profile by their ID
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Traveler ID
+          schema:
+            type: string
+          example: 507f1f77bcf86cd799439011
+      responses:
+        '200':
+          description: Profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravelerProfile'
+        '404':
+          description: Profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /profile/follow/{userId}:
+    post:
+      tags:
+        - Profiles
+      summary: Follow traveler
+      description: Follow another traveler (requires authentication)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Traveler ID to follow
+          schema:
+            type: string
+          example: 507f1f77bcf86cd799439011
+      responses:
+        '200':
+          description: Traveler followed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successfully followed user
+        '400':
+          description: Cannot follow yourself or already following
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Traveler not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      tags:
+        - Profiles
+      summary: Unfollow traveler
+      description: Unfollow another traveler (requires authentication)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Traveler ID to unfollow
+          schema:
+            type: string
+          example: 507f1f77bcf86cd799439011
+      responses:
+        '200':
+          description: Traveler unfollowed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successfully unfollowed user
+        '400':
+          description: Not following this traveler
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Traveler not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /profile/followers/{userId}:
+    get:
+      tags:
+        - Profiles
+      summary: Get traveler's followers
+      description: Retrieve list of travelers following a specific traveler
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Traveler ID
+          schema:
+            type: string
+          example: 507f1f77bcf86cd799439011
+      responses:
+        '200':
+          description: Followers retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  followers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Traveler'
+                  count:
+                    type: integer
+                    example: 15
+        '404':
+          description: Profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /profile/following/{userId}:
+    get:
+      tags:
+        - Profiles
+      summary: Get traveler's following
+      description: Retrieve list of travelers that a specific traveler is following
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Traveler ID
+          schema:
+            type: string
+          example: 507f1f77bcf86cd799439011
+      responses:
+        '200':
+          description: Following retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  following:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Traveler'
+                  count:
+                    type: integer
+                    example: 8
+        '404':
+          description: Profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /profile/follow/status/{userId}:
+    get:
+      tags:
+        - Profiles
+      summary: Check follow status
+      description: Check if current traveler is following another traveler (requires authentication)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Traveler ID to check
+          schema:
+            type: string
+          example: 507f1f77bcf86cd799439011
+      responses:
+        '200':
+          description: Follow status retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isFollowing:
+                    type: boolean
+                    example: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /profile/bookmarks:
+    get:
+      tags:
+        - Profiles
+      summary: Get bookmarked travel stories
+      description: Retrieve current traveler's bookmarked travel stories (requires authentication)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Bookmarks retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bookmarks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TravelStory'
+                  count:
+                    type: integer
+                    example: 5
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /profile/bookmark/status/{postId}:
+    get:
+      tags:
+        - Profiles
+      summary: Check bookmark status
+      description: Check if a travel story is bookmarked by current traveler (requires authentication)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          description: Travel story ID to check
+          schema:
+            type: string
+          example: 507f1f77bcf86cd799439011
+      responses:
+        '200':
+          description: Bookmark status retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isBookmarked:
+                    type: boolean
+                    example: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Profile not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /comments:
+    post:
+      tags:
+        - Comments
+      summary: Create comment on travel story
+      description: Create a new comment on a travel story (requires authentication)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - postId
+                - content
+              properties:
+                postId:
+                  type: string
+                  example: 507f1f77bcf86cd799439011
+                content:
+                  type: string
+                  example: Amazing travel story! Thanks for sharing your Paris adventure.
+      responses:
+        '201':
+          description: Comment created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Travel story not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /comments/post/{postId}:
+    get:
+      tags:
+        - Comments
+      summary: Get travel story comments
+      description: Retrieve all comments for a specific travel story
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          description: Travel story ID
+          schema:
+            type: string
+          example: 507f1f77bcf86cd799439011
+      responses:
+        '200':
+          description: Comments retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        '404':
+          description: Travel story not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /comments/{commentId}:
+    delete:
+      tags:
+        - Comments
+      summary: Delete comment
+      description: Delete a comment (requires authentication and ownership)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: commentId
+          in: path
+          required: true
+          description: Comment ID
+          schema:
+            type: string
+          example: 507f1f77bcf86cd799439011
+      responses:
+        '200':
+          description: Comment deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Comment deleted successfully
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - not the author
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Comment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /chats:
+    get:
+      tags:
+        - Chat
+      summary: Get traveler's chats
+      description: Retrieve all chats for the current traveler (requires authentication)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Chats retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chats:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Chat'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /chats/unread-count:
+    get:
+      tags:
+        - Chat
+      summary: Get unread message count
+      description: Get total unread message count for current traveler (requires authentication)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Unread count retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  unreadCount:
+                    type: integer
+                    example: 3
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /chats/user/{userId}:
+    get:
+      tags:
+        - Chat
+      summary: Get or create chat with traveler
+      description: Get existing chat or create new chat with specific traveler (requires authentication)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Traveler ID to chat with
+          schema:
+            type: string
+          example: 507f1f77bcf86cd799439011
+      responses:
+        '200':
+          description: Chat retrieved or created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chat:
+                    $ref: '#/components/schemas/Chat'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /chats/{chatId}/message:
+    post:
+      tags:
+        - Chat
+      summary: Send message
+      description: Send a message in a chat (requires authentication)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: chatId
+          in: path
+          required: true
+          description: Chat ID
+          schema:
+            type: string
+          example: 507f1f77bcf86cd799439011
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+              properties:
+                content:
+                  type: string
+                  example: Hi! I loved your Paris travel story. Any tips for first-time visitors?
+      responses:
+        '201':
+          description: Message sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    $ref: '#/components/schemas/Message'
+                  chatId:
+                    type: string
+                    example: 507f1f77bcf86cd799439011
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - not a participant
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Chat not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /chats/{chatId}/read:
+    put:
+      tags:
+        - Chat
+      summary: Mark messages as read
+      description: Mark all messages in a chat as read (requires authentication)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: chatId
+          in: path
+          required: true
+          description: Chat ID
+          schema:
+            type: string
+          example: 507f1f77bcf86cd799439011
+      responses:
+        '200':
+          description: Messages marked as read
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Messages marked as read
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Chat not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /chats/{chatId}:
+    delete:
+      tags:
+        - Chat
+      summary: Delete chat
+      description: Delete a chat (requires authentication and participation)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: chatId
+          in: path
+          required: true
+          description: Chat ID
+          schema:
+            type: string
+          example: 507f1f77bcf86cd799439011
+      responses:
+        '200':
+          description: Chat deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Chat deleted successfully
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - not a participant
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Chat not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /ai/fix-grammar:
+    post:
+      tags:
+        - AI
+      summary: Fix travel story mistakes
+      description: AI-powered grammar, spelling, and mistake correction for travel stories (rate limited to 10 requests per hour)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+              properties:
+                content:
+                  type: string
+                  example: Last summer I went to paris and it was amazing! The eiffel tower was so beautiful and the food was incredable.
+      responses:
+        '200':
+          description: Travel story mistakes fixed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+                    example: Last summer I went to Paris and it was amazing! The Eiffel Tower was so beautiful and the food was incredible.
+                  originalContent:
+                    type: string
+                    example: Last summer I went to paris and it was amazing! The eiffel tower was so beautiful and the food was incredable.
+                  warning:
+                    type: string
+                    description: Optional warning about fallback usage
+                    example: Using basic text improvement
+        '400':
+          description: Content is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Upgrade to the Pro version for more requests per hour.
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /admin/dashboard/stats:
+    get:
+      tags:
+        - Admin
+      summary: Get dashboard statistics
+      description: Retrieve comprehensive dashboard statistics (admin access required)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stats:
+                    type: object
+                    properties:
+                      totalUsers:
+                        type: integer
+                        example: 150
+                      totalPosts:
+                        type: integer
+                        example: 1200
+                      totalComments:
+                        type: integer
+                        example: 3500
+                      userGrowthPercentage:
+                        type: number
+                        example: 15.2
+                      postGrowthPercentage:
+                        type: number
+                        example: 8.7
+                  recentUsers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Traveler'
+                  recentPosts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TravelStory'
+                  topPosts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TravelStory'
+                  charts:
+                    type: object
+                    properties:
+                      userStatsByMonth:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            month:
+                              type: string
+                              example: "2024-01"
+                            count:
+                              type: integer
+                              example: 25
+                      postStatsByMonth:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            month:
+                              type: string
+                              example: "2024-01"
+                            count:
+                              type: integer
+                              example: 120
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - admin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /admin/users:
+    get:
+      tags:
+        - Admin
+      summary: Get travelers
+      description: Retrieve paginated list of travelers with search and filtering (admin access required)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            type: integer
+            default: 1
+          example: 1
+        - name: limit
+          in: query
+          description: Number of travelers per page
+          schema:
+            type: integer
+            default: 10
+          example: 10
+        - name: search
+          in: query
+          description: Search by email
+          schema:
+            type: string
+          example: traveler@example.com
+        - name: role
+          in: query
+          description: Filter by role
+          schema:
+            type: string
+            enum: [user, admin, superadmin]
+          example: user
+        - name: isActive
+          in: query
+          description: Filter by active status
+          schema:
+            type: boolean
+          example: true
+      responses:
+        '200':
+          description: Travelers retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Traveler'
+                  pagination:
+                    type: object
+                    properties:
+                      current:
+                        type: integer
+                        example: 1
+                      pages:
+                        type: integer
+                        example: 5
+                      total:
+                        type: integer
+                        example: 50
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - admin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /admin/users/{id}/role:
+    put:
+      tags:
+        - Admin
+      summary: Update traveler role
+      description: Update traveler role and status (superadmin access required)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Traveler ID
+          schema:
+            type: string
+          example: 507f1f77bcf86cd799439011
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role:
+                  type: string
+                  enum: [user, admin, superadmin]
+                  example: admin
+                isActive:
+                  type: boolean
+                  example: true
+      responses:
+        '200':
+          description: Traveler role updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Traveler'
+        '400':
+          description: Cannot change your own role
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - superadmin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Traveler not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /faq:
+    get:
+      tags:
+        - FAQ
+      summary: Get all FAQs
+      description: Retrieve all frequently asked questions
+      responses:
+        '200':
+          description: FAQs retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FAQ'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /faq/{id}:
+    get:
+      tags:
+        - FAQ
+      summary: Get FAQ by ID
+      description: Retrieve a specific FAQ by its ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: FAQ ID
+          schema:
+            type: string
+          example: 507f1f77bcf86cd799439011
+      responses:
+        '200':
+          description: FAQ retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FAQ'
+        '404':
+          description: FAQ not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /faq/search:
+    get:
+      tags:
+        - FAQ
+      summary: Search FAQs
+      description: Search FAQs by query string
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: Search query
+          schema:
+            type: string
+          example: authentication
+      responses:
+        '200':
+          description: Search results retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FAQ'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /faq/category/{category}:
+    get:
+      tags:
+        - FAQ
+      summary: Get FAQs by category
+      description: Retrieve FAQs filtered by category
+      parameters:
+        - name: category
+          in: path
+          required: true
+          description: FAQ category
+          schema:
+            type: string
+          example: authentication
+      responses:
+        '200':
+          description: FAQs retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FAQ'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /faq/categories:
+    get:
+      tags:
+        - FAQ
+      summary: Get FAQ categories
+      description: Retrieve all available FAQ categories
+      responses:
+        '200':
+          description: Categories retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                example: ["authentication", "travel-stories", "profile", "chat"]
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /faq/chatbot:
+    post:
+      tags:
+        - FAQ
+      summary: Process chatbot query
+      description: Process a chatbot query and return relevant FAQ responses
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - query
+              properties:
+                query:
+                  type: string
+                  example: How do I reset my password?
+      responses:
+        '200':
+          description: Chatbot response retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                    example: To reset your password, go to the login page and click "Forgot Password"...
+                  relatedFAQs:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FAQ'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Traveler:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+        email:
+          type: string
+          format: email
+          example: traveler@example.com
+        role:
+          type: string
+          enum: [user, admin, superadmin]
+          example: user
+        isActive:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: 2024-01-01T00:00:00.000Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2024-01-01T00:00:00.000Z
+        profile:
+          $ref: '#/components/schemas/TravelerProfile'
+
+    TravelerProfile:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+        user:
+          type: string
+          example: 507f1f77bcf86cd799439011
+        name:
+          type: string
+          example: John Traveler
+        bio:
+          type: string
+          example: Passionate traveler exploring the world one adventure at a time
+        avatar:
+          type: string
+          format: uri
+          example: https://res.cloudinary.com/traveler-avatar.jpg
+        following:
+          type: array
+          items:
+            type: string
+          example: ["507f1f77bcf86cd799439012", "507f1f77bcf86cd799439013"]
+        followers:
+          type: array
+          items:
+            type: string
+          example: ["507f1f77bcf86cd799439014", "507f1f77bcf86cd799439015"]
+        followingCount:
+          type: integer
+          example: 5
+        followerCount:
+          type: integer
+          example: 12
+        bookmarkedPosts:
+          type: array
+          items:
+            type: string
+          example: ["507f1f77bcf86cd799439016", "507f1f77bcf86cd799439017"]
+        createdAt:
+          type: string
+          format: date-time
+          example: 2024-01-01T00:00:00.000Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2024-01-01T00:00:00.000Z
+
+    TravelStory:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+        title:
+          type: string
+          example: My Amazing Paris Adventure
+        content:
+          type: string
+          example: Last summer, I embarked on an incredible journey through the streets of Paris...
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+          example: ["https://res.cloudinary.com/paris1.jpg", "https://res.cloudinary.com/paris2.jpg"]
+        author:
+          type: string
+          example: 507f1f77bcf86cd799439011
+        tags:
+          type: array
+          items:
+            type: string
+          example: ["europe", "paris", "adventure"]
+        likes:
+          type: array
+          items:
+            type: string
+          example: ["507f1f77bcf86cd799439012", "507f1f77bcf86cd799439013"]
+        bookmarks:
+          type: array
+          items:
+            type: string
+          example: ["507f1f77bcf86cd799439014", "507f1f77bcf86cd799439015"]
+        likeCount:
+          type: integer
+          example: 15
+        bookmarkCount:
+          type: integer
+          example: 8
+        commentCount:
+          type: integer
+          example: 5
+        createdAt:
+          type: string
+          format: date-time
+          example: 2024-01-01T00:00:00.000Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2024-01-01T00:00:00.000Z
+
+    Comment:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+        postId:
+          type: string
+          example: 507f1f77bcf86cd799439012
+        content:
+          type: string
+          example: Amazing travel story! Thanks for sharing your Paris adventure.
+        author:
+          type: string
+          example: 507f1f77bcf86cd799439013
+        createdAt:
+          type: string
+          format: date-time
+          example: 2024-01-01T00:00:00.000Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2024-01-01T00:00:00.000Z
+
+    Chat:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/Traveler'
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        lastMessage:
+          type: string
+          example: Hi! I loved your Paris travel story. Any tips for first-time visitors?
+        lastMessageAt:
+          type: string
+          format: date-time
+          example: 2024-01-01T00:00:00.000Z
+        createdAt:
+          type: string
+          format: date-time
+          example: 2024-01-01T00:00:00.000Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2024-01-01T00:00:00.000Z
+
+    Message:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+        sender:
+          type: string
+          example: 507f1f77bcf86cd799439012
+        content:
+          type: string
+          example: Hi! I loved your Paris travel story. Any tips for first-time visitors?
+        read:
+          type: boolean
+          example: false
+        createdAt:
+          type: string
+          format: date-time
+          example: 2024-01-01T00:00:00.000Z
+
+    FAQ:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+        question:
+          type: string
+          example: How do I reset my password?
+        answer:
+          type: string
+          example: To reset your password, go to the login page and click "Forgot Password"...
+        category:
+          type: string
+          example: authentication
+        tags:
+          type: array
+          items:
+            type: string
+          example: ["password", "reset", "login"]
+        createdAt:
+          type: string
+          format: date-time
+          example: 2024-01-01T00:00:00.000Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2024-01-01T00:00:00.000Z
+
+    Pagination:
+      type: object
+      properties:
+        currentPage:
+          type: integer
+          example: 1
+        totalPages:
+          type: integer
+          example: 5
+        totalPosts:
+          type: integer
+          example: 50
+        postsPerPage:
+          type: integer
+          example: 10
+        hasMore:
+          type: boolean
+          example: true
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Error message description
+        stack:
+          type: string
+          description: Error stack trace (development only)
+          example: Error: Something went wrong\n    at functionName (file.js:line:column)

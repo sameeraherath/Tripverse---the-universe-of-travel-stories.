@@ -1,51 +1,292 @@
-# Blogger - AI-Powered Blogging Platform
+# Tripverse - Travel Community Platform
 
-Welcome to **Blogger**, a modern, AI-powered blogging platform designed to help writers create, edit, and publish content effortlessly. This project is built with a **React-based frontend** and a **Node.js/Express backend**, providing a seamless and intuitive user experience.
+🌍 **Tripverse — for travelers, by travelers.**  
+An open-source community platform for those who love to explore, share experiences, and connect through travel.
 
-## Features
+Welcome to **Tripverse**, a comprehensive travel storytelling and community platform designed to help travelers create, edit, and publish their adventure stories while building connections with fellow explorers. This project features a **React-based frontend** with **Redux state management** and a **Node.js/Express backend** with **Socket.IO real-time communication**, providing a seamless and interactive travel community experience.
 
-- **AI-Powered Writing**: Generate high-quality blog posts with AI assistance.
-- **Magic Link Authentication**: Secure and passwordless login using email magic links.
-- **User Profiles**: Customizable profiles with avatars, names, and bios.
-- **CRUD Operations**: Create, read, update, and delete blog posts.
-- **Image Uploads**: Upload and manage images for blog posts using Cloudinary.
-- **Responsive Design**: Optimized for both desktop and mobile devices.
-- **Dark Mode**: Built-in dark mode for a modern look and feel.
+## 🎥 Demo Video
 
-## Technologies Used
+Watch the platform in action: [Tripverse Platform Demo](https://youtu.be/iT4rAaV9MhU?si=0sUBL6oLZnKGsrZH)
 
-### Frontend
+## ✨ Key Features
 
-- **React**: A JavaScript library for building user interfaces.
-- **Vite**: A fast build tool for modern web applications.
-- **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
-- **React Router**: For client-side routing.
-- **Axios**: For making HTTP requests to the backend.
-- **Framer Motion**: For animations and transitions.
-- **React Toastify**: For displaying notifications.
+### 🤖 AI-Powered Features
+- **Smart Story Correction**: AI-powered grammar, spelling, and mistake correction using OpenAI GPT-3.5-turbo
+- **Travel Story Enhancement**: Improve travel story writing quality with intelligent suggestions and corrections
+- **Fallback Systems**: Multiple AI providers (OpenAI, Hugging Face) for reliable mistake detection and correction
 
-### Backend
+### 👥 Travel Community Features
+- **Traveler Profiles**: Customizable profiles with avatars, names, and travel bios
+- **Follow System**: Follow/unfollow fellow travelers and see their adventures in your feed
+- **Real-time Chat**: Direct messaging between travelers for trip planning and sharing
+- **Notifications**: Real-time notifications for likes, comments, and travel connections
+- **Bookmarking**: Save inspiring travel stories and itineraries for later reference
 
-- **Node.js**: A JavaScript runtime for building scalable server-side applications.
-- **Express**: A web framework for Node.js.
-- **MongoDB**: A NoSQL database for storing application data.
-- **Mongoose**: An ODM (Object Data Modeling) library for MongoDB.
-- **Cloudinary**: For image uploads and management.
-- **Nodemailer**: For sending magic link emails.
-- **JSON Web Tokens (JWT)**: For secure authentication.
+### 📝 Travel Content Management
+- **Rich Text Editor**: Advanced editor with TipTap for formatting travel stories
+- **Image Uploads**: Multiple image support (up to 3 per post) using Cloudinary for travel photos
+- **Tags System**: Organize content with travel-related tags and discoverability
+- **CRUD Operations**: Create, read, update, and delete travel stories and experiences
+- **Search & Filter**: Advanced search with tag filtering and pagination for travel content
 
-## Getting Started
+### 🎯 Personalized Travel Experience
+- **For You Feed**: Personalized content feed based on following and travel interactions
+- **Trending Posts**: Discover popular travel content and destinations across the platform
+- **Travel Analytics**: Track engagement and performance of your travel stories
+
+### 🛡️ Admin Features
+- **Admin Dashboard**: Comprehensive analytics and traveler management
+- **User Management**: Role-based access control (traveler, admin, superadmin)
+- **Content Moderation**: Monitor and manage travel stories and community
+- **Analytics**: Detailed statistics and growth metrics for the travel community
+
+## 🛠️ Technologies Used
+
+### Frontend Stack
+- **React 18**: Modern UI library with hooks and concurrent features
+- **Redux Toolkit**: State management with RTK Query for API calls
+- **Vite**: Lightning-fast build tool and development server
+- **Tailwind CSS**: Utility-first CSS framework for rapid styling
+- **React Router v7**: Client-side routing with data loading
+- **TipTap**: Rich text editor with extensible functionality
+- **Framer Motion**: Smooth animations and transitions
+- **Socket.IO Client**: Real-time communication
+- **Chart.js**: Data visualization for analytics
+- **React Toastify**: Elegant notifications
+- **Lucide React**: Modern icon library
+
+### Backend Stack
+- **Node.js**: JavaScript runtime for server-side development
+- **Express.js**: Web framework with middleware support
+- **MongoDB**: NoSQL database for flexible data storage
+- **Mongoose**: ODM for MongoDB with schema validation
+- **Socket.IO**: Real-time bidirectional communication
+- **JWT**: Secure authentication with JSON Web Tokens
+- **Cloudinary**: Cloud-based image and video management
+- **OpenAI API**: AI-powered content enhancement
+- **Hugging Face**: Fallback AI services
+- **Bcrypt**: Password hashing and security
+- **Multer**: File upload handling
+- **Express Rate Limit**: API rate limiting and protection
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- **Node.js**: Ensure you have Node.js installed (v16 or higher).
-- **MongoDB**: Set up a MongoDB database (local or cloud-based).
-- **Cloudinary Account**: Create an account on [Cloudinary](https://cloudinary.com/) for image uploads.
+- **Node.js**: Version 16 or higher
+- **MongoDB**: Local installation or MongoDB Atlas cloud database
+- **Cloudinary Account**: For image uploads and management
+- **OpenAI API Key**: For AI-powered features (optional but recommended)
 
-### Installation
+### 📦 Installation
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/sameeraherath/blogger.git
-   cd blogger
+   git clone https://github.com/sameeraherath/tripverse.git
+   cd tripverse
    ```
+
+2. **Install Dependencies**:
+   ```bash
+   # Install server dependencies
+   cd server
+   npm install
+   
+   # Install client dependencies
+   cd ../client
+   npm install
+   ```
+
+3. **Environment Setup**:
+   
+   Create a `.env` file in the `server` directory:
+   ```env
+   # Database
+   MONGODB_URI=mongodb://localhost:27017/tripverse
+   
+   # JWT Secret
+   JWT_SECRET=your_jwt_secret_key
+   
+   # Cloudinary Configuration
+   CLOUDINARY_CLOUD_NAME=your_cloud_name
+   CLOUDINARY_API_KEY=your_api_key
+   CLOUDINARY_API_SECRET=your_api_secret
+   
+   # OpenAI API (Optional)
+   OPENAI_API_KEY=your_openai_api_key
+   
+   # Hugging Face API (Fallback)
+   HF_API_KEY=your_huggingface_api_key
+   
+   # Server Configuration
+   PORT=5000
+   NODE_ENV=development
+   ```
+
+4. **Start the Application**:
+   ```bash
+   # Start the server (from server directory)
+   npm run dev
+   
+   # Start the client (from client directory)
+   npm run dev
+   ```
+
+5. **Access the Application**:
+   - Frontend: http://localhost:5173
+   - Backend API: http://localhost:5000
+
+## 📁 Project Structure
+
+```
+tripverse/
+├── client/                 # React frontend application
+│   ├── src/
+│   │   ├── components/    # Reusable UI components
+│   │   ├── pages/         # Page components
+│   │   ├── features/      # Redux slices and feature logic
+│   │   ├── contexts/      # React contexts (Socket.IO)
+│   │   ├── store/         # Redux store configuration
+│   │   └── utils/         # Utility functions and API calls
+│   ├── public/            # Static assets
+│   └── dist/              # Build output
+├── server/                # Node.js backend application
+│   ├── controllers/       # Route handlers
+│   ├── models/           # MongoDB schemas
+│   ├── routes/           # API route definitions
+│   ├── middleware/       # Custom middleware
+│   ├── utils/            # Utility functions
+│   └── config/           # Database configuration
+└── api_docs/             # API documentation
+```
+
+## 🔌 API Endpoints
+
+### Authentication
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - User login
+
+### Posts
+- `GET /api/posts` - Get all posts (with pagination, search, filters)
+- `GET /api/posts/:id` - Get specific post
+- `POST /api/posts` - Create new post (authenticated)
+- `PUT /api/posts/:id` - Update post (authenticated, author only)
+- `DELETE /api/posts/:id` - Delete post (authenticated, author only)
+- `POST /api/posts/:id/like` - Like/unlike post
+- `POST /api/posts/:id/bookmark` - Bookmark post
+- `DELETE /api/posts/:id/bookmark` - Remove bookmark
+- `GET /api/posts/tags/all` - Get all unique tags
+- `GET /api/posts/tags/popular` - Get popular tags
+
+### Profiles
+- `GET /api/profile` - Get current user profile
+- `PUT /api/profile` - Update profile (authenticated)
+- `GET /api/profile/user/:userId` - Get user profile by ID
+- `POST /api/profile/follow/:userId` - Follow user
+- `DELETE /api/profile/follow/:userId` - Unfollow user
+- `GET /api/profile/followers/:userId` - Get user's followers
+- `GET /api/profile/following/:userId` - Get user's following
+- `GET /api/profile/follow/status/:userId` - Check follow status
+- `GET /api/profile/bookmarks` - Get bookmarked posts
+- `GET /api/profile/bookmark/status/:postId` - Check bookmark status
+
+### Comments
+- `POST /api/comments` - Create comment (authenticated)
+- `GET /api/comments/post/:postId` - Get post comments
+- `DELETE /api/comments/:commentId` - Delete comment (authenticated, author only)
+
+### Chat
+- `GET /api/chats` - Get user's chats
+- `GET /api/chats/unread-count` - Get unread message count
+- `GET /api/chats/user/:userId` - Get or create chat with user
+- `POST /api/chats/:chatId/message` - Send message
+- `PUT /api/chats/:chatId/read` - Mark messages as read
+- `DELETE /api/chats/:chatId` - Delete chat
+
+### AI Features
+- `POST /api/ai/fix-grammar` - Fix grammar, spelling, and mistakes in travel stories (rate limited)
+
+### Admin
+- `GET /api/admin/dashboard/stats` - Get dashboard statistics
+- `GET /api/admin/users` - Get users (admin only)
+- `PUT /api/admin/users/:id/role` - Update user role (superadmin only)
+
+### FAQ
+- `GET /api/faq` - Get all FAQs
+- `GET /api/faq/:id` - Get FAQ by ID
+- `GET /api/faq/search` - Search FAQs
+- `GET /api/faq/category/:category` - Get FAQs by category
+- `GET /api/faq/categories` - Get FAQ categories
+- `POST /api/faq/chatbot` - Process chatbot query
+
+## 🤖 AI Story Correction
+
+Tripverse includes powerful AI assistance to help travelers write better stories:
+
+- **Automatic Mistake Detection**: AI identifies grammar, spelling, and style issues in your travel stories
+- **Smart Corrections**: Get intelligent suggestions to improve your writing while preserving your unique voice
+- **Multiple AI Providers**: Uses OpenAI GPT-3.5-turbo with Hugging Face fallback for reliable correction
+- **Rate Limited**: 10 corrections per hour to ensure fair usage across the community
+- **Travel-Focused**: AI understands travel terminology and context for better suggestions
+
+### How It Works
+1. Write your travel story in the rich text editor
+2. Click the AI correction button
+3. Get instant suggestions for grammar, spelling, and style improvements
+4. Accept or reject changes to maintain your authentic travel voice
+
+## 🔒 Authentication
+
+The API uses JWT (JSON Web Tokens) for authentication. Include the token in the Authorization header:
+
+```
+Authorization: Bearer <your_jwt_token>
+```
+
+## 📊 Real-time Features
+
+The platform uses Socket.IO for real-time communication:
+
+- **Chat Messages**: Real-time messaging between travelers
+- **Typing Indicators**: Show when travelers are typing
+- **Online Status**: Track traveler online/offline status
+- **Notifications**: Real-time notifications for travel story interactions
+
+## 🚀 Deployment
+
+### Frontend (Vercel)
+1. Connect your GitHub repository to Vercel
+2. Set build command: `npm run build`
+3. Set output directory: `dist`
+4. Deploy automatically on push to main branch
+
+### Backend (Railway/Heroku)
+1. Set environment variables in your hosting platform
+2. Ensure MongoDB connection string is configured
+3. Deploy with Node.js buildpack
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature-name`
+3. Commit changes: `git commit -m 'Add feature'`
+4. Push to branch: `git push origin feature-name`
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👨‍💻 Author
+
+**Sameera Herath**
+- GitHub: [@sameeraherath](https://github.com/sameeraherath)
+- LinkedIn: [Sameera Herath](https://linkedin.com/in/sameeraherath)
+
+## 🙏 Acknowledgments
+
+- OpenAI for AI-powered content enhancement
+- Cloudinary for image management services
+- MongoDB for database services
+- All contributors and users of the platform
