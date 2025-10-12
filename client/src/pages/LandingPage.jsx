@@ -2,13 +2,6 @@ import { Button, Typography, Container, Box, Paper, Grid } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Edit, Group, Public, Star, ArrowForward } from "@mui/icons-material";
 
-const stats = [
-  { label: "Active Travelers", value: "50K+" },
-  { label: "Stories Shared", value: "2.3M+" },
-  { label: "Countries Covered", value: "195" },
-  { label: "Community Rating", value: "4.9★" },
-];
-
 const LandingPage = () => {
   return (
     <Box className="min-h-screen flex flex-col" sx={{ background: "#FFF9F3" }}>
@@ -106,47 +99,118 @@ const LandingPage = () => {
               sx={{
                 width: "100%",
                 height: { xs: 180, sm: 220, md: 260 },
-                background: "#F3F4F6",
                 borderRadius: 4,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
                 position: "relative",
+                overflow: "hidden",
+                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
               }}
             >
-              {/* Placeholder for hero image or illustration */}
-              <Typography
-                variant="h6"
-                sx={{ color: "#bbb", fontSize: { xs: 14, sm: 16 } }}
-              >
-                [ Travel Story Preview ]
-              </Typography>
+              {/* Hero Image */}
               <Box
                 sx={{
-                  position: "absolute",
-                  bottom: 12,
-                  left: 12,
-                  background: "#fff",
-                  borderRadius: 2,
-                  px: 2,
-                  py: 0.5,
-                  border: "1px solid #e5e7eb",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
+                  width: "100%",
+                  height: "100%",
+                  backgroundImage: "url('/hero.jpg')",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                  position: "relative",
+                  "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: "linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 100%)",
+                    zIndex: 1,
+                  },
                 }}
               >
-                <Edit sx={{ color: "#FF7A1A", fontSize: 18 }} />
-                <Typography
-                  variant="body2"
+                {/* Travel Story Preview Overlay */}
+                <Box
                   sx={{
-                    color: "#FF7A1A",
-                    fontWeight: 600,
-                    fontSize: { xs: 12, sm: 14 },
+                    position: "absolute",
+                    top: 16,
+                    left: 16,
+                    background: "rgba(255, 255, 255, 0.95)",
+                    borderRadius: 2,
+                    px: 2,
+                    py: 1,
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
+                    backdropFilter: "blur(10px)",
+                    zIndex: 2,
                   }}
                 >
-                  2.3M+ Stories Shared
-                </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "#FF7A1A",
+                      fontWeight: 700,
+                      fontSize: { xs: 11, sm: 12 },
+                      textTransform: "uppercase",
+                      letterSpacing: "0.5px",
+                    }}
+                  >
+                    ✈️ Travel Story Preview
+                  </Typography>
+                </Box>
+
+                {/* Story Stats Badge */}
+                <Box
+                  sx={{
+                    position: "absolute",
+                    bottom: 12,
+                    left: 12,
+                    background: "rgba(255, 255, 255, 0.95)",
+                    borderRadius: 2,
+                    px: 2,
+                    py: 0.5,
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
+                    backdropFilter: "blur(10px)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    zIndex: 2,
+                  }}
+                >
+                  <Edit sx={{ color: "#FF7A1A", fontSize: 16 }} />
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "#FF7A1A",
+                      fontWeight: 600,
+                      fontSize: { xs: 11, sm: 12 },
+                    }}
+                  >
+                    2.3M+ Stories Shared
+                  </Typography>
+                </Box>
+
+                {/* Adventure Tag */}
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: 16,
+                    right: 16,
+                    background: "rgba(255, 122, 26, 0.9)",
+                    borderRadius: 2,
+                    px: 2,
+                    py: 0.5,
+                    zIndex: 2,
+                  }}
+                >
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "#fff",
+                      fontWeight: 600,
+                      fontSize: { xs: 10, sm: 11 },
+                    }}
+                  >
+                    🌟 Adventure Awaits
+                  </Typography>
+                </Box>
               </Box>
             </Paper>
           </Grid>
@@ -639,460 +703,6 @@ const LandingPage = () => {
         </Container>
       </Box>
 
-      {/* Featured Stories Section */}
-      <Box sx={{ background: "#F9FAFB", py: { xs: 6, md: 10 } }}>
-        <Container maxWidth="lg">
-          <Typography
-            variant="h4"
-            sx={{
-              fontWeight: 700,
-              color: "#111",
-              textAlign: "center",
-              mb: 3,
-              fontSize: { xs: 22, sm: 28, md: 32 },
-            }}
-          >
-            Featured Travel Stories
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            sx={{
-              color: "#444",
-              textAlign: "center",
-              mb: 6,
-              fontSize: { xs: 15, sm: 17, md: 20 },
-              maxWidth: "600px",
-              mx: "auto",
-            }}
-          >
-            Discover amazing adventures from our community of passionate
-            travelers
-          </Typography>
-
-          <Grid container spacing={{ xs: 3, md: 4 }}>
-            <Grid item xs={12} md={4}>
-              <Paper
-                elevation={0}
-                sx={{
-                  borderRadius: 4,
-                  overflow: "hidden",
-                  background: "#fff",
-                  border: "1px solid #E5E7EB",
-                  transition: "all 0.3s ease",
-                  cursor: "pointer",
-                  "&:hover": {
-                    transform: "translateY(-4px)",
-                    border: "1px solid #d1d5db",
-                  },
-                }}
-              >
-                <Box
-                  sx={{
-                    height: 200,
-                    background:
-                      "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                    position: "relative",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Typography
-                    variant="h6"
-                    sx={{ color: "#fff", fontWeight: 600 }}
-                  >
-                    📸 Bali Adventure
-                  </Typography>
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      top: 12,
-                      right: 12,
-                      background: "rgba(255, 255, 255, 0.9)",
-                      borderRadius: 2,
-                      px: 2,
-                      py: 0.5,
-                    }}
-                  >
-                    <Typography
-                      variant="body2"
-                      sx={{ color: "#333", fontWeight: 600 }}
-                    >
-                      Indonesia
-                    </Typography>
-                  </Box>
-                </Box>
-                <Box sx={{ p: 3 }}>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontWeight: 700,
-                      mb: 1,
-                      fontSize: { xs: 16, sm: 18 },
-                      color: "#111",
-                    }}
-                  >
-                    Hidden Temples of Ubud
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: "#555",
-                      mb: 2,
-                      fontSize: { xs: 13, sm: 14 },
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    Discovering ancient temples tucked away in the lush jungles
-                    of Bali, where spirituality meets breathtaking natural
-                    beauty...
-                  </Typography>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Box
-                      sx={{
-                        width: 32,
-                        height: 32,
-                        background: "#FF7A1A",
-                        borderRadius: "50%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        color: "#fff",
-                        fontWeight: 600,
-                        fontSize: 14,
-                      }}
-                    >
-                      M
-                    </Box>
-                    <Box>
-                      <Typography
-                        variant="body2"
-                        sx={{ fontWeight: 600, fontSize: 12, color: "#333" }}
-                      >
-                        Maya Chen
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{ fontSize: 11, color: "#888" }}
-                      >
-                        2 days ago
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Box>
-              </Paper>
-            </Grid>
-
-            <Grid item xs={12} md={4}>
-              <Paper
-                elevation={0}
-                sx={{
-                  borderRadius: 4,
-                  overflow: "hidden",
-                  background: "#fff",
-                  border: "1px solid #E5E7EB",
-                  transition: "all 0.3s ease",
-                  cursor: "pointer",
-                  "&:hover": {
-                    transform: "translateY(-4px)",
-                    border: "1px solid #d1d5db",
-                  },
-                }}
-              >
-                <Box
-                  sx={{
-                    height: 200,
-                    background:
-                      "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-                    position: "relative",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Typography
-                    variant="h6"
-                    sx={{ color: "#fff", fontWeight: 600 }}
-                  >
-                    🏔️ Alps Journey
-                  </Typography>
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      top: 12,
-                      right: 12,
-                      background: "rgba(255, 255, 255, 0.9)",
-                      borderRadius: 2,
-                      px: 2,
-                      py: 0.5,
-                    }}
-                  >
-                    <Typography
-                      variant="body2"
-                      sx={{ color: "#333", fontWeight: 600 }}
-                    >
-                      Switzerland
-                    </Typography>
-                  </Box>
-                </Box>
-                <Box sx={{ p: 3 }}>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontWeight: 700,
-                      mb: 1,
-                      fontSize: { xs: 16, sm: 18 },
-                      color: "#111",
-                    }}
-                  >
-                    Solo Hiking Through the Alps
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: "#555",
-                      mb: 2,
-                      fontSize: { xs: 13, sm: 14 },
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    A transformative 10-day solo hiking experience through
-                    Switzerland&apos;s most stunning alpine trails, complete
-                    with cozy mountain huts...
-                  </Typography>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Box
-                      sx={{
-                        width: 32,
-                        height: 32,
-                        background: "#3B82F6",
-                        borderRadius: "50%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        color: "#fff",
-                        fontWeight: 600,
-                        fontSize: 14,
-                      }}
-                    >
-                      A
-                    </Box>
-                    <Box>
-                      <Typography
-                        variant="body2"
-                        sx={{ fontWeight: 600, fontSize: 12, color: "#333" }}
-                      >
-                        Alex Rodriguez
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{ fontSize: 11, color: "#888" }}
-                      >
-                        5 days ago
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Box>
-              </Paper>
-            </Grid>
-
-            <Grid item xs={12} md={4}>
-              <Paper
-                elevation={0}
-                sx={{
-                  borderRadius: 4,
-                  overflow: "hidden",
-                  background: "#fff",
-                  border: "1px solid #E5E7EB",
-                  transition: "all 0.3s ease",
-                  cursor: "pointer",
-                  "&:hover": {
-                    transform: "translateY(-4px)",
-                    border: "1px solid #d1d5db",
-                  },
-                }}
-              >
-                <Box
-                  sx={{
-                    height: 200,
-                    background:
-                      "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
-                    position: "relative",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Typography
-                    variant="h6"
-                    sx={{ color: "#fff", fontWeight: 600 }}
-                  >
-                    🌸 Cherry Blossoms
-                  </Typography>
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      top: 12,
-                      right: 12,
-                      background: "rgba(255, 255, 255, 0.9)",
-                      borderRadius: 2,
-                      px: 2,
-                      py: 0.5,
-                    }}
-                  >
-                    <Typography
-                      variant="body2"
-                      sx={{ color: "#333", fontWeight: 600 }}
-                    >
-                      Japan
-                    </Typography>
-                  </Box>
-                </Box>
-                <Box sx={{ p: 3 }}>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontWeight: 700,
-                      mb: 1,
-                      fontSize: { xs: 16, sm: 18 },
-                      color: "#111",
-                    }}
-                  >
-                    Cherry Blossom Season in Kyoto
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: "#555",
-                      mb: 2,
-                      fontSize: { xs: 13, sm: 14 },
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    Experiencing the magical sakura season in Japan&apos;s
-                    ancient capital, from traditional tea ceremonies to midnight
-                    hanami parties...
-                  </Typography>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Box
-                      sx={{
-                        width: 32,
-                        height: 32,
-                        background: "#22C55E",
-                        borderRadius: "50%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        color: "#fff",
-                        fontWeight: 600,
-                        fontSize: 14,
-                      }}
-                    >
-                      S
-                    </Box>
-                    <Box>
-                      <Typography
-                        variant="body2"
-                        sx={{ fontWeight: 600, fontSize: 12, color: "#333" }}
-                      >
-                        Sarah Kim
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{ fontSize: 11, color: "#888" }}
-                      >
-                        1 week ago
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Box>
-              </Paper>
-            </Grid>
-          </Grid>
-
-          <Box sx={{ textAlign: "center", mt: 6 }}>
-            <Button
-              variant="outlined"
-              size="large"
-              sx={{
-                borderColor: "#FF7A1A",
-                color: "#FF7A1A",
-                borderRadius: 2,
-                fontWeight: 600,
-                px: 4,
-                textTransform: "none",
-                "&:hover": {
-                  borderColor: "#FF6600",
-                  backgroundColor: "rgba(255, 122, 26, 0.04)",
-                },
-              }}
-            >
-              Explore All Stories
-            </Button>
-          </Box>
-        </Container>
-      </Box>
-
-      {/* Community Stats Section */}
-      <Box
-        sx={{
-          background: "linear-gradient(90deg, #FF7A1A 0%, #FFB347 100%)",
-          py: { xs: 4, md: 8 },
-          color: "#fff",
-        }}
-      >
-        <Container maxWidth="lg">
-          <Typography
-            variant="h4"
-            sx={{
-              fontWeight: 700,
-              textAlign: "center",
-              mb: 4,
-              fontSize: { xs: 22, sm: 28, md: 32 },
-            }}
-          >
-            Join Our Global Community
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            sx={{
-              textAlign: "center",
-              mb: 6,
-              fontSize: { xs: 15, sm: 17, md: 20 },
-            }}
-          >
-            Connect with travelers from every corner of the world and share your
-            passion for exploration.
-          </Typography>
-          <Grid container spacing={{ xs: 2, md: 4 }} justifyContent="center">
-            {stats.map((stat) => (
-              <Grid item xs={6} sm={3} key={stat.label}>
-                <Box sx={{ textAlign: "center", mb: { xs: 2, sm: 0 } }}>
-                  <Typography
-                    variant="h4"
-                    sx={{
-                      fontWeight: 700,
-                      fontSize: { xs: 20, sm: 28, md: 32 },
-                    }}
-                  >
-                    {stat.value}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: "#fff",
-                      opacity: 0.9,
-                      fontSize: { xs: 13, sm: 15 },
-                    }}
-                  >
-                    {stat.label}
-                  </Typography>
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </Box>
 
       {/* Footer */}
       <Box
