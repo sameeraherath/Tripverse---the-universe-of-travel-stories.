@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { Search, X, TrendingUp, Clock, Heart } from "lucide-react";
+import { Search, X, Clock, Heart } from "lucide-react";
 
 const SearchBar = ({ onSearch, onSort }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -32,7 +32,7 @@ const SearchBar = ({ onSearch, onSort }) => {
   };
 
   return (
-    <div className="bg-white rounded-2xl p-6 mb-8 border border-gray-200">
+    <div className="bg-white rounded-2xl p-6 mb-8 border border-gray-200 max-w-2xl mx-auto">
       {/* Search Input */}
       <div className="relative mb-4">
         <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -86,18 +86,6 @@ const SearchBar = ({ onSearch, onSort }) => {
         >
           <Heart className="w-4 h-4" />
           Popular
-        </button>
-
-        <button
-          onClick={() => handleSortChange("commentCount")}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all font-medium text-sm ${
-            sortBy === "commentCount"
-              ? "bg-gradient-primary text-white"
-              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-          }`}
-        >
-          <TrendingUp className="w-4 h-4" />
-          Discussed
         </button>
       </div>
 

@@ -29,18 +29,38 @@ const CreatePost = () => {
 
   if (loading) {
     return (
-      <div className="container mx-auto max-w-2xl py-16 px-8 flex justify-center items-center">
-        <p className="text-gray-light animate-pulse">Creating post...</p>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="text-gray-600 font-medium">Creating your post...</p>
+        </div>
       </div>
     );
   }
+  
   return (
-    <div className="container mx-auto max-w-2xl py-16 px-8">
-      <h2 className="text-3xl font-bold mb-4 pb-6 pt-24 text-gray-dark bg-gradient-primary bg-clip-text text-transparent">
-        Create New Post
-      </h2>
-      {error && <p className="text-red-500">{error}</p>}
-      <PostForm onSubmit={handleSubmit} />
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="mb-8 pt-20 sm:pt-24">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+            Create New Post
+          </h1>
+          <p className="text-gray-600 text-lg">
+            Share your thoughts and ideas with the community
+          </p>
+        </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+            <p className="text-red-700 font-medium">{error}</p>
+          </div>
+        )}
+
+        {/* Form */}
+        <PostForm onSubmit={handleSubmit} />
+      </div>
     </div>
   );
 };

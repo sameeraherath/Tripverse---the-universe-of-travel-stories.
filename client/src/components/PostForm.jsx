@@ -109,118 +109,150 @@ const PostForm = ({ onSubmit, initialData }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="space-y-2">
-        <input
-          type="text"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-          className="w-full p-2 border border-gray-light bg-gray-lightest rounded-3xl px-4 focus:outline-none focus:ring-2 focus:ring-primary/20 text-gray-dark placeholder-gray-medium transition-all"
-        />
-      </div>
-
-      {/* Tags Input */}
-      <TagInput tags={tags} onChange={setTags} />
-
-      {/* Rich Text Editor */}
-      <div className="space-y-2">
-        <label className="block text-sm font-semibold text-gray-700 mb-2">
-          Content
-        </label>
-        <RichTextEditor
-          content={content}
-          onChange={setContent}
-          placeholder="Start writing your amazing blog post..."
-        />
-      </div>
-
-      <div className="space-y-2">
-        <label className="block text-sm font-semibold text-gray-700 mb-2">
-          Images (Maximum 3)
-        </label>
-
-        {/* Display existing images */}
-        {existingImages.length > 0 && (
-          <div className="grid grid-cols-3 gap-3 mb-3">
-            {existingImages.map((img, index) => (
-              <div key={`existing-${index}`} className="relative group">
-                <img
-                  src={img}
-                  alt={`Existing ${index + 1}`}
-                  className="w-full h-24 object-cover rounded-lg"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeExistingImage(index)}
-                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  ×
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Display newly selected images */}
-        {images.length > 0 && (
-          <div className="grid grid-cols-3 gap-3 mb-3">
-            {images.map((img, index) => (
-              <div key={`new-${index}`} className="relative group">
-                <img
-                  src={URL.createObjectURL(img)}
-                  alt={`New ${index + 1}`}
-                  className="w-full h-24 object-cover rounded-lg"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeNewImage(index)}
-                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  ×
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* File input - only show if less than 3 images */}
-        {existingImages.length + images.length < 3 && (
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <form onSubmit={handleSubmit} className="p-6 space-y-8">
+        {/* Title Section */}
+        <div className="space-y-3">
+          <label className="block text-sm font-semibold text-gray-800">
+            Post Title
+          </label>
           <input
-            type="file"
-            onChange={handleImageChange}
-            className="w-full p-2 px-4 border-none rounded-3xl focus:outline-none file:bg-gradient-primary file:py-2 file:px-4 file:border-none file:mr-4 file:text-white file:font-semibold file:hover:opacity-90 file:transition"
-            accept="image/*"
-            multiple
+            type="text"
+            placeholder="Enter an engaging title for your post..."
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            className="w-full p-4 border border-gray-200 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-gray-900 placeholder-gray-500 transition-all duration-200 text-lg font-medium"
           />
-        )}
+        </div>
 
-        <p className="text-xs text-gray-500 mt-1">
-          {existingImages.length + images.length} of 3 images selected
-        </p>
-      </div>
+        {/* Tags Section */}
+        <div className="space-y-3">
+          <label className="block text-sm font-semibold text-gray-800">
+            Tags
+          </label>
+          <div className="bg-gray-50 rounded-xl p-4">
+            <TagInput tags={tags} onChange={setTags} />
+          </div>
+        </div>
 
-      <div className="flex flex-col gap-4">
-        <button
-          type="button"
-          className="w-full p-3 bg-white border-2 border-primary text-primary font-semibold focus:outline-none rounded-3xl hover:bg-primary hover:text-white transition disabled:opacity-60 flex items-center justify-center gap-2"
-          onClick={handleFixGrammar}
-          disabled={loading || generating}
-        >
-          <Sparkles className="w-5 h-5" />
-          {generating ? "AI is helping..." : "Fix Mistakes with AI"}
-        </button>
+        {/* Content Section */}
+        <div className="space-y-3">
+          <label className="block text-sm font-semibold text-gray-800">
+            Content
+          </label>
+          <div className="bg-gray-50 rounded-xl p-4">
+            <RichTextEditor
+              content={content}
+              onChange={setContent}
+              placeholder="Start writing your amazing blog post..."
+            />
+          </div>
+        </div>
 
-        <button
-          type="submit"
-          className="w-full p-3 bg-gradient-primary text-white font-semibold rounded-3xl border border-gray-200 transition disabled:opacity-60"
-          disabled={loading}
-        >
-          {loading ? "Publishing..." : "Publish Post"}
-        </button>
-      </div>
-    </form>
+        {/* Images Section */}
+        <div className="space-y-3">
+          <label className="block text-sm font-semibold text-gray-800">
+            Images <span className="text-gray-500 font-normal">(Maximum 3)</span>
+          </label>
+          
+          <div className="bg-gray-50 rounded-xl p-4 space-y-4">
+            {/* Display existing images */}
+            {existingImages.length > 0 && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {existingImages.map((img, index) => (
+                  <div key={`existing-${index}`} className="relative group">
+                    <img
+                      src={img}
+                      alt={`Existing ${index + 1}`}
+                      className="w-full h-32 sm:h-28 object-cover rounded-lg shadow-sm"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeExistingImage(index)}
+                      className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-lg"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Display newly selected images */}
+            {images.length > 0 && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {images.map((img, index) => (
+                  <div key={`new-${index}`} className="relative group">
+                    <img
+                      src={URL.createObjectURL(img)}
+                      alt={`New ${index + 1}`}
+                      className="w-full h-32 sm:h-28 object-cover rounded-lg shadow-sm"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeNewImage(index)}
+                      className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-7 h-7 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-lg"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* File input - only show if less than 3 images */}
+            {existingImages.length + images.length < 3 && (
+              <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-primary transition-colors duration-200">
+                <input
+                  type="file"
+                  onChange={handleImageChange}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  accept="image/*"
+                  multiple
+                />
+                <div className="space-y-2">
+                  <div className="text-gray-400">
+                    <svg className="mx-auto h-12 w-12" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                      <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    <span className="font-medium text-primary">Click to upload</span> or drag and drop
+                  </p>
+                  <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB each</p>
+                </div>
+              </div>
+            )}
+
+            <p className="text-sm text-gray-500 text-center">
+              {existingImages.length + images.length} of 3 images selected
+            </p>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 pt-4">
+          <button
+            type="button"
+            className="flex-1 p-4 bg-white border-2 border-primary text-primary font-semibold focus:outline-none rounded-xl hover:bg-primary hover:text-white transition-all duration-200 disabled:opacity-60 flex items-center justify-center gap-3 shadow-sm"
+            onClick={handleFixGrammar}
+            disabled={loading || generating}
+          >
+            <Sparkles className="w-5 h-5" />
+            {generating ? "AI is helping..." : "Fix Mistakes with AI"}
+          </button>
+
+          <button
+            type="submit"
+            className="flex-1 p-4 bg-gradient-primary text-white font-semibold rounded-xl transition-all duration-200 disabled:opacity-60 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            disabled={loading}
+          >
+            {loading ? "Publishing..." : "Publish Post"}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 

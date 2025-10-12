@@ -180,8 +180,8 @@ const PostDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50/30 to-white py-24">
-      <div className="container max-w-4xl mx-auto px-4">
+    <div className="min-h-screen bg-gradient-to-b from-orange-50/30 to-white pt-20 pb-16 md:py-24">
+      <div className="container max-w-4xl mx-auto px-3 md:px-4">
         {/* Back Button */}
         <button
           onClick={() => navigate("/home")}
@@ -198,7 +198,7 @@ const PostDetails = () => {
             <ImageSlideshow images={post.images} />
           ) : (
             post.image && (
-              <div className="relative h-96 overflow-hidden">
+              <div className="relative h-64 md:h-96 overflow-hidden">
                 <img
                   src={post.image}
                   alt={post.title}
@@ -209,51 +209,51 @@ const PostDetails = () => {
             )
           )}
 
-          <div className="p-8 md:p-12">
+          <div className="p-4 md:p-8 lg:p-12">
             {/* Author Info */}
-            <div className="flex items-center justify-between mb-6 pb-6 border-b border-gray-100">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 pb-6 border-b border-gray-100">
               <Link
                 to={`/profile/${post.author?._id}`}
-                className="flex items-center gap-4 hover:opacity-80 transition-opacity"
+                className="flex items-center gap-3 hover:opacity-80 transition-opacity"
               >
                 {authorProfile?.avatar ? (
                   <img
                     src={authorProfile.avatar}
                     alt={authorProfile.name || "Author"}
-                    className="w-12 h-12 rounded-full object-cover border-2 border-orange-200"
+                    className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover border-2 border-orange-200"
                   />
                 ) : (
-                  <div className="w-12 h-12 rounded-full bg-gradient-primary flex items-center justify-center text-white text-xl font-bold">
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-primary flex items-center justify-center text-white text-lg md:text-xl font-bold">
                     {authorProfile?.name?.charAt(0).toUpperCase() || "U"}
                   </div>
                 )}
                 <div>
-                  <p className="font-semibold text-gray-800">
+                  <p className="font-semibold text-gray-800 text-sm md:text-base">
                     {authorProfile ? authorProfile.name : "Unknown User"}
                   </p>
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
-                    <Calendar className="w-4 h-4" />
+                  <div className="flex items-center gap-2 text-xs md:text-sm text-gray-500">
+                    <Calendar className="w-3 h-3 md:w-4 md:h-4" />
                     <span>{formatDate(post.createdAt)}</span>
                   </div>
                 </div>
               </Link>
 
               {/* Action Buttons */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 md:gap-2 flex-wrap">
                 {userId && post.author && userId === post.author._id ? (
                   <>
                     <Link
                       to={`/edit/${id}`}
-                      className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors font-medium"
+                      className="flex items-center gap-1 md:gap-2 px-2 md:px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors font-medium text-xs md:text-sm"
                     >
-                      <Edit2 className="w-4 h-4" />
+                      <Edit2 className="w-3 h-3 md:w-4 md:h-4" />
                       <span className="hidden sm:inline">Edit</span>
                     </Link>
                     <button
                       onClick={handleDeleteClick}
-                      className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium"
+                      className="flex items-center gap-1 md:gap-2 px-2 md:px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium text-xs md:text-sm"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-3 h-3 md:w-4 md:h-4" />
                       <span className="hidden sm:inline">Delete</span>
                     </button>
                   </>
@@ -265,39 +265,39 @@ const PostDetails = () => {
                 <BookmarkButton postId={id} variant="icon-only" />
                 <button
                   onClick={handleShare}
-                  className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium"
+                  className="flex items-center gap-1 md:gap-2 px-2 md:px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium text-xs md:text-sm"
                 >
-                  <Share2 className="w-4 h-4" />
+                  <Share2 className="w-3 h-3 md:w-4 md:h-4" />
                   <span className="hidden sm:inline">Share</span>
                 </button>
               </div>
             </div>
 
             {/* Title */}
-            <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+            <h1 className="text-2xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4 md:mb-6 leading-tight">
               {post.title}
             </h1>
 
             {/* Stats */}
-            <div className="flex items-center gap-6 mb-8 pb-8 border-b border-gray-100">
+            <div className="flex items-center gap-4 md:gap-6 mb-6 md:mb-8 pb-6 md:pb-8 border-b border-gray-100">
               <div className="flex items-center gap-2 text-gray-600">
-                <Heart className="w-5 h-5" />
-                <span className="font-medium">{post.likeCount || 0} likes</span>
+                <Heart className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="font-medium text-sm md:text-base">{post.likeCount || 0} likes</span>
               </div>
               <div className="flex items-center gap-2 text-gray-600">
-                <MessageCircle className="w-5 h-5" />
-                <span className="font-medium">{comments.length} comments</span>
+                <MessageCircle className="w-4 h-4 md:w-5 md:h-5" />
+                <span className="font-medium text-sm md:text-base">{comments.length} comments</span>
               </div>
             </div>
 
             {/* Tags */}
             {post.tags && post.tags.length > 0 && (
-              <div className="flex flex-wrap items-center gap-3 mb-6 pb-6 border-b border-gray-100">
-                <span className="text-sm font-medium text-gray-500">Tags:</span>
+              <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-4 md:mb-6 pb-4 md:pb-6 border-b border-gray-100">
+                <span className="text-xs md:text-sm font-medium text-gray-500">Tags:</span>
                 {post.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="px-3 py-1 bg-orange-50 text-orange-600 text-sm font-medium rounded-full hover:bg-orange-100 transition-colors cursor-pointer"
+                    className="px-2 md:px-3 py-1 bg-orange-50 text-orange-600 text-xs md:text-sm font-medium rounded-full hover:bg-orange-100 transition-colors cursor-pointer"
                   >
                     #{tag}
                   </span>
@@ -307,20 +307,20 @@ const PostDetails = () => {
 
             {/* Content */}
             <div
-              className="prose prose-lg max-w-none mb-12 rich-text-content"
+              className="prose prose-sm md:prose-lg max-w-none mb-8 md:mb-12 rich-text-content"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
           </div>
         </article>
 
         {/* Comments Section */}
-        <div className="mt-8 bg-white rounded-2xl p-8 md:p-12 border border-gray-200">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-            <MessageCircle className="w-8 h-8 text-primary" />
+        <div className="mt-6 md:mt-8 bg-white rounded-2xl p-4 md:p-8 lg:p-12 border border-gray-200">
+          <h2 className="text-xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6 flex items-center gap-2 md:gap-3">
+            <MessageCircle className="w-5 h-5 md:w-8 md:h-8 text-primary" />
             Comments ({comments.length})
           </h2>
 
-          <div className="mb-8">
+          <div className="mb-6 md:mb-8">
             <CommentForm postId={id} />
           </div>
 

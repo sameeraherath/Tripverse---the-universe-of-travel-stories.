@@ -53,9 +53,21 @@ const EditPost = () => {
   };
 
   return (
-    <div className="container mx-auto max-w-2xl  px-8 pt-28">
-      <h2 className="text-3xl font-bold mb-4">Edit Post</h2>
-      <PostForm onSubmit={handleSubmit} initialData={post} />
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="mb-8 pt-20 sm:pt-24">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+            Edit Post
+          </h1>
+          <p className="text-gray-600 text-lg">
+            Update your post content and settings
+          </p>
+        </div>
+
+        {/* Form */}
+        <PostForm onSubmit={handleSubmit} initialData={post} />
+      </div>
     </div>
   );
 };

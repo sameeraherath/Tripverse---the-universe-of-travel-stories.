@@ -85,12 +85,12 @@ const Home = () => {
     <div className="min-h-screen bg-gradient-to-b from-orange-50/30 to-white">
       <div className="container mx-auto px-4 py-8 pt-24">
         {/* Hero Section */}
-        <div className="text-center mb-12 space-y-4">
+        <div className="text-center mb-6 space-y-1 bg-gradient-to-br from-orange-50/50 via-yellow-50/30 to-orange-100/40 rounded-3xl p-2 md:p-3 shadow-sm border border-orange-100/50">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-primary rounded-full text-white font-medium border border-gray-200 mb-4">
             <Sparkles className="w-4 h-4" />
             <span>Discover Amazing Stories</span>
           </div>
-          <h1 className="text-5xl md:text-6xl font-extrabold text-gray-dark mb-4">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-gray-dark mb-4">
             Latest Stories
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
