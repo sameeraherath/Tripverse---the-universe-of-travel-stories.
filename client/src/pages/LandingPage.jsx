@@ -11,11 +11,15 @@ const LandingPage = () => {
       {/* Hero Section */}
       <Container
         maxWidth="lg"
-        sx={{ pt: { xs: 4, md: 8 }, pb: { xs: 4, md: 10 } }}
+        sx={{ 
+          pt: { xs: 2, sm: 4, md: 8 }, 
+          pb: { xs: 4, sm: 6, md: 10 },
+          px: { xs: 2, sm: 3, md: 4 }
+        }}
       >
         <Grid
           container
-          spacing={{ xs: 4, md: 6 }}
+          spacing={{ xs: 3, sm: 4, md: 6 }}
           alignItems="center"
           direction={{ xs: "column-reverse", md: "row" }}
         >
@@ -25,9 +29,10 @@ const LandingPage = () => {
               sx={{
                 fontWeight: 700,
                 color: "#111",
-                mb: 2,
-                fontSize: { xs: 32, sm: 40, md: 56 },
-                lineHeight: 1.15,
+                mb: { xs: 1.5, sm: 2 },
+                fontSize: { xs: 24, sm: 32, md: 40, lg: 56 },
+                lineHeight: { xs: 1.2, sm: 1.15 },
+                textAlign: { xs: "center", md: "left" },
               }}
             >
               Share Your Travel Stories with the World
@@ -36,8 +41,11 @@ const LandingPage = () => {
               variant="subtitle1"
               sx={{
                 color: "#444",
-                mb: 4,
-                fontSize: { xs: 16, sm: 18, md: 20 },
+                mb: { xs: 3, sm: 4 },
+                fontSize: { xs: 14, sm: 16, md: 18, lg: 20 },
+                lineHeight: { xs: 1.5, sm: 1.4 },
+                textAlign: { xs: "center", md: "left" },
+                px: { xs: 1, sm: 0 },
               }}
             >
               Connect with fellow travelers, share your adventures, and discover
@@ -48,8 +56,10 @@ const LandingPage = () => {
               sx={{
                 display: "flex",
                 flexDirection: { xs: "column", sm: "row" },
-                gap: 2,
-                mb: 2,
+                gap: { xs: 2, sm: 2 },
+                mb: { xs: 2, sm: 2 },
+                justifyContent: { xs: "center", md: "flex-start" },
+                alignItems: "center",
               }}
             >
               <Button
@@ -60,16 +70,16 @@ const LandingPage = () => {
                 sx={{
                   backgroundColor: "#FF7A1A",
                   color: "#fff",
-                  borderRadius: 3,
+                  borderRadius: { xs: 2, sm: 3 },
                   fontWeight: 700,
-                  px: 5,
-                  py: 1.5,
-                  fontSize: { xs: "16px", sm: "18px", md: "20px" },
-                  minHeight: { xs: "48px", sm: "56px", md: "64px" },
+                  px: { xs: 4, sm: 5 },
+                  py: { xs: 1.2, sm: 1.5 },
+                  fontSize: { xs: "14px", sm: "16px", md: "18px", lg: "20px" },
+                  minHeight: { xs: "44px", sm: "48px", md: "56px", lg: "64px" },
                   boxShadow: "0 4px 14px 0 rgba(255, 122, 26, 0.3)",
                   border: "1px solid #e5e7eb",
                   width: { xs: "100%", sm: "auto" },
-                  mb: { xs: 1, sm: 0 },
+                  maxWidth: { xs: "280px", sm: "none" },
                   "&:hover": { 
                     backgroundColor: "#FF6600",
                     transform: "translateY(-2px)",
@@ -78,16 +88,26 @@ const LandingPage = () => {
                   textTransform: "none",
                   transition: "all 0.3s ease",
                 }}
-                endIcon={<ArrowForward sx={{ fontSize: { xs: "18px", sm: "20px", md: "22px" } }} />}
+                endIcon={<ArrowForward sx={{ fontSize: { xs: "16px", sm: "18px", md: "20px", lg: "22px" } }} />}
               >
                 Start Sharing Stories
               </Button>
             </Box>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}>
-              <Star sx={{ color: "#FFD700", fontSize: 20 }} />
+            <Box sx={{ 
+              display: "flex", 
+              alignItems: "center", 
+              gap: 1, 
+              mt: { xs: 2, sm: 1 },
+              justifyContent: { xs: "center", md: "flex-start" }
+            }}>
+              <Star sx={{ color: "#FFD700", fontSize: { xs: 18, sm: 20 } }} />
               <Typography
                 variant="body2"
-                sx={{ color: "#222", fontSize: { xs: 13, sm: 15 } }}
+                sx={{ 
+                  color: "#222", 
+                  fontSize: { xs: 12, sm: 13, md: 15 },
+                  textAlign: { xs: "center", md: "left" }
+                }}
               >
                 4.9/5 &nbsp;·&nbsp; Free to join &nbsp;·&nbsp; No ads
               </Typography>
@@ -98,11 +118,13 @@ const LandingPage = () => {
               elevation={0}
               sx={{
                 width: "100%",
-                height: { xs: 180, sm: 220, md: 260 },
-                borderRadius: 4,
+                height: { xs: 200, sm: 240, md: 260 },
+                borderRadius: { xs: 2, sm: 3, md: 4 },
                 position: "relative",
                 overflow: "hidden",
                 background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                mx: { xs: "auto", md: 0 },
+                maxWidth: { xs: "100%", sm: "500px", md: "100%" },
               }}
             >
               {/* Hero Image */}
@@ -131,12 +153,12 @@ const LandingPage = () => {
                 <Box
                   sx={{
                     position: "absolute",
-                    top: 16,
-                    left: 16,
+                    top: { xs: 12, sm: 16 },
+                    left: { xs: 12, sm: 16 },
                     background: "rgba(255, 255, 255, 0.95)",
-                    borderRadius: 2,
-                    px: 2,
-                    py: 1,
+                    borderRadius: { xs: 1.5, sm: 2 },
+                    px: { xs: 1.5, sm: 2 },
+                    py: { xs: 0.5, sm: 1 },
                     border: "1px solid rgba(255, 255, 255, 0.2)",
                     backdropFilter: "blur(10px)",
                     zIndex: 2,
@@ -147,7 +169,7 @@ const LandingPage = () => {
                     sx={{
                       color: "#FF7A1A",
                       fontWeight: 700,
-                      fontSize: { xs: 11, sm: 12 },
+                      fontSize: { xs: 10, sm: 11, md: 12 },
                       textTransform: "uppercase",
                       letterSpacing: "0.5px",
                     }}
@@ -160,27 +182,27 @@ const LandingPage = () => {
                 <Box
                   sx={{
                     position: "absolute",
-                    bottom: 12,
-                    left: 12,
+                    bottom: { xs: 8, sm: 12 },
+                    left: { xs: 8, sm: 12 },
                     background: "rgba(255, 255, 255, 0.95)",
-                    borderRadius: 2,
-                    px: 2,
-                    py: 0.5,
+                    borderRadius: { xs: 1.5, sm: 2 },
+                    px: { xs: 1.5, sm: 2 },
+                    py: { xs: 0.5, sm: 0.5 },
                     border: "1px solid rgba(255, 255, 255, 0.2)",
                     backdropFilter: "blur(10px)",
                     display: "flex",
                     alignItems: "center",
-                    gap: 1,
+                    gap: { xs: 0.5, sm: 1 },
                     zIndex: 2,
                   }}
                 >
-                  <Edit sx={{ color: "#FF7A1A", fontSize: 16 }} />
+                  <Edit sx={{ color: "#FF7A1A", fontSize: { xs: 14, sm: 16 } }} />
                   <Typography
                     variant="body2"
                     sx={{
                       color: "#FF7A1A",
                       fontWeight: 600,
-                      fontSize: { xs: 11, sm: 12 },
+                      fontSize: { xs: 10, sm: 11, md: 12 },
                     }}
                   >
                     2.3M+ Stories Shared
@@ -191,12 +213,12 @@ const LandingPage = () => {
                 <Box
                   sx={{
                     position: "absolute",
-                    top: 16,
-                    right: 16,
+                    top: { xs: 12, sm: 16 },
+                    right: { xs: 12, sm: 16 },
                     background: "rgba(255, 122, 26, 0.9)",
-                    borderRadius: 2,
-                    px: 2,
-                    py: 0.5,
+                    borderRadius: { xs: 1.5, sm: 2 },
+                    px: { xs: 1.5, sm: 2 },
+                    py: { xs: 0.5, sm: 0.5 },
                     zIndex: 2,
                   }}
                 >
@@ -205,7 +227,7 @@ const LandingPage = () => {
                     sx={{
                       color: "#fff",
                       fontWeight: 600,
-                      fontSize: { xs: 10, sm: 11 },
+                      fontSize: { xs: 9, sm: 10, md: 11 },
                     }}
                   >
                     🌟 Adventure Awaits
@@ -218,15 +240,20 @@ const LandingPage = () => {
       </Container>
 
       {/* Features Section */}
-      <Container maxWidth="lg" sx={{ py: { xs: 4, md: 8 } }}>
+      <Container maxWidth="lg" sx={{ 
+        py: { xs: 4, sm: 6, md: 8 },
+        px: { xs: 2, sm: 3, md: 4 }
+      }}>
         <Typography
           variant="h4"
           sx={{
             fontWeight: 700,
             color: "#111",
             textAlign: "center",
-            mb: 2,
-            fontSize: { xs: 22, sm: 28, md: 32 },
+            mb: { xs: 1.5, sm: 2 },
+            fontSize: { xs: 20, sm: 24, md: 28, lg: 32 },
+            lineHeight: { xs: 1.3, sm: 1.2 },
+            px: { xs: 1, sm: 0 },
           }}
         >
           Everything You Need to Share Your Journey
@@ -236,36 +263,52 @@ const LandingPage = () => {
           sx={{
             color: "#444",
             textAlign: "center",
-            mb: 6,
-            fontSize: { xs: 15, sm: 17, md: 20 },
+            mb: { xs: 4, sm: 5, md: 6 },
+            fontSize: { xs: 14, sm: 15, md: 17, lg: 20 },
+            lineHeight: { xs: 1.5, sm: 1.4 },
+            px: { xs: 2, sm: 1, md: 0 },
           }}
         >
           Our platform provides all the tools you need to create, share, and
           discover amazing travel experiences.
         </Typography>
-        <Grid container spacing={{ xs: 2, md: 4 }} justifyContent="center">
+        <Grid container spacing={{ xs: 3, sm: 3, md: 4 }} justifyContent="center">
           <Grid item xs={12} sm={6} md={4}>
             <Paper
               elevation={0}
               sx={{
-                p: { xs: 2, sm: 4 },
-                borderRadius: 4,
+                p: { xs: 3, sm: 3, md: 4 },
+                borderRadius: { xs: 2, sm: 3, md: 4 },
                 background: "#fff",
                 textAlign: "center",
                 border: "1px solid #F3F4F6",
-                minHeight: 180,
+                minHeight: { xs: 160, sm: 180, md: 180 },
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
               }}
             >
-              <Edit sx={{ color: "#FF7A1A", fontSize: 40, mb: 1 }} />
+              <Edit sx={{ color: "#FF7A1A", fontSize: { xs: 32, sm: 36, md: 40 }, mb: { xs: 1, sm: 1 } }} />
               <Typography
                 variant="h6"
-                sx={{ fontWeight: 700, mb: 1, fontSize: { xs: 16, sm: 18 } }}
+                sx={{ 
+                  fontWeight: 700, 
+                  mb: { xs: 1, sm: 1 }, 
+                  fontSize: { xs: 15, sm: 16, md: 18 },
+                  lineHeight: { xs: 1.3, sm: 1.2 }
+                }}
               >
                 Rich Story Editor
               </Typography>
               <Typography
                 variant="body2"
-                sx={{ color: "#555", fontSize: { xs: 13, sm: 15 } }}
+                sx={{ 
+                  color: "#555", 
+                  fontSize: { xs: 12, sm: 13, md: 15 },
+                  lineHeight: { xs: 1.5, sm: 1.4 },
+                  px: { xs: 1, sm: 0 }
+                }}
               >
                 Create beautiful travel stories with our intuitive editor. Add
                 photos, maps, and interactive elements.
@@ -276,52 +319,80 @@ const LandingPage = () => {
             <Paper
               elevation={0}
               sx={{
-                p: { xs: 2, sm: 4 },
-                borderRadius: 4,
+                p: { xs: 3, sm: 3, md: 4 },
+                borderRadius: { xs: 2, sm: 3, md: 4 },
                 background: "#fff",
                 textAlign: "center",
                 border: "1px solid #F3F4F6",
-                minHeight: 180,
+                minHeight: { xs: 160, sm: 180, md: 180 },
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
               }}
             >
-              <Group sx={{ color: "#3B82F6", fontSize: 40, mb: 1 }} />
+              <Group sx={{ color: "#3B82F6", fontSize: { xs: 32, sm: 36, md: 40 }, mb: { xs: 1, sm: 1 } }} />
               <Typography
                 variant="h6"
-                sx={{ fontWeight: 700, mb: 1, fontSize: { xs: 16, sm: 18 } }}
+                sx={{ 
+                  fontWeight: 700, 
+                  mb: { xs: 1, sm: 1 }, 
+                  fontSize: { xs: 15, sm: 16, md: 18 },
+                  lineHeight: { xs: 1.3, sm: 1.2 }
+                }}
               >
                 Travel Community
               </Typography>
               <Typography
                 variant="body2"
-                sx={{ color: "#555", fontSize: { xs: 13, sm: 15 } }}
+                sx={{ 
+                  color: "#555", 
+                  fontSize: { xs: 12, sm: 13, md: 15 },
+                  lineHeight: { xs: 1.5, sm: 1.4 },
+                  px: { xs: 1, sm: 0 }
+                }}
               >
                 Connect with like-minded travelers, follow your favorite
                 storytellers, and build lasting friendships.
               </Typography>
             </Paper>
           </Grid>
-          <Grid item xs={12} sm={12} md={4}>
+          <Grid item xs={12} sm={6} md={4}>
             <Paper
               elevation={0}
               sx={{
-                p: { xs: 2, sm: 4 },
-                borderRadius: 4,
+                p: { xs: 3, sm: 3, md: 4 },
+                borderRadius: { xs: 2, sm: 3, md: 4 },
                 background: "#fff",
                 textAlign: "center",
                 border: "1px solid #F3F4F6",
-                minHeight: 180,
+                minHeight: { xs: 160, sm: 180, md: 180 },
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
               }}
             >
-              <Public sx={{ color: "#22C55E", fontSize: 40, mb: 1 }} />
+              <Public sx={{ color: "#22C55E", fontSize: { xs: 32, sm: 36, md: 40 }, mb: { xs: 1, sm: 1 } }} />
               <Typography
                 variant="h6"
-                sx={{ fontWeight: 700, mb: 1, fontSize: { xs: 16, sm: 18 } }}
+                sx={{ 
+                  fontWeight: 700, 
+                  mb: { xs: 1, sm: 1 }, 
+                  fontSize: { xs: 15, sm: 16, md: 18 },
+                  lineHeight: { xs: 1.3, sm: 1.2 }
+                }}
               >
                 Destination Discovery
               </Typography>
               <Typography
                 variant="body2"
-                sx={{ color: "#555", fontSize: { xs: 13, sm: 15 } }}
+                sx={{ 
+                  color: "#555", 
+                  fontSize: { xs: 12, sm: 13, md: 15 },
+                  lineHeight: { xs: 1.5, sm: 1.4 },
+                  px: { xs: 1, sm: 0 }
+                }}
               >
                 Discover hidden gems and popular destinations through authentic
                 stories from fellow travelers.
@@ -332,16 +403,18 @@ const LandingPage = () => {
       </Container>
 
       {/* Why This Platform Important Section */}
-      <Box sx={{ background: "#FFF", py: { xs: 6, md: 10 } }}>
-        <Container maxWidth="lg">
+      <Box sx={{ background: "#FFF", py: { xs: 4, sm: 6, md: 8, lg: 10 } }}>
+        <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 3, md: 4 } }}>
           <Typography
             variant="h4"
             sx={{
               fontWeight: 700,
               color: "#111",
               textAlign: "center",
-              mb: 3,
-              fontSize: { xs: 22, sm: 28, md: 32 },
+              mb: { xs: 2, sm: 3 },
+              fontSize: { xs: 20, sm: 24, md: 28, lg: 32 },
+              lineHeight: { xs: 1.3, sm: 1.2 },
+              px: { xs: 1, sm: 0 },
             }}
           >
             Why Tripverse Matters
@@ -351,10 +424,12 @@ const LandingPage = () => {
             sx={{
               color: "#444",
               textAlign: "center",
-              mb: 6,
-              fontSize: { xs: 15, sm: 17, md: 20 },
+              mb: { xs: 4, sm: 5, md: 6 },
+              fontSize: { xs: 14, sm: 15, md: 17, lg: 20 },
+              lineHeight: { xs: 1.5, sm: 1.4 },
               maxWidth: "800px",
               mx: "auto",
+              px: { xs: 2, sm: 1, md: 0 },
             }}
           >
             In a world of filtered content and curated feeds, Tripverse brings
@@ -362,16 +437,23 @@ const LandingPage = () => {
             storytelling.
           </Typography>
 
-          <Grid container spacing={{ xs: 3, md: 5 }} alignItems="center">
+          <Grid container spacing={{ xs: 4, sm: 4, md: 5 }} alignItems="center">
             <Grid item xs={12} md={6}>
-              <Box sx={{ pr: { md: 3 } }}>
+              <Box sx={{ 
+                pr: { md: 3 }, 
+                textAlign: { xs: "center", md: "left" },
+                background: "#F8F9FA",
+                borderRadius: { xs: 2, sm: 3, md: 4 },
+                p: { xs: 3, sm: 4, md: 5 },
+              }}>
                 <Typography
                   variant="h5"
                   sx={{
                     fontWeight: 700,
                     color: "#111",
-                    mb: 3,
-                    fontSize: { xs: 20, sm: 24, md: 28 },
+                    mb: { xs: 2, sm: 3 },
+                    fontSize: { xs: 18, sm: 20, md: 24, lg: 28 },
+                    lineHeight: { xs: 1.3, sm: 1.2 },
                   }}
                 >
                   Inspiring Adventure Through Real Stories
@@ -380,9 +462,10 @@ const LandingPage = () => {
                   variant="body1"
                   sx={{
                     color: "#555",
-                    mb: 3,
-                    fontSize: { xs: 15, sm: 16, md: 18 },
-                    lineHeight: 1.7,
+                    mb: { xs: 2, sm: 3 },
+                    fontSize: { xs: 14, sm: 15, md: 16, lg: 18 },
+                    lineHeight: { xs: 1.6, sm: 1.7 },
+                    px: { xs: 1, sm: 0 },
                   }}
                 >
                   Every journey has a story worth telling. Tripverse empowers
@@ -394,9 +477,10 @@ const LandingPage = () => {
                   variant="body1"
                   sx={{
                     color: "#555",
-                    mb: 4,
-                    fontSize: { xs: 15, sm: 16, md: 18 },
-                    lineHeight: 1.7,
+                    mb: { xs: 3, sm: 4 },
+                    fontSize: { xs: 14, sm: 15, md: 16, lg: 18 },
+                    lineHeight: { xs: 1.6, sm: 1.7 },
+                    px: { xs: 1, sm: 0 },
                   }}
                 >
                   Unlike traditional travel guides, our platform showcases
@@ -406,12 +490,17 @@ const LandingPage = () => {
                   through the eyes of those who&apos;ve walked the path before
                   you.
                 </Typography>
-                <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+                <Box sx={{ 
+                  display: "flex", 
+                  gap: { xs: 1.5, sm: 2 }, 
+                  flexWrap: "wrap",
+                  justifyContent: { xs: "center", md: "flex-start" }
+                }}>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     <Box
                       sx={{
-                        width: 8,
-                        height: 8,
+                        width: { xs: 6, sm: 8 },
+                        height: { xs: 6, sm: 8 },
                         backgroundColor: "#FF7A1A",
                         borderRadius: "50%",
                       }}
@@ -421,7 +510,7 @@ const LandingPage = () => {
                       sx={{
                         color: "#333",
                         fontWeight: 600,
-                        fontSize: { xs: 13, sm: 15 },
+                        fontSize: { xs: 12, sm: 13, md: 15 },
                       }}
                     >
                       Authentic Experiences
@@ -430,8 +519,8 @@ const LandingPage = () => {
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     <Box
                       sx={{
-                        width: 8,
-                        height: 8,
+                        width: { xs: 6, sm: 8 },
+                        height: { xs: 6, sm: 8 },
                         backgroundColor: "#3B82F6",
                         borderRadius: "50%",
                       }}
@@ -441,7 +530,7 @@ const LandingPage = () => {
                       sx={{
                         color: "#333",
                         fontWeight: 600,
-                        fontSize: { xs: 13, sm: 15 },
+                        fontSize: { xs: 12, sm: 13, md: 15 },
                       }}
                     >
                       Global Community
@@ -450,8 +539,8 @@ const LandingPage = () => {
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     <Box
                       sx={{
-                        width: 8,
-                        height: 8,
+                        width: { xs: 6, sm: 8 },
+                        height: { xs: 6, sm: 8 },
                         backgroundColor: "#22C55E",
                         borderRadius: "50%",
                       }}
@@ -461,7 +550,7 @@ const LandingPage = () => {
                       sx={{
                         color: "#333",
                         fontWeight: 600,
-                        fontSize: { xs: 13, sm: 15 },
+                        fontSize: { xs: 12, sm: 13, md: 15 },
                       }}
                     >
                       Stunning Visuals
@@ -476,16 +565,18 @@ const LandingPage = () => {
                 sx={{
                   background:
                     "linear-gradient(135deg, #FF7A1A 0%, #FFB347 50%, #3B82F6 100%)",
-                  borderRadius: 4,
-                  p: 4,
+                  borderRadius: { xs: 2, sm: 3, md: 4 },
+                  p: { xs: 3, sm: 4 },
                   color: "#fff",
                   textAlign: "center",
-                  minHeight: { xs: 200, md: 280 },
+                  minHeight: { xs: 180, sm: 220, md: 280 },
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "center",
                   position: "relative",
                   overflow: "hidden",
+                  mx: { xs: "auto", md: 0 },
+                  maxWidth: { xs: "100%", sm: "400px", md: "100%" },
                 }}
               >
                 <Box
@@ -514,8 +605,8 @@ const LandingPage = () => {
                   variant="h3"
                   sx={{
                     fontWeight: 700,
-                    mb: 2,
-                    fontSize: { xs: 28, sm: 36, md: 42 },
+                    mb: { xs: 1.5, sm: 2 },
+                    fontSize: { xs: 24, sm: 28, md: 36, lg: 42 },
                   }}
                 >
                   195+
@@ -524,8 +615,8 @@ const LandingPage = () => {
                   variant="h6"
                   sx={{
                     fontWeight: 600,
-                    mb: 1,
-                    fontSize: { xs: 16, sm: 18, md: 20 },
+                    mb: { xs: 1, sm: 1 },
+                    fontSize: { xs: 14, sm: 16, md: 18, lg: 20 },
                   }}
                 >
                   Countries Explored
@@ -534,9 +625,11 @@ const LandingPage = () => {
                   variant="body1"
                   sx={{
                     opacity: 0.9,
-                    fontSize: { xs: 14, sm: 16 },
+                    fontSize: { xs: 12, sm: 14, md: 16 },
                     maxWidth: "80%",
                     mx: "auto",
+                    lineHeight: { xs: 1.4, sm: 1.3 },
+                    px: { xs: 1, sm: 0 },
                   }}
                 >
                   Stories from every corner of the world, waiting to inspire
@@ -549,37 +642,43 @@ const LandingPage = () => {
       </Box>
 
       {/* Steps Section */}
-      <Box sx={{ background: "#F8FAFC", py: { xs: 4, md: 8 } }}>
-        <Container maxWidth="lg">
+      <Box sx={{ background: "#F8FAFC", py: { xs: 4, sm: 6, md: 8 } }}>
+        <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 3, md: 4 } }}>
           <Typography
             variant="h5"
             sx={{
               fontWeight: 700,
               color: "#111",
               textAlign: "center",
-              mb: 6,
-              fontSize: { xs: 18, sm: 22, md: 26 },
+              mb: { xs: 4, sm: 5, md: 6 },
+              fontSize: { xs: 16, sm: 18, md: 22, lg: 26 },
+              lineHeight: { xs: 1.3, sm: 1.2 },
+              px: { xs: 1, sm: 0 },
             }}
           >
             Start Sharing in 3 Simple Steps
           </Typography>
-          <Grid container spacing={{ xs: 2, md: 4 }} justifyContent="center">
+          <Grid container spacing={{ xs: 3, sm: 3, md: 4 }} justifyContent="center">
             <Grid item xs={12} sm={4}>
               <Paper
                 elevation={0}
                 sx={{
-                  p: { xs: 2, sm: 4 },
-                  borderRadius: 4,
+                  p: { xs: 3, sm: 3, md: 4 },
+                  borderRadius: { xs: 2, sm: 3, md: 4 },
                   background: "#fff",
                   textAlign: "center",
                   border: "1px solid #F3F4F6",
-                  minHeight: 180,
+                  minHeight: { xs: 160, sm: 180, md: 180 },
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
                 }}
               >
                 <Box
                   sx={{
-                    width: 44,
-                    height: 44,
+                    width: { xs: 36, sm: 40, md: 44 },
+                    height: { xs: 36, sm: 40, md: 44 },
                     background: "#FFEDD5",
                     color: "#FF7A1A",
                     borderRadius: "50%",
@@ -587,8 +686,8 @@ const LandingPage = () => {
                     alignItems: "center",
                     justifyContent: "center",
                     fontWeight: 700,
-                    fontSize: 22,
-                    mb: 2,
+                    fontSize: { xs: 18, sm: 20, md: 22 },
+                    mb: { xs: 1.5, sm: 2 },
                     mx: "auto",
                   }}
                 >
@@ -596,13 +695,23 @@ const LandingPage = () => {
                 </Box>
                 <Typography
                   variant="subtitle1"
-                  sx={{ fontWeight: 700, mb: 1, fontSize: { xs: 15, sm: 17 } }}
+                  sx={{ 
+                    fontWeight: 700, 
+                    mb: { xs: 1, sm: 1 }, 
+                    fontSize: { xs: 14, sm: 15, md: 17 },
+                    lineHeight: { xs: 1.3, sm: 1.2 }
+                  }}
                 >
                   Create Your Profile
                 </Typography>
                 <Typography
                   variant="body2"
-                  sx={{ color: "#555", fontSize: { xs: 13, sm: 15 } }}
+                  sx={{ 
+                    color: "#555", 
+                    fontSize: { xs: 12, sm: 13, md: 15 },
+                    lineHeight: { xs: 1.5, sm: 1.4 },
+                    px: { xs: 1, sm: 0 }
+                  }}
                 >
                   Sign up and create your traveler profile. Add your bio, travel
                   interests, and dream destinations.
@@ -613,18 +722,22 @@ const LandingPage = () => {
               <Paper
                 elevation={0}
                 sx={{
-                  p: { xs: 2, sm: 4 },
-                  borderRadius: 4,
+                  p: { xs: 3, sm: 3, md: 4 },
+                  borderRadius: { xs: 2, sm: 3, md: 4 },
                   background: "#fff",
                   textAlign: "center",
                   border: "1px solid #F3F4F6",
-                  minHeight: 180,
+                  minHeight: { xs: 160, sm: 180, md: 180 },
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
                 }}
               >
                 <Box
                   sx={{
-                    width: 44,
-                    height: 44,
+                    width: { xs: 36, sm: 40, md: 44 },
+                    height: { xs: 36, sm: 40, md: 44 },
                     background: "#DBEAFE",
                     color: "#3B82F6",
                     borderRadius: "50%",
@@ -632,8 +745,8 @@ const LandingPage = () => {
                     alignItems: "center",
                     justifyContent: "center",
                     fontWeight: 700,
-                    fontSize: 22,
-                    mb: 2,
+                    fontSize: { xs: 18, sm: 20, md: 22 },
+                    mb: { xs: 1.5, sm: 2 },
                     mx: "auto",
                   }}
                 >
@@ -641,13 +754,23 @@ const LandingPage = () => {
                 </Box>
                 <Typography
                   variant="subtitle1"
-                  sx={{ fontWeight: 700, mb: 1, fontSize: { xs: 15, sm: 17 } }}
+                  sx={{ 
+                    fontWeight: 700, 
+                    mb: { xs: 1, sm: 1 }, 
+                    fontSize: { xs: 14, sm: 15, md: 17 },
+                    lineHeight: { xs: 1.3, sm: 1.2 }
+                  }}
                 >
                   Write Your Story
                 </Typography>
                 <Typography
                   variant="body2"
-                  sx={{ color: "#555", fontSize: { xs: 13, sm: 15 } }}
+                  sx={{ 
+                    color: "#555", 
+                    fontSize: { xs: 12, sm: 13, md: 15 },
+                    lineHeight: { xs: 1.5, sm: 1.4 },
+                    px: { xs: 1, sm: 0 }
+                  }}
                 >
                   Use our rich editor to craft your travel story. Add photos,
                   videos, and interactive maps to bring it to life.
@@ -658,18 +781,22 @@ const LandingPage = () => {
               <Paper
                 elevation={0}
                 sx={{
-                  p: { xs: 2, sm: 4 },
-                  borderRadius: 4,
+                  p: { xs: 3, sm: 3, md: 4 },
+                  borderRadius: { xs: 2, sm: 3, md: 4 },
                   background: "#fff",
                   textAlign: "center",
                   border: "1px solid #F3F4F6",
-                  minHeight: 180,
+                  minHeight: { xs: 160, sm: 180, md: 180 },
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
                 }}
               >
                 <Box
                   sx={{
-                    width: 44,
-                    height: 44,
+                    width: { xs: 36, sm: 40, md: 44 },
+                    height: { xs: 36, sm: 40, md: 44 },
                     background: "#DCFCE7",
                     color: "#22C55E",
                     borderRadius: "50%",
@@ -677,8 +804,8 @@ const LandingPage = () => {
                     alignItems: "center",
                     justifyContent: "center",
                     fontWeight: 700,
-                    fontSize: 22,
-                    mb: 2,
+                    fontSize: { xs: 18, sm: 20, md: 22 },
+                    mb: { xs: 1.5, sm: 2 },
                     mx: "auto",
                   }}
                 >
@@ -686,13 +813,23 @@ const LandingPage = () => {
                 </Box>
                 <Typography
                   variant="subtitle1"
-                  sx={{ fontWeight: 700, mb: 1, fontSize: { xs: 15, sm: 17 } }}
+                  sx={{ 
+                    fontWeight: 700, 
+                    mb: { xs: 1, sm: 1 }, 
+                    fontSize: { xs: 14, sm: 15, md: 17 },
+                    lineHeight: { xs: 1.3, sm: 1.2 }
+                  }}
                 >
                   Share & Connect
                 </Typography>
                 <Typography
                   variant="body2"
-                  sx={{ color: "#555", fontSize: { xs: 13, sm: 15 } }}
+                  sx={{ 
+                    color: "#555", 
+                    fontSize: { xs: 12, sm: 13, md: 15 },
+                    lineHeight: { xs: 1.5, sm: 1.4 },
+                    px: { xs: 1, sm: 0 }
+                  }}
                 >
                   Publish your story and connect with travelers worldwide. Get
                   feedback, tips, and inspiration for your next trip.
@@ -706,7 +843,11 @@ const LandingPage = () => {
 
       {/* Footer */}
       <Box
-        sx={{ background: "#FFF9F3", py: 3, borderTop: "1px solid #F3F4F6" }}
+        sx={{ 
+          background: "#FFF9F3", 
+          py: { xs: 2, sm: 3 }, 
+          borderTop: "1px solid #F3F4F6" 
+        }}
       >
         <Container
           maxWidth="lg"
@@ -716,42 +857,64 @@ const LandingPage = () => {
             justifyContent: "space-between",
             alignItems: "center",
             gap: { xs: 2, sm: 0 },
+            px: { xs: 2, sm: 3, md: 4 },
           }}
         >
           <Typography
             variant="body2"
-            sx={{ color: "#888", textAlign: { xs: "center", sm: "left" } }}
+            sx={{ 
+              color: "#888", 
+              textAlign: { xs: "center", sm: "left" },
+              fontSize: { xs: 12, sm: 13, md: 14 }
+            }}
           >
-            © {new Date().getFullYear()} WanderTales. All rights reserved.
+            © {new Date().getFullYear()} Tripverse. All rights reserved.
           </Typography>
           <Box
             sx={{
               display: "flex",
-              gap: 3,
+              gap: { xs: 2, sm: 3 },
               justifyContent: { xs: "center", sm: "flex-end" },
+              flexWrap: "wrap",
             }}
           >
             <Typography
               variant="body2"
-              sx={{ color: "#888", cursor: "pointer" }}
+              sx={{ 
+                color: "#888", 
+                cursor: "pointer",
+                fontSize: { xs: 11, sm: 12, md: 13 }
+              }}
             >
               Terms of Service
             </Typography>
             <Typography
               variant="body2"
-              sx={{ color: "#888", cursor: "pointer" }}
+              sx={{ 
+                color: "#888", 
+                cursor: "pointer",
+                fontSize: { xs: 11, sm: 12, md: 13 }
+              }}
             >
               Privacy Policy
             </Typography>
             <Typography
               variant="body2"
-              sx={{ color: "#888", cursor: "pointer" }}
+              sx={{ 
+                color: "#888", 
+                cursor: "pointer",
+                fontSize: { xs: 11, sm: 12, md: 13 }
+              }}
             >
               Contact
             </Typography>
             <Typography
               variant="body2"
-              sx={{ color: "#888", cursor: "pointer" }}
+              sx={{ 
+                color: "#888", 
+                cursor: "pointer",
+                fontSize: { xs: 11, sm: 12, md: 13 }
+              }}
             >
               Help
             </Typography>
