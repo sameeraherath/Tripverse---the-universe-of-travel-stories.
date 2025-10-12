@@ -19,18 +19,19 @@ import {
   DialogActions,
   Button,
   DialogContentText,
+  Badge,
 } from "@mui/material";
 import {
-  Create,
-  Logout,
-  AccountCircle,
-  Home,
-  Bookmark,
-  Menu as MenuIcon,
-  Close as CloseIcon,
-  Message,
-  Badge,
-} from "@mui/icons-material";
+  MdCreate,
+  MdLogout,
+  MdAccountCircle,
+  MdHome,
+  MdBookmark,
+  MdMenu,
+  MdClose,
+  MdMessage,
+} from "react-icons/md";
+import { IoNotificationsOutline } from "react-icons/io5";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../utils/authService";
@@ -102,18 +103,18 @@ const Navbar = () => {
   };
 
   const menuItems = [
-    { text: "Home", path: "/home", icon: <Home /> },
-    { text: "Create Post", path: "/create", icon: <Create /> },
-    { text: "Bookmarks", path: "/bookmarks", icon: <Bookmark /> },
-    { text: "Messages", path: "/messages", icon: <Message /> },
-    { text: "Notifications", path: "/notifications", icon: <AccountCircle /> },
+    { text: "Home", path: "/home", icon: <MdHome /> },
+    { text: "Create Post", path: "/create", icon: <MdCreate /> },
+    { text: "Bookmarks", path: "/bookmarks", icon: <MdBookmark /> },
+    { text: "Messages", path: "/messages", icon: <MdMessage /> },
+    { text: "Notifications", path: "/notifications", icon: <IoNotificationsOutline /> },
     {
       text: "Profile",
       path: "/profile",
       icon: userAvatar ? (
         <Avatar src={userAvatar} alt="Profile" sx={{ width: 24, height: 24 }} />
       ) : (
-        <AccountCircle />
+        <MdAccountCircle />
       ),
     },
   ];
@@ -180,7 +181,7 @@ const Navbar = () => {
                   },
                 }}
               >
-                <Home sx={{ fontSize: { xs: "24px", md: "28px" } }} />
+                <MdHome style={{ fontSize: "28px" }} />
               </IconButton>
             </Tooltip>
             <Tooltip title="Create Post" arrow placement="bottom">
@@ -199,7 +200,7 @@ const Navbar = () => {
                   },
                 }}
               >
-                <Create sx={{ fontSize: { xs: "24px", md: "28px" } }} />
+                <MdCreate style={{ fontSize: "28px" }} />
               </IconButton>
             </Tooltip>
             <Tooltip title="Bookmarks" arrow placement="bottom">
@@ -218,7 +219,7 @@ const Navbar = () => {
                   },
                 }}
               >
-                <Bookmark sx={{ fontSize: { xs: "24px", md: "28px" } }} />
+                <MdBookmark style={{ fontSize: "28px" }} />
               </IconButton>
             </Tooltip>
             <Tooltip title="Messages" arrow placement="bottom">
@@ -238,7 +239,7 @@ const Navbar = () => {
                 }}
               >
                 <Badge badgeContent={unreadCount} color="error">
-                  <Message sx={{ fontSize: { xs: "24px", md: "28px" } }} />
+                  <MdMessage style={{ fontSize: "28px" }} />
                 </Badge>
               </IconButton>
             </Tooltip>
@@ -299,7 +300,7 @@ const Navbar = () => {
                   },
                 }}
               >
-                <Logout sx={{ fontSize: { xs: "24px", md: "28px" } }} />
+                <MdLogout style={{ fontSize: "28px" }} />
               </IconButton>
             </Tooltip>
           </Box>
@@ -337,7 +338,7 @@ const Navbar = () => {
                 },
               }}
             >
-              {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
+              {mobileMenuOpen ? <MdClose /> : <MdMenu />}
             </IconButton>
           </Box>
         </Toolbar>
@@ -433,7 +434,7 @@ const Navbar = () => {
                 minWidth: 40,
               }}
             >
-              <Logout />
+              <MdLogout />
             </ListItemIcon>
             <ListItemText
               primary="Logout"

@@ -33,7 +33,7 @@ const LandingPage = () => {
                 fontWeight: 700,
                 color: "#111",
                 mb: 2,
-                fontSize: { xs: 28, sm: 32, md: 48 },
+                fontSize: { xs: 32, sm: 40, md: 56 },
                 lineHeight: 1.15,
               }}
             >
@@ -67,17 +67,25 @@ const LandingPage = () => {
                 sx={{
                   backgroundColor: "#FF7A1A",
                   color: "#fff",
-                  borderRadius: 2,
-                  fontWeight: 600,
-                  px: 4,
-                  boxShadow: "none",
+                  borderRadius: 3,
+                  fontWeight: 700,
+                  px: 5,
+                  py: 1.5,
+                  fontSize: { xs: "16px", sm: "18px", md: "20px" },
+                  minHeight: { xs: "48px", sm: "56px", md: "64px" },
+                  boxShadow: "0 4px 14px 0 rgba(255, 122, 26, 0.3)",
                   border: "1px solid #e5e7eb",
                   width: { xs: "100%", sm: "auto" },
                   mb: { xs: 1, sm: 0 },
-                  "&:hover": { backgroundColor: "#FF6600" },
+                  "&:hover": { 
+                    backgroundColor: "#FF6600",
+                    transform: "translateY(-2px)",
+                    boxShadow: "0 6px 20px 0 rgba(255, 122, 26, 0.4)",
+                  },
                   textTransform: "none",
+                  transition: "all 0.3s ease",
                 }}
-                endIcon={<ArrowForward />}
+                endIcon={<ArrowForward sx={{ fontSize: { xs: "18px", sm: "20px", md: "22px" } }} />}
               >
                 Start Sharing Stories
               </Button>

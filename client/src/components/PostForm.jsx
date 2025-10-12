@@ -18,25 +18,44 @@ const PostForm = ({ onSubmit, initialData }) => {
 
   // AI Assistance Functions
 
-  const handleGenerateContent = async () => {
+  const handleFixGrammar = async () => {
+    if (!content.trim()) {
+      alert("Please write some content first before fixing grammar mistakes.");
+      return;
+    }
+
     setGenerating(true);
 
     try {
       const token = localStorage.getItem("authToken");
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/ai/generate`,
-        { prompt: title || "Write a blog post" },
+        `${import.meta.env.VITE_API_URL}/api/ai/fix-grammar`,
+        { content: content },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      setContent(response.data.content);
+      
+      if (response.data.content) {
+        setContent(response.data.content);
+      }
+      
+      if (response.data.warning) {
+        console.warn("AI grammar check warning:", response.data.warning);
+        // You could show a toast notification here if you have a toast system
+      }
+      
+      if (response.data.error) {
+        console.warn("AI grammar check error:", response.data.error);
+        alert(response.data.error);
+      }
     } catch (error) {
-      console.error("Error generating content:", error);
+      console.error("Error fixing grammar:", error);
+      alert("Failed to fix grammar. Please try again.");
     } finally {
-      setLoading(false);
+      setGenerating(false);
     }
   };
 
@@ -186,11 +205,11 @@ const PostForm = ({ onSubmit, initialData }) => {
         <button
           type="button"
           className="w-full p-3 bg-white border-2 border-primary text-primary font-semibold focus:outline-none rounded-3xl hover:bg-primary hover:text-white transition disabled:opacity-60 flex items-center justify-center gap-2"
-          onClick={handleGenerateContent}
+          onClick={handleFixGrammar}
           disabled={loading || generating}
         >
           <Sparkles className="w-5 h-5" />
-          {generating ? "Generating with AI..." : "Generate Content with AI"}
+          {generating ? "AI is helping..." : "Fix Mistakes with AI"}
         </button>
 
         <button
