@@ -14,7 +14,6 @@ import Navbar from "./components/Navbar";
 import Profile from "./pages/Profile";
 import UserProfile from "./pages/UserProfile";
 import Bookmarks from "./pages/Bookmarks";
-import Notifications from "./pages/Notifications";
 import Messages from "./pages/Messages";
 import LandingPage from "./pages/LandingPage";
 import ForYou from "./pages/ForYou";
@@ -68,7 +67,6 @@ const AppContent = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/:userId" element={<UserProfile />} />
         <Route path="/bookmarks" element={<Bookmarks />} />
-        <Route path="/notifications" element={<Notifications />} />
         <Route path="/messages" element={<Messages />} />
         <Route path="/admin" element={
           <ProtectedRoute requiredRole="admin">

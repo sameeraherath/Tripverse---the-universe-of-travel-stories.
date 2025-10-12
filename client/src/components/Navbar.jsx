@@ -31,12 +31,10 @@ import {
   MdClose,
   MdMessage,
 } from "react-icons/md";
-import { IoNotificationsOutline } from "react-icons/io5";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../utils/authService";
 import { fetchUnreadCount } from "../features/chat/chatSlice";
-import NotificationDropdown from "./NotificationDropdown";
 import api from "../utils/api";
 
 const Navbar = () => {
@@ -107,7 +105,6 @@ const Navbar = () => {
     { text: "Create Post", path: "/create", icon: <MdCreate /> },
     { text: "Bookmarks", path: "/bookmarks", icon: <MdBookmark /> },
     { text: "Messages", path: "/messages", icon: <MdMessage /> },
-    { text: "Notifications", path: "/notifications", icon: <IoNotificationsOutline /> },
     {
       text: "Profile",
       path: "/profile",
@@ -244,19 +241,6 @@ const Navbar = () => {
               </IconButton>
             </Tooltip>
 
-            {/* Notification Dropdown */}
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                "& > div": {
-                  display: "flex",
-                  alignItems: "center",
-                },
-              }}
-            >
-              <NotificationDropdown />
-            </Box>
 
             <Tooltip title="Profile" arrow placement="bottom">
               <IconButton
@@ -305,7 +289,7 @@ const Navbar = () => {
             </Tooltip>
           </Box>
 
-          {/* Mobile Menu - Notification & Hamburger */}
+          {/* Mobile Menu - Hamburger */}
           <Box
             sx={{
               display: { xs: "flex", md: "none" },
@@ -313,21 +297,6 @@ const Navbar = () => {
               alignItems: "center",
             }}
           >
-            {/* Notification Dropdown for Mobile */}
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                "& > div": {
-                  display: "flex",
-                  alignItems: "center",
-                },
-              }}
-            >
-              <NotificationDropdown />
-            </Box>
-
-            {/* Hamburger Menu Button */}
             <IconButton
               onClick={toggleMobileMenu}
               sx={{

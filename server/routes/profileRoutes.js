@@ -124,10 +124,6 @@ router.post("/follow/:userId", authMiddleware, async (req, res) => {
       ),
     ]);
 
-    // Create notification for the followed user
-    const { createFollowNotification } = require("../utils/notificationHelper");
-    await createFollowNotification(currentUserId, targetUserId);
-
     res.status(200).json({ message: "Successfully followed user" });
   } catch (error) {
     console.error("Error following user:", error);

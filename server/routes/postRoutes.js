@@ -269,19 +269,6 @@ router.post("/:id/like", authMiddleware, async (req, res) => {
       // Like the post
       post.likes.push(req.userId);
       post.likeCount = post.likeCount + 1;
-
-      // Create notification for post author (only when liking, not unliking)
-      if (post.author.toString() !== req.userId) {
-        const {
-          createLikeNotification,
-        } = require("../utils/notificationHelper");
-        await createLikeNotification(
-          req.userId,
-          post.author,
-          post._id,
-          post.title
-        );
-      }
     }
 
     await post.save();

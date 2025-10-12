@@ -27,25 +27,6 @@ const createComment = async (req, res) => {
       $inc: { commentCount: 1 },
     });
 
-    // Get post details for notification
-    const post = await Post.findById(postId);
-    if (post && post.author.toString() !== req.userId) {
-      // Create comment notification for post author
-      const {
-        createCommentNotification,
-        createMentionNotifications,
-      } = require("../utils/notificationHelper");
-      await createCommentNotification(
-        req.userId,
-        post.author,
-        postId,
-        post.title
-      );
-
-      // Check for mentions in comment content
-      await createMentionNotifications(req.userId, content, postId, post.title);
-    }
-
     res.status(201).json(comment);
   } catch (error) {
     res.status(500).json({ message: error.message });

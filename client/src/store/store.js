@@ -5,7 +5,6 @@ import postReducer from "../features/posts/postsSlice";
 import profileReducer from "../features/profile/profileSlice";
 import commentsReducer from "../features/comments/commentsSlice";
 import followingReducer from "../features/following/followingSlice";
-import notificationsReducer from "../features/notifications/notificationsSlice";
 import chatReducer from "../features/chat/chatSlice";
 
 export const store = configureStore({
@@ -15,7 +14,6 @@ export const store = configureStore({
     profile: profileReducer,
     comments: commentsReducer,
     following: followingReducer,
-    notifications: notificationsReducer,
     chat: chatReducer,
   },
 });
