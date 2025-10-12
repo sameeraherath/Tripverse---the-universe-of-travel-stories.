@@ -166,6 +166,7 @@ router.get("/", async (req, res) => {
     const {
       search,
       tags,
+      author,
       page = 1,
       limit = 10,
       sortBy = "createdAt",
@@ -181,6 +182,11 @@ router.get("/", async (req, res) => {
         { title: { $regex: search, $options: "i" } },
         { content: { $regex: search, $options: "i" } },
       ];
+    }
+
+    // Filter by author
+    if (author) {
+      query.author = author;
     }
 
     // Filter by tags

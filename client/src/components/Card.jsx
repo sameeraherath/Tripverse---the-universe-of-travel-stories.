@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { likePost } from "../features/posts/postsSlice";
 import BookmarkButton from "./BookmarkButton";
 import { MessageCircle } from "lucide-react";
+import { getTextPreview } from "../utils/htmlUtils";
 
 const Card = ({ post }) => {
   const dispatch = useDispatch();
@@ -132,8 +133,7 @@ const Card = ({ post }) => {
           </h3>
 
           <p className="text-gray-medium line-clamp-3 text-sm leading-relaxed">
-            {post.content.substring(0, 150)}
-            {post.content.length > 150 ? "..." : ""}
+            {getTextPreview(post.content, 150)}
           </p>
 
           {/* Tags */}
