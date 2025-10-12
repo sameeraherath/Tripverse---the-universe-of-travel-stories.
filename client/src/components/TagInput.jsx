@@ -15,7 +15,7 @@ const TagInput = ({ tags, onChange, maxTags = 10 }) => {
       }
 
       try {
-        const response = await fetch("/api/posts/tags/all");
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/posts/tags/all`);
         const data = await response.json();
         const filtered = data.tags.filter(
           (tag) =>
@@ -101,7 +101,7 @@ const TagInput = ({ tags, onChange, maxTags = 10 }) => {
                 : "Add a tag..."
             }
             disabled={tags.length >= maxTags}
-            className="flex-1 min-w-[120px] bg-transparent border-none focus:outline-none text-gray-900 placeholder-gray-400 disabled:cursor-not-allowed"
+            className="flex-1 min-w-[120px] bg-transparent border-none focus:outline-none text-gray-900 placeholder-gray-400 disabled:cursor-not-allowed relative z-30"
           />
         </div>
 

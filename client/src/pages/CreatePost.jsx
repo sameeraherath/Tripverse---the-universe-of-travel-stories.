@@ -19,7 +19,9 @@ const CreatePost = () => {
           navigate("/home");
         }, 500);
       } else if (createPost.rejected.match(resultAction)) {
-        toast.error("Failed to create post. Please try again.");
+        const errorMessage = resultAction.payload?.message || "Failed to create post. Please try again.";
+        toast.error(errorMessage);
+        console.error("Post creation error:", resultAction.payload);
       }
     } catch (err) {
       console.error("Error creating post:", err);

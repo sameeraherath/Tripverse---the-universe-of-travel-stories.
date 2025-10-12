@@ -81,11 +81,23 @@ const PostForm = ({ onSubmit, initialData }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Basic validation
+    if (!title.trim()) {
+      alert("Please enter a title for your post");
+      return;
+    }
+    
+    if (!content.trim()) {
+      alert("Please enter some content for your post");
+      return;
+    }
+
     setLoading(true); // Set loading to true when the form is submitted
 
     const formData = new FormData();
-    formData.append("title", title);
-    formData.append("content", content);
+    formData.append("title", title.trim());
+    formData.append("content", content.trim());
     formData.append("tags", JSON.stringify(tags));
 
     // Append existing images (for edit mode)
@@ -103,6 +115,7 @@ const PostForm = ({ onSubmit, initialData }) => {
       await onSubmit(formData); // Assuming onSubmit is an async function
     } catch (error) {
       console.error("Error submitting form", error);
+      alert("Failed to create post. Please try again.");
     } finally {
       setLoading(false); // Set loading to false after form submission
     }
@@ -110,7 +123,7 @@ const PostForm = ({ onSubmit, initialData }) => {
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-      <form onSubmit={handleSubmit} className="p-6 space-y-8">
+      <form onSubmit={handleSubmit} className="p-6 space-y-8 relative">
         {/* Title Section */}
         <div className="space-y-3">
           <label className="block text-sm font-semibold text-gray-800">
@@ -122,12 +135,12 @@ const PostForm = ({ onSubmit, initialData }) => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
-            className="w-full p-4 border border-gray-200 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-gray-900 placeholder-gray-500 transition-all duration-200 text-lg font-medium"
+            className="w-full p-4 border border-gray-200 bg-gray-50 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-gray-900 placeholder-gray-500 transition-all duration-200 text-lg font-medium relative z-20"
           />
         </div>
 
         {/* Tags Section */}
-        <div className="space-y-3">
+        <div className="space-y-3 relative z-20">
           <label className="block text-sm font-semibold text-gray-800">
             Tags
           </label>
@@ -203,15 +216,15 @@ const PostForm = ({ onSubmit, initialData }) => {
 
             {/* File input - only show if less than 3 images */}
             {existingImages.length + images.length < 3 && (
-              <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-primary transition-colors duration-200">
+              <div className="relative border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-primary transition-colors duration-200">
                 <input
                   type="file"
                   onChange={handleImageChange}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                   accept="image/*"
                   multiple
                 />
-                <div className="space-y-2">
+                <div className="space-y-2 pointer-events-none">
                   <div className="text-gray-400">
                     <svg className="mx-auto h-12 w-12" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                       <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

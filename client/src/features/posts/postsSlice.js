@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api from "../../utils/api";
+import api, { apiMultipart } from "../../utils/api";
 
 // Fetch all posts with search, pagination, and sorting
 export const fetchPosts = createAsyncThunk(
@@ -28,14 +28,10 @@ export const createPost = createAsyncThunk(
   "posts/createPost",
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await api.post("/api/posts", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await apiMultipart.post("/api/posts", formData);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data || { message: "Failed to create post" });
     }
   }
 );
