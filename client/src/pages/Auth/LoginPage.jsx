@@ -34,12 +34,20 @@ const LoginPage = () => {
             navigate("/home");
           }
         }, 2000);
-      } else {
-        toast.error(result.payload?.message || "Login failed");
+      } else if (loginUser.rejected.match(result)) {
+        // Show specific error message from server
+        const errorMessage = result.payload?.message || "Invalid email or password";
+        toast.error(errorMessage, {
+          autoClose: 4000,
+        });
+        // Stay on login page - no navigation
       }
     } catch (error) {
       console.error("Login error:", error);
-      toast.error("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.", {
+        autoClose: 4000,
+      });
+      // Stay on login page - no navigation
     }
   };
 

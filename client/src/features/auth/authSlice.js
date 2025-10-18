@@ -88,7 +88,7 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.message || "Login failed";
+        state.error = action.payload?.message || "Invalid email or password";
       })
       // Register
       .addCase(registerUser.pending, (state) => {

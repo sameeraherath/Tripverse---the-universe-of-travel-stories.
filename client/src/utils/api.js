@@ -37,8 +37,13 @@ api.interceptors.response.use(
   (error) => {
     // Handle errors (e.g., unauthorized, server errors)
     if (error.response?.status === 401) {
+      // Don't redirect if it's a login request - let the login page handle it
+      if (error.config?.url?.includes('/api/auth/login')) {
+        return Promise.reject(error);
+      }
+      
       localStorage.removeItem("authToken");
-      window.location.href = "/LoginPage";
+      window.location.href = "/login";
     }
     return Promise.reject(error);
   }
@@ -50,8 +55,13 @@ apiMultipart.interceptors.response.use(
   (error) => {
     // Handle errors (e.g., unauthorized, server errors)
     if (error.response?.status === 401) {
+      // Don't redirect if it's a login request - let the login page handle it
+      if (error.config?.url?.includes('/api/auth/login')) {
+        return Promise.reject(error);
+      }
+      
       localStorage.removeItem("authToken");
-      window.location.href = "/LoginPage";
+      window.location.href = "/login";
     }
     return Promise.reject(error);
   }
