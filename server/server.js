@@ -30,16 +30,19 @@ const faqRoutes = require("./routes/faqRoutes");
 const app = express();
 const server = http.createServer(app);
 
+// Define allowed origins from environment or default
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:5000",
+  ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
+  ...(process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(",") : []),
+];
+
 // Socket.IO setup
 const io = new Server(server, {
   cors: {
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "http://localhost:5000",
-      "https://blogger-client-murex.vercel.app",
-      "https://blogger-client-sameeraheraths-projects.vercel.app",
-    ],
+    origin: allowedOrigins,
     credentials: true,
   },
 });
@@ -53,13 +56,7 @@ const aiLimiter = rateLimit({
 // CORS configuration with error handling
 app.use((req, res, next) => {
   cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "http://localhost:5000",
-      "https://blogger-client-murex.vercel.app",
-      "https://blogger-client-sameeraheraths-projects.vercel.app",
-    ],
+    origin: allowedOrigins,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   })(req, res, (err) => {
@@ -81,6 +78,15 @@ app.use("/uploads", express.static("uploads"));
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.originalUrl}`);
   next();
+});
+
+// Health check endpoint
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+  });
 });
 
 // Routes
