@@ -31,19 +31,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Sanitize repository name for Docker
-        id: sanitize
-        run: |
-          # Convert to lowercase, replace triple dashes with single, remove trailing period, replace invalid chars
-          REPO_NAME=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]' | sed 's/---/-/g' | sed 's/\.$//' | sed 's/[^a-z0-9\/-]/-/g' | sed 's/-\{2,\}/-/g')
-          echo "sanitized=$REPO_NAME" >> $GITHUB_OUTPUT
-          echo "Sanitized repo name: $REPO_NAME"
-
       - name: Extract metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ steps.sanitize.outputs.sanitized }}/tripverse-backend
+          images: ghcr.io/${{ github.repository_owner }}/tripverse-backend
           tags: |
             type=ref,event=branch
             type=sha,prefix={{branch}}-
