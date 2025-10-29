@@ -43,7 +43,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ steps.sanitize.outputs.sanitized }}/blogger-backend
+          images: ghcr.io/${{ steps.sanitize.outputs.sanitized }}/tripverse-backend
           tags: |
             type=ref,event=branch
             type=sha,prefix={{branch}}-
