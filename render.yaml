@@ -3,7 +3,7 @@ services:
     name: Tripverse-server
     runtime: docker
     repo: https://github.com/sameeraherath/Tripverse---the-universe-of-travel-stories..git
-    dockerfilePath: ./server/Dockerfile
+    dockerfilePath: Dockerfile
     dockerContext: ./server
     healthCheckPath: /api/health
     envVars:
