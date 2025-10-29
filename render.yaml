@@ -2,9 +2,9 @@ services:
   - type: web
     name: Tripverse-server
     runtime: docker
-    repo: https://github.com/sameeraherath/Tripverse---the-universe-of-travel-stories..git
+    repo: https://github.com/sameeraherath/Tripverse---the-universe-of-travel-stories.git
     dockerfilePath: ./server/Dockerfile
-    dockerContext: ./
+    dockerContext: ./server
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
